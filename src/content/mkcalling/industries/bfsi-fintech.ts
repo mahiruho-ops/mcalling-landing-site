@@ -119,7 +119,7 @@ export const bfsiFintechContent = {
   },
   control: {
     title: "Control, Auditability & Responsible Communication",
-    subtitle: "Keep it trust-focused and non-legal",
+    subtitle: "",
     points: [
       "DNC handling supported",
       "Rule-based call timing and frequency",

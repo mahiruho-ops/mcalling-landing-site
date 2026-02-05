@@ -124,7 +124,7 @@ export const educationContent = {
   },
   trust: {
     title: "Trust, Respect & Student Communication",
-    subtitle: "Keep it clear and non-legal",
+    subtitle: "",
     points: [
       "DNC handling supported",
       "Controlled call timing and frequency",

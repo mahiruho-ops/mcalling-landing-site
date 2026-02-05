@@ -234,6 +234,10 @@ export const homeContent = {
       {
         title: "Ethical Practices",
         description: "Fair-use practices and ethical AI deployment guidelines"
+      },
+      {
+        title: "Role-Based Access Control",
+        description: "Secure access controls with role-based permissions. Control who can view call data, configure agents, and manage settings within your organization."
       }
     ]
   },

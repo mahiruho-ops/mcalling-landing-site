@@ -120,7 +120,7 @@ export const industriesIndexContent = {
   },
   whyFits: {
     title: "Why mKcalling fits across industries",
-    subtitle: "Keep this section compact and repeat the universal differentiators",
+    subtitle: "",
     points: [
       "All-inclusive pricing (no hidden LLM/STT/TTS/telephony costs)",
       "Billing only for connected talk time",

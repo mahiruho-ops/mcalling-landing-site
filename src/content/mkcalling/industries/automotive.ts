@@ -128,7 +128,7 @@ export const automotiveContent = {
   },
   control: {
     title: "Control, Visibility & Customer Communication",
-    subtitle: "Keep it trust-focused and practical",
+    subtitle: "",
     points: [
       "DNC handling supported",
       "Controlled call timing and frequency",

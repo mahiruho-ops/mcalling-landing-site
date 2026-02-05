@@ -63,6 +63,19 @@ export const trustContent = {
     ],
     closing: "We focus on practical security for everyday business use."
   },
+  roleBasedAccess: {
+    title: "Role-Based Access Control",
+    subtitle: "",
+    description: "Control who can access what within your mKcalling account. Define roles and permissions to ensure the right people have the right level of access.",
+    points: [
+      "Assign role-based permissions to team members",
+      "Control who can view call data, recordings, and transcripts",
+      "Restrict agent configuration and workflow changes to authorized users",
+      "Manage account settings and billing access separately",
+      "Audit logs track all access and permission changes"
+    ],
+    closing: "This ensures your call data and platform settings remain secure while allowing your team to work efficiently."
+  },
   fairUse: {
     title: "Ethical & Fair Use",
     subtitle: "",
@@ -75,13 +88,14 @@ export const trustContent = {
   },
   businessValue: {
     title: "What This Means for Your Business",
-    subtitle: "Translate compliance into value",
+    subtitle: "",
     benefits: [
       "Confidence in automated calling",
       "Clear visibility into conversations",
       "Reduced operational risk",
       "Control over how and when calls are made",
-      "AI support without loss of accountability"
+      "AI support without loss of accountability",
+      "Secure team collaboration with role-based access controls"
     ]
   },
   cta: {

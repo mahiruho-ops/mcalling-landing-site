@@ -44,6 +44,7 @@ export const InterestForm = () => {
   
   // Detect country on mount
   const [detectedCountry, setDetectedCountry] = useState<CountryCode>(defaultCountry);
+  const [isMounted, setIsMounted] = useState(false);
   
   // Initialize formData with defaultCountry to avoid hydration mismatch
   const [formData, setFormData] = useState<InterestFormData>({
@@ -66,6 +67,7 @@ export const InterestForm = () => {
 
   // Detect country and update form data on mount (client-side only)
   useEffect(() => {
+    setIsMounted(true);
     if (typeof window === 'undefined') return;
     
     try {
@@ -309,28 +311,34 @@ export const InterestForm = () => {
                   Primary Contact Mobile <span className="text-red-500">*</span>
                 </label>
                 <div className="flex gap-2">
-                  <Select
-                    value={validCountryCode}
-                    onValueChange={(value) => {
-                      // Store the composite value (dialCode-countryCode)
-                      setFormData({ ...formData, countryCode: value });
-                    }}
-                  >
-                    <SelectTrigger className="w-[140px] bg-background/50 border-border focus:border-primary">
-                      <SelectValue placeholder="Code" />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-[300px]">
-                      {countryCodes.map((country) => (
-                        <SelectItem key={country.code} value={`${country.dialCode}-${country.code}`}>
-                          <span className="flex items-center gap-2">
-                            <span>{country.flag}</span>
-                            <span>{country.dialCode}</span>
-                            <span className="text-xs text-muted-foreground">({country.code})</span>
-                          </span>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  {isMounted ? (
+                    <Select
+                      value={validCountryCode}
+                      onValueChange={(value) => {
+                        // Store the composite value (dialCode-countryCode)
+                        setFormData({ ...formData, countryCode: value });
+                      }}
+                    >
+                      <SelectTrigger className="w-[140px] bg-background/50 border-border focus:border-primary">
+                        <SelectValue placeholder="Code" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[300px]">
+                        {countryCodes.map((country) => (
+                          <SelectItem key={country.code} value={`${country.dialCode}-${country.code}`}>
+                            <span className="flex items-center gap-2">
+                              <span>{country.flag}</span>
+                              <span>{country.dialCode}</span>
+                              <span className="text-xs text-muted-foreground">({country.code})</span>
+                            </span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <div className="w-[140px] h-10 rounded-md border border-input bg-background/50 px-3 py-2 flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">Code</span>
+                    </div>
+                  )}
                   <Input
                     id="phone"
                     type="tel"
@@ -368,22 +376,28 @@ export const InterestForm = () => {
                 <label htmlFor="industry" className="text-sm font-medium">
                   Industry <span className="text-red-500">*</span>
                 </label>
-                <Select
-                  value={formData.industry || undefined}
-                  onValueChange={(value) => setFormData({ ...formData, industry: value })}
-                >
-                  <SelectTrigger className="bg-background/50 border-border focus:border-primary">
-                    <SelectValue placeholder="Select your industry" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-[300px]">
-                    {industriesData.map((industry) => (
-                      <SelectItem key={industry.slug} value={industry.name}>
-                        {industry.name}
-                      </SelectItem>
-                    ))}
-                    <SelectItem value="Others">Others</SelectItem>
-                  </SelectContent>
-                </Select>
+                {isMounted ? (
+                  <Select
+                    value={formData.industry || undefined}
+                    onValueChange={(value) => setFormData({ ...formData, industry: value })}
+                  >
+                    <SelectTrigger className="bg-background/50 border-border focus:border-primary">
+                      <SelectValue placeholder="Select your industry" />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[300px]">
+                      {industriesData.map((industry) => (
+                        <SelectItem key={industry.slug} value={industry.name}>
+                          {industry.name}
+                        </SelectItem>
+                      ))}
+                      <SelectItem value="Others">Others</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <div className="h-10 rounded-md border border-input bg-background/50 px-3 py-2 flex items-center">
+                    <span className="text-sm text-muted-foreground">Select your industry</span>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -416,41 +430,53 @@ export const InterestForm = () => {
                 <label htmlFor="callingDirection" className="text-sm font-medium">
                   Calling Direction <span className="text-red-500">*</span>
                 </label>
-                <Select
-                  value={formData.callingDirection || undefined}
-                  onValueChange={(value) => setFormData({ ...formData, callingDirection: value })}
-                >
-                  <SelectTrigger className="bg-background/50 border-border focus:border-primary">
-                    <SelectValue placeholder="Select calling direction" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Inbound">Inbound</SelectItem>
-                    <SelectItem value="Outbound">Outbound</SelectItem>
-                    <SelectItem value="Both">Both</SelectItem>
-                  </SelectContent>
-                </Select>
+                {isMounted ? (
+                  <Select
+                    value={formData.callingDirection || undefined}
+                    onValueChange={(value) => setFormData({ ...formData, callingDirection: value })}
+                  >
+                    <SelectTrigger className="bg-background/50 border-border focus:border-primary">
+                      <SelectValue placeholder="Select calling direction" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Inbound">Inbound</SelectItem>
+                      <SelectItem value="Outbound">Outbound</SelectItem>
+                      <SelectItem value="Both">Both</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <div className="h-10 rounded-md border border-input bg-background/50 px-3 py-2 flex items-center">
+                    <span className="text-sm text-muted-foreground">Select calling direction</span>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
                 <label htmlFor="monthlyCallingMinutes" className="text-sm font-medium">
                   Estimated Monthly Calling Minutes <span className="text-red-500">*</span>
                 </label>
-                <Select
-                  value={formData.monthlyCallingMinutes || undefined}
-                  onValueChange={(value) => setFormData({ ...formData, monthlyCallingMinutes: value })}
-                >
-                  <SelectTrigger className="bg-background/50 border-border focus:border-primary">
-                    <SelectValue placeholder="Select estimated minutes" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0–1,500">0–1,500</SelectItem>
-                    <SelectItem value="1,501–3,000">1,501–3,000</SelectItem>
-                    <SelectItem value="3,001–5,000">3,001–5,000</SelectItem>
-                    <SelectItem value="5,001–10,000">5,001–10,000</SelectItem>
-                    <SelectItem value="10,001–20,000">10,001–20,000</SelectItem>
-                    <SelectItem value="20,001+">20,001+</SelectItem>
-                  </SelectContent>
-                </Select>
+                {isMounted ? (
+                  <Select
+                    value={formData.monthlyCallingMinutes || undefined}
+                    onValueChange={(value) => setFormData({ ...formData, monthlyCallingMinutes: value })}
+                  >
+                    <SelectTrigger className="bg-background/50 border-border focus:border-primary">
+                      <SelectValue placeholder="Select estimated minutes" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="0–1,500">0–1,500</SelectItem>
+                      <SelectItem value="1,501–3,000">1,501–3,000</SelectItem>
+                      <SelectItem value="3,001–5,000">3,001–5,000</SelectItem>
+                      <SelectItem value="5,001–10,000">5,001–10,000</SelectItem>
+                      <SelectItem value="10,001–20,000">10,001–20,000</SelectItem>
+                      <SelectItem value="20,001+">20,001+</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <div className="h-10 rounded-md border border-input bg-background/50 px-3 py-2 flex items-center">
+                    <span className="text-sm text-muted-foreground">Select estimated minutes</span>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -458,7 +484,7 @@ export const InterestForm = () => {
                   Preferred Languages <span className="text-red-500">*</span>
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 p-4 rounded-lg bg-background/50 border border-border">
-                  {["English", "Hindi", "Marathi", "Tamil", "Telugu", "Kannada", "Malayalam", "Bengali", "Gujarati", "Punjabi", "Others"].map((lang) => (
+                  {["English", "Hindi", "Hinglish", "Marathi", "Tamil", "Telugu", "Kannada", "Malayalam", "Bengali", "Gujarati", "Punjabi", "Others"].map((lang) => (
                     <div key={lang} className="flex items-center space-x-2">
                       <Checkbox
                         id={`lang-${lang}`}
@@ -483,40 +509,52 @@ export const InterestForm = () => {
                 <label htmlFor="goLiveTimeline" className="text-sm font-medium">
                   Go-live Timeline <span className="text-red-500">*</span>
                 </label>
-                <Select
-                  value={formData.goLiveTimeline || undefined}
-                  onValueChange={(value) => setFormData({ ...formData, goLiveTimeline: value })}
-                >
-                  <SelectTrigger className="bg-background/50 border-border focus:border-primary">
-                    <SelectValue placeholder="Select timeline" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Immediately (0–2 weeks)">Immediately (0–2 weeks)</SelectItem>
-                    <SelectItem value="2–4 weeks">2–4 weeks</SelectItem>
-                    <SelectItem value="1–2 months">1–2 months</SelectItem>
-                    <SelectItem value="Not sure yet">Not sure yet</SelectItem>
-                  </SelectContent>
-                </Select>
+                {isMounted ? (
+                  <Select
+                    value={formData.goLiveTimeline || undefined}
+                    onValueChange={(value) => setFormData({ ...formData, goLiveTimeline: value })}
+                  >
+                    <SelectTrigger className="bg-background/50 border-border focus:border-primary">
+                      <SelectValue placeholder="Select timeline" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Immediately (0–2 weeks)">Immediately (0–2 weeks)</SelectItem>
+                      <SelectItem value="2–4 weeks">2–4 weeks</SelectItem>
+                      <SelectItem value="1–2 months">1–2 months</SelectItem>
+                      <SelectItem value="Not sure yet">Not sure yet</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <div className="h-10 rounded-md border border-input bg-background/50 px-3 py-2 flex items-center">
+                    <span className="text-sm text-muted-foreground">Select timeline</span>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
                 <label htmlFor="currentCallingSetup" className="text-sm font-medium">
                   Current Calling Setup <span className="text-red-500">*</span>
                 </label>
-                <Select
-                  value={formData.currentCallingSetup || undefined}
-                  onValueChange={(value) => setFormData({ ...formData, currentCallingSetup: value })}
-                >
-                  <SelectTrigger className="bg-background/50 border-border focus:border-primary">
-                    <SelectValue placeholder="Select current setup" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="In-house calling team">In-house calling team</SelectItem>
-                    <SelectItem value="Outsourced / BPO">Outsourced / BPO</SelectItem>
-                    <SelectItem value="Mixed">Mixed</SelectItem>
-                    <SelectItem value="Not doing calls currently">Not doing calls currently</SelectItem>
-                  </SelectContent>
-                </Select>
+                {isMounted ? (
+                  <Select
+                    value={formData.currentCallingSetup || undefined}
+                    onValueChange={(value) => setFormData({ ...formData, currentCallingSetup: value })}
+                  >
+                    <SelectTrigger className="bg-background/50 border-border focus:border-primary">
+                      <SelectValue placeholder="Select current setup" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="In-house calling team">In-house calling team</SelectItem>
+                      <SelectItem value="Outsourced / BPO">Outsourced / BPO</SelectItem>
+                      <SelectItem value="Mixed">Mixed</SelectItem>
+                      <SelectItem value="Not doing calls currently">Not doing calls currently</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <div className="h-10 rounded-md border border-input bg-background/50 px-3 py-2 flex items-center">
+                    <span className="text-sm text-muted-foreground">Select current setup</span>
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">

@@ -38,7 +38,7 @@ export const useCasesIndexContent = {
   ],
   inboundOutbound: {
     title: "Inbound vs Outbound Coverage",
-    subtitle: "Clarify scope",
+    subtitle: "",
     inbound: {
       title: "Inbound AI Calling",
       features: [

@@ -39,7 +39,7 @@ export const educationContent = {
   },
   useCases: {
     title: "Key Education Use Cases",
-    subtitle: "Grid of use case cards",
+    subtitle: "",
     items: [
       {
         title: "Admission Inquiry Follow-ups",
@@ -76,7 +76,7 @@ export const educationContent = {
   },
   workflow: {
     title: "Example Workflow (Education Calling Journey)",
-    subtitle: "Example Flow",
+    subtitle: "",
     steps: [
       {
         step: "1",
@@ -138,7 +138,7 @@ export const educationContent = {
   },
   whyChoose: {
     title: "Why Education Providers Choose mKcalling",
-    subtitle: "Close with benefits",
+    subtitle: "",
     reasons: [
       "Faster admission follow-ups",
       "Reduced counselor workload",

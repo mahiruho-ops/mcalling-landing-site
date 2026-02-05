@@ -39,7 +39,7 @@ export const insuranceContent = {
   },
   useCases: {
     title: "Key Insurance Use Cases",
-    subtitle: "Grid of use case cards",
+    subtitle: "",
     items: [
       {
         title: "Policy Renewal Reminders",
@@ -75,7 +75,7 @@ export const insuranceContent = {
   },
   workflow: {
     title: "Example Workflow (Insurance Calling Journey)",
-    subtitle: "Example Flow",
+    subtitle: "",
     steps: [
       {
         step: "1",
@@ -119,7 +119,7 @@ export const insuranceContent = {
   },
   control: {
     title: "Control, Auditability & Responsible Communication",
-    subtitle: "Keep it practical and trust-focused",
+    subtitle: "",
     points: [
       "DNC handling supported",
       "Rule-based call timing and frequency",
@@ -132,7 +132,7 @@ export const insuranceContent = {
   },
   whyChoose: {
     title: "Why Insurance Teams Choose mKcalling",
-    subtitle: "Close with benefits",
+    subtitle: "",
     reasons: [
       "Reduced manual renewal calling effort",
       "Consistent and polite policyholder communication",

@@ -40,7 +40,7 @@ export const fieldServiceMaintenanceContent = {
   },
   useCases: {
     title: "Key Field Service Use Cases",
-    subtitle: "Grid of use case cards",
+    subtitle: "",
     items: [
       {
         title: "Installation Scheduling & Confirmation",
@@ -75,7 +75,7 @@ export const fieldServiceMaintenanceContent = {
   },
   workflow: {
     title: "Example Workflow (Field Service Calling Journey)",
-    subtitle: "Example Flow",
+    subtitle: "",
     steps: [
       {
         step: "1",
@@ -123,7 +123,7 @@ export const fieldServiceMaintenanceContent = {
   },
   control: {
     title: "Control & Responsible Communication",
-    subtitle: "Keep it practical and trust-focused",
+    subtitle: "",
     points: [
       "DNC handling supported",
       "Rule-based call timing",
@@ -136,7 +136,7 @@ export const fieldServiceMaintenanceContent = {
   },
   whyChoose: {
     title: "Why Field Service Teams Choose mKcalling",
-    subtitle: "Close with benefits",
+    subtitle: "",
     reasons: [
       "Reduced dispatcher workload",
       "Fewer missed or delayed visits",

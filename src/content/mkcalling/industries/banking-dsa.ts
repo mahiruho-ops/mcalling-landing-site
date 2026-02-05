@@ -83,7 +83,7 @@ export const bankingDsaContent = {
   },
   workflow: {
     title: "Example Banking DSA Calling Workflow",
-    subtitle: "Example Flow",
+    subtitle: "",
     steps: [
       {
         step: "1",
@@ -148,7 +148,7 @@ export const bankingDsaContent = {
   },
   whyChoose: {
     title: "Why Banking DSAs Choose mKcalling",
-    subtitle: "Close with benefits",
+    subtitle: "",
     reasons: [
       "Faster and more consistent lead follow-ups",
       "Reduced telecaller dependency",

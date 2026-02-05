@@ -87,7 +87,7 @@ export const useCasesContent = {
     },
     whatYouGet: {
       title: "What You Get (Platform + Managed Service)",
-      description: "Reinforce differentiation",
+      description: "",
       platform: {
         title: "Platform Includes",
         items: [
@@ -288,7 +288,7 @@ export const useCasesContent = {
     },
     whyChoose: {
       title: "Why Businesses Use mKcalling for Appointments",
-      description: "Close with benefits",
+      description: "",
       reasons: [
         "Fewer missed appointments",
         "Reduced administrative workload",
@@ -375,7 +375,7 @@ export const useCasesContent = {
     },
     ethical: {
       title: "Ethical & Controlled Communication",
-      description: "Build trust and compliance confidence",
+      description: "",
       points: [
         "Calls follow defined scripts and rules",
         "Frequency and timing controlled by business policies",
@@ -599,7 +599,7 @@ export const useCasesContent = {
     },
     whyChoose: {
       title: "Why Businesses Use mKcalling for Support",
-      description: "Close with benefits",
+      description: "",
       reasons: [
         "Fewer missed support calls",
         "Reduced support team workload",
@@ -686,7 +686,7 @@ export const useCasesContent = {
     },
     consistency: {
       title: "Consistency, Control & Auditability",
-      description: "Build trust",
+      description: "",
       points: [
         "Predefined and approved question flows",
         "Consistent experience for every customer",
@@ -698,7 +698,7 @@ export const useCasesContent = {
     },
     whatYouGet: {
       title: "What You Get (Platform + Managed Service)",
-      description: "Reinforce differentiation",
+      description: "",
       platform: {
         title: "Platform Includes",
         items: [
@@ -849,7 +849,7 @@ export const useCasesContent = {
     },
     whatYouGet: {
       title: "What You Get (Platform + Managed Service)",
-      description: "Reinforce differentiation",
+      description: "",
       platform: {
         title: "Platform Includes",
         items: [
@@ -902,7 +902,7 @@ export const useCasesContent = {
     },
     whyChoose: {
       title: "Why Businesses Use mKcalling for Feedback",
-      description: "Close with benefits",
+      description: "",
       reasons: [
         "Consistent feedback collection",
         "Higher reach compared to manual calling",

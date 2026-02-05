@@ -7,7 +7,7 @@ export const howItWorksContent = {
   },
   overview: {
     title: "The High-Level Flow",
-    subtitle: "Show simplicity at a glance",
+    subtitle: "",
     steps: [
       "Understand Your Use Cases",
       "Configure AI Voice Agents",
@@ -18,7 +18,7 @@ export const howItWorksContent = {
   },
   step1: {
     title: "Step 1 — We Understand Your Use Cases",
-    subtitle: "Show consultative onboarding",
+    subtitle: "",
     content: [
       "We conduct structured discovery workshops",
       "Understand your business, customers, and calling needs",
@@ -35,7 +35,7 @@ export const howItWorksContent = {
   },
   step2: {
     title: "Step 2 — We Configure AI Voice Agents",
-    subtitle: "Remove AI fear",
+    subtitle: "",
     content: [
       "We create AI voice agents with the right persona and tone",
       "Configure languages and voice styles",
@@ -55,7 +55,7 @@ export const howItWorksContent = {
   },
   step3: {
     title: "Step 3 — AI Handles Inbound & Outbound Calls",
-    subtitle: "Show operational coverage",
+    subtitle: "",
     inbound: {
       title: "Inbound Calling",
       points: [
@@ -76,7 +76,7 @@ export const howItWorksContent = {
   },
   step4: {
     title: "Step 4 — Smart Human Escalation",
-    subtitle: "Build trust",
+    subtitle: "",
     content: [
       "AI handles routine conversations",
       "When a situation needs human attention: AI schedules a callback",
@@ -87,7 +87,7 @@ export const howItWorksContent = {
   },
   step5: {
     title: "Step 5 — Monitor, Review & Improve",
-    subtitle: "Show visibility and control",
+    subtitle: "",
     content: [
       "Real-time call visibility",
       "Call recordings and transcripts",
@@ -99,7 +99,7 @@ export const howItWorksContent = {
   },
   responsibilities: {
     title: "What You Manage vs What We Manage",
-    subtitle: "Clarify responsibility",
+    subtitle: "",
     youManage: {
       title: "You Manage",
       items: [
@@ -122,7 +122,7 @@ export const howItWorksContent = {
   },
   indiaFirst: {
     title: "Designed for Indian Businesses",
-    subtitle: "Reinforce India-first positioning",
+    subtitle: "",
     points: [
       "Indian phone numbers",
       "Indian languages",

@@ -7,7 +7,7 @@ export const trustContent = {
   },
   indiaFirst: {
     title: "India-First by Design",
-    subtitle: "Reinforce local readiness",
+    subtitle: "",
     description: "mKcalling is built with Indian businesses in mind:",
     points: [
       "Indian phone numbers",
@@ -20,7 +20,7 @@ export const trustContent = {
   },
   callHandling: {
     title: "Call Handling & Recording",
-    subtitle: "Address transparency and auditability",
+    subtitle: "",
     points: [
       "All calls are recorded by default",
       "Call recordings are stored securely in India",
@@ -32,7 +32,7 @@ export const trustContent = {
   },
   consent: {
     title: "Consent, DND & Responsible Outreach",
-    subtitle: "Show ethical communication",
+    subtitle: "",
     points: [
       "Do-Not-Call (DNC) handling supported",
       "Businesses control call timing and frequency",
@@ -43,7 +43,7 @@ export const trustContent = {
   },
   aiTransparency: {
     title: "AI Transparency & Human Control",
-    subtitle: "Build trust in AI usage",
+    subtitle: "",
     points: [
       "AI agents can disclose they are AI (configurable by the business)",
       "AI handles routine conversations only",
@@ -54,7 +54,7 @@ export const trustContent = {
   },
   dataSecurity: {
     title: "Data Access & Security Practices",
-    subtitle: "Reassure without heavy claims",
+    subtitle: "",
     points: [
       "Secure access controls within the platform",
       "Role-based visibility for call data",
@@ -65,7 +65,7 @@ export const trustContent = {
   },
   fairUse: {
     title: "Ethical & Fair Use",
-    subtitle: "Protect platform and brand",
+    subtitle: "",
     points: [
       "Industry-standard fair-use practices apply",
       "Ethical, lawful usage is expected from all clients",

@@ -47,20 +47,6 @@ export const Pricing = () => {
                 16<sup className="gradient-text-primary text-4xl">th</sup> January 2026
               </p>
              
-              <p className="text-xl text-muted-foreground mb-6">
-                Join our exclusive beta program and be among the first to experience the future of AI chatbots
-              </p>
-              <div className="flex flex-wrap justify-center gap-3">
-                <Badge variant="outline" className="px-4 py-2 text-base border-primary/40">
-                  Early Access
-                </Badge>
-                <Badge variant="outline" className="px-4 py-2 text-base border-secondary/40">
-                  Beta Testing
-                </Badge>
-                <Badge variant="outline" className="px-4 py-2 text-base border-primary/40">
-                  Priority Support
-                </Badge>
-              </div>
             </div>
           </div>
         </div>

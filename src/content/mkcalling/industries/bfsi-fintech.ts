@@ -39,7 +39,7 @@ export const bfsiFintechContent = {
   },
   useCases: {
     title: "Key BFSI & Fintech Use Cases",
-    subtitle: "Grid of use case cards",
+    subtitle: "",
     items: [
       {
         title: "Verification & Onboarding Calls",
@@ -75,7 +75,7 @@ export const bfsiFintechContent = {
   },
   workflow: {
     title: "Example Workflow (BFSI & Fintech Calling Journey)",
-    subtitle: "Example Flow",
+    subtitle: "",
     steps: [
       {
         step: "1",
@@ -132,7 +132,7 @@ export const bfsiFintechContent = {
   },
   whyChoose: {
     title: "Why BFSI & Fintech Teams Choose mKcalling",
-    subtitle: "Close with benefits",
+    subtitle: "",
     reasons: [
       "Reduced manual calling workload",
       "Consistent and auditable communication",

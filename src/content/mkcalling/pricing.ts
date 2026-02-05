@@ -11,7 +11,7 @@ export const pricingContent = {
   },
   billingRules: {
     title: "How Billing Works",
-    subtitle: "Remove confusion before showing prices",
+    subtitle: "",
     rules: {
       title: "Billing Rules",
       points: [
@@ -161,7 +161,7 @@ export const pricingContent = {
   },
   premium: {
     title: "Premium Voices & Languages (Advanced Plan Only)",
-    subtitle: "Set expectations clearly",
+    subtitle: "",
     points: [
       "Premium voices and languages are available only in the Advanced plan",
       "Clients may use their own API keys (paid directly to provider), or use mKcalling API key with an additional **₹5.00 / minute** charge",
@@ -171,7 +171,7 @@ export const pricingContent = {
   },
   managedService: {
     title: "Managed Service – What's Included",
-    subtitle: "Justify implementation & platform fees",
+    subtitle: "",
     included: [
       "3–5 discovery workshops (plan dependent)",
       "Setup of 5–10 use cases",
@@ -186,7 +186,7 @@ export const pricingContent = {
   },
   fairUse: {
     title: "Fair Use & Responsible Usage",
-    subtitle: "Protect platform without legal heaviness",
+    subtitle: "",
     points: [
       "Industry-standard fair-use policy applies",
       "Ethical and lawful usage expected",

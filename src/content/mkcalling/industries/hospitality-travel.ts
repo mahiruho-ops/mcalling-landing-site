@@ -39,7 +39,7 @@ export const hospitalityTravelContent = {
   },
   useCases: {
     title: "Key Hospitality & Travel Use Cases",
-    subtitle: "Grid of use case cards",
+    subtitle: "",
     items: [
       {
         title: "Booking Confirmations & Updates",
@@ -75,7 +75,7 @@ export const hospitalityTravelContent = {
   },
   workflow: {
     title: "Example Workflow (Hospitality & Travel Calling Journey)",
-    subtitle: "Example Flow",
+    subtitle: "",
     steps: [
       {
         step: "1",
@@ -123,7 +123,7 @@ export const hospitalityTravelContent = {
   },
   control: {
     title: "Control, Trust & Guest Communication",
-    subtitle: "Keep it practical and reassuring",
+    subtitle: "",
     points: [
       "DNC handling supported",
       "Controlled call timing and frequency",
@@ -137,7 +137,7 @@ export const hospitalityTravelContent = {
   },
   whyChoose: {
     title: "Why Hospitality & Travel Teams Choose mKcalling",
-    subtitle: "Close with benefits",
+    subtitle: "",
     reasons: [
       "Reduced front-desk and agent workload",
       "Always-on availability for routine queries",

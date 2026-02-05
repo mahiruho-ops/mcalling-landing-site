@@ -69,7 +69,6 @@ export const EnterpriseManagement = () => {
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Reduce release risk and speed rollouts with version control, approvals and audit trails.
           </p>
-          <p className="text-sm text-muted-foreground">Security review available during beta. SOC 2 in progress.</p>
         </div>
 
         {/* Core Management Features */}

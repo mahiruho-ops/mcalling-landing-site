@@ -39,7 +39,7 @@ export const realEstateContent = {
   },
   useCases: {
     title: "Key Real Estate Use Cases",
-    subtitle: "Grid of use case cards",
+    subtitle: "",
     items: [
       {
         title: "Lead Qualification & First Contact",
@@ -76,7 +76,7 @@ export const realEstateContent = {
   },
   workflow: {
     title: "Example Workflow (Real Estate Calling Journey)",
-    subtitle: "Example Flow",
+    subtitle: "",
     steps: [
       {
         step: "1",
@@ -125,7 +125,7 @@ export const realEstateContent = {
   },
   control: {
     title: "Control, Visibility & Responsible Communication",
-    subtitle: "Keep it practical and trust-focused",
+    subtitle: "",
     points: [
       "DNC handling supported",
       "Call timing and frequency controlled by your rules",
@@ -138,7 +138,7 @@ export const realEstateContent = {
   },
   whyChoose: {
     title: "Why Real Estate Teams Choose mKcalling",
-    subtitle: "Close with benefits",
+    subtitle: "",
     reasons: [
       "Faster response to new leads",
       "Reduced dependency on manual telecallers",

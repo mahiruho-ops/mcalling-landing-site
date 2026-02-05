@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "AI Sales Calling & Lead Qualification | mKcalling",
         description: "Automate sales and lead qualification calls with mKcalling — an AI calling platform, configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/use-cases/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "AI Appointment Booking & Reminder Calls | mKcalling",
         description: "Automate appointment booking and reminder calls with mKcalling — an AI calling platform, configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/use-cases/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -77,7 +77,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "AI Payment Reminder & Collection Calls | mKcalling",
         description: "Automate payment reminder and follow-up calls with mKcalling — an AI calling platform, configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/use-cases/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -99,7 +99,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "AI Customer Support & Follow-up Calls | mKcalling",
         description: "Handle inbound support and outbound follow-up calls using mKcalling — an AI calling platform, configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/use-cases/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -121,7 +121,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "AI Verification & Onboarding Calls | mKcalling",
         description: "Automate verification and onboarding calls with mKcalling — an AI calling platform, configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/use-cases/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -143,7 +143,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "AI Feedback & NPS Calling | mKcalling",
         description: "Collect customer feedback and NPS using AI voice agents with mKcalling — configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/use-cases/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -163,7 +163,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       title: `${useCase.title} | mKcalling`,
       description: useCase.description,
       type: "article",
-      url: `https://mkcalling.ai/use-cases/${slug}`,
+      url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
       images: ["/mKCalling_Logo.png"],
     },
     twitter: {

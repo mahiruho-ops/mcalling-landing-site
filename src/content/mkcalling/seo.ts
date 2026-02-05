@@ -3,7 +3,7 @@ export const seoContent = {
   defaultTitle: "mKcalling - AI Calling Platform for Indian Businesses",
   defaultDescription: "Automate business calls with AI. Handle inbound and outbound calls for sales, support, reminders, and follow-ups. Managed service built for Indian businesses.",
   defaultKeywords: ["AI calling platform", "automated calling", "business phone calls", "AI voice calls", "Indian business calls", "managed AI calling"],
-  metadataBase: "https://mkcalling.ai", // Update with actual domain
+  metadataBase: "https://mkcalling.mchatbot.ai",
   openGraph: {
     type: "website" as const,
     locale: "en_IN",

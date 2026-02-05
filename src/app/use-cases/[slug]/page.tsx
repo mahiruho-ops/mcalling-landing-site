@@ -207,7 +207,7 @@ export default async function UseCasePage({ params }: Params) {
           <span className="mx-2">/</span>
             <Link href="/use-cases" className="hover:text-foreground transition-colors">Use Cases</Link>
           <span className="mx-2">/</span>
-            <span className="text-foreground">{useCase.title}</span>
+            <span className="text-foreground">{hasNewStructure ? (useCase as any).hero.headline : (useCase as any).title}</span>
         </nav>
 
           {hasNewStructure ? (
@@ -487,16 +487,16 @@ export default async function UseCasePage({ params }: Params) {
                   <ArrowLeft className="w-4 h-4" />
                   Back to Use Cases
                 </Link>
-                <h1 className="text-4xl md:text-5xl font-bold mb-4">{useCase.title}</h1>
-                <p className="text-xl text-muted-foreground">{useCase.description}</p>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4">{(useCase as any).title}</h1>
+                <p className="text-xl text-muted-foreground">{(useCase as any).description}</p>
               </div>
 
               {/* Problem */}
               <div className="mb-12 p-8 rounded-xl bg-card border border-border/50">
-                <h2 className="text-2xl font-bold mb-4">{useCase.problem.title}</h2>
-                <p className="text-muted-foreground mb-6">{useCase.problem.description}</p>
+                <h2 className="text-2xl font-bold mb-4">{(useCase as any).problem.title}</h2>
+                <p className="text-muted-foreground mb-6">{(useCase as any).problem.description}</p>
                 <ul className="space-y-3">
-                  {useCase.problem.points.map((point, index) => (
+                  {(useCase as any).problem.points.map((point: string, index: number) => (
                     <li key={index} className="flex items-start gap-3">
                       <span className="text-destructive mt-1">•</span>
                       <span className="text-foreground">{point}</span>
@@ -507,10 +507,10 @@ export default async function UseCasePage({ params }: Params) {
 
               {/* Solution */}
               <div className="mb-12 p-8 rounded-xl bg-card border border-primary/30">
-                <h2 className="text-2xl font-bold mb-4">{useCase.solution.title}</h2>
-                <p className="text-muted-foreground mb-6">{useCase.solution.description}</p>
+                <h2 className="text-2xl font-bold mb-4">{(useCase as any).solution.title}</h2>
+                <p className="text-muted-foreground mb-6">{(useCase as any).solution.description}</p>
                 <div className="grid md:grid-cols-2 gap-4">
-                  {useCase.solution.features.map((feature, index) => (
+                  {(useCase as any).solution.features.map((feature: string, index: number) => (
                     <div key={index} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                       <span className="text-foreground">{feature}</span>
@@ -521,9 +521,9 @@ export default async function UseCasePage({ params }: Params) {
 
               {/* Workflow */}
               <div className="mb-12">
-                <h2 className="text-2xl font-bold mb-6">{useCase.workflow.title}</h2>
+                <h2 className="text-2xl font-bold mb-6">{(useCase as any).workflow.title}</h2>
                 <div className="space-y-4">
-                  {useCase.workflow.steps.map((step, index) => (
+                  {(useCase as any).workflow.steps.map((step: any, index: number) => (
                     <div key={index} className="flex gap-4 p-6 rounded-xl bg-card border border-border/50">
                       <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold">
                         {step.step}
@@ -541,7 +541,7 @@ export default async function UseCasePage({ params }: Params) {
                   mKcalling integrates with your existing systems for seamless workflows.
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  {useCase.integrations.map((integration, index) => (
+                  {(useCase as any).integrations.map((integration: string, index: number) => (
                     <div key={index} className="px-4 py-2 rounded-lg bg-background border border-border/50 text-sm">
                       {integration}
                     </div>
@@ -553,7 +553,7 @@ export default async function UseCasePage({ params }: Params) {
               <div className="text-center p-8 rounded-xl bg-card border border-primary/30">
                 <h2 className="text-2xl font-bold mb-4">Ready to get started?</h2>
                 <p className="text-muted-foreground mb-6">
-                  See how mKcalling can help with {useCase.title.toLowerCase()}.
+                  See how mKcalling can help with {(useCase as any).title.toLowerCase()}.
                 </p>
                 <div className="inline-flex flex-col sm:flex-row gap-4">
                   <Link href="/schedule-demo">

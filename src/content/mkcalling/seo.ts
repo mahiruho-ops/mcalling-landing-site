@@ -5,7 +5,7 @@ export const seoContent = {
   defaultKeywords: ["AI calling platform", "automated calling", "business phone calls", "AI voice calls", "Indian business calls", "managed AI calling"],
   metadataBase: "https://mkcalling.ai", // Update with actual domain
   openGraph: {
-    type: "website",
+    type: "website" as const,
     locale: "en_IN",
     siteName: "mKcalling",
     images: [
@@ -18,7 +18,7 @@ export const seoContent = {
     ]
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary_large_image" as const,
     site: "@mkcalling" // Update if available
   }
 };

@@ -21,17 +21,17 @@ export const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/50 backdrop-blur-xl">
-      <div className="container mx-auto px-6 py-4">
+      <div className="container mx-auto px-6 py-3 md:py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2">
               <Image 
                 src="/mKCalling_Logo.png" 
                 alt="mKcalling logo" 
-                width={120} 
-                height={40} 
+                width={240} 
+                height={140} 
                 priority 
-                className="h-8 w-auto"
+                className="h-16 md:h-20 w-auto object-contain"
               />
             </Link>
           </div>

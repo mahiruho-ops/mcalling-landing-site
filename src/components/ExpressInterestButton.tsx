@@ -8,7 +8,7 @@ export const ExpressInterestButton = () => {
   return (
     <div className="flex justify-center">
       <Button onClick={() => scrollToSection("interest")} className="bg-gradient-primary hover:shadow-glow-primary transition-all">
-        Join Waitlist
+        Schedule a Demo
       </Button>
     </div>
   );

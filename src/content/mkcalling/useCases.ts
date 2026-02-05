@@ -125,6 +125,18 @@ export const useCasesContent = {
       ],
       note: "The same sales qualification logic can be adapted per industry."
     },
+    commonScenarios: {
+      title: "Common Scenarios Across Industries",
+      description: "Sales & lead qualification calls are used across multiple industries to ensure faster follow-ups and better lead handling.",
+      examples: [
+        "Lead follow-ups for **Banking DSAs** and **BFSI distributors**",
+        "Admission inquiry follow-ups for **Education providers**",
+        "Property inquiry calls for **Real Estate teams**",
+        "Vehicle sales inquiry follow-ups for **Automotive dealerships**",
+        "Initial interest qualification for **Insurance agents**"
+      ],
+      closing: "In all cases, AI handles the first layer of outreach and qualification, and schedules callbacks when human discussion is required."
+    },
     whyChoose: {
       title: "Why Sales Teams Choose mKcalling",
       description: "Close with confidence",
@@ -260,6 +272,19 @@ export const useCasesContent = {
         "Hospitality & Travel",
         "Field Service & Maintenance"
       ]
+    },
+    commonScenarios: {
+      title: "Common Scenarios Across Industries",
+      description: "Appointment booking and reminder calls help businesses reduce missed appointments and improve scheduling efficiency.",
+      examples: [
+        "Site visit scheduling for **Real Estate teams**",
+        "Doctor or diagnostic appointment reminders for **Healthcare providers**",
+        "Test drive scheduling for **Automotive businesses**",
+        "Pickup and service scheduling for **Logistics providers**",
+        "Installation and maintenance visit reminders for **Field Service & Maintenance companies**",
+        "Booking confirmations and check-in reminders for **Hospitality & Travel businesses**"
+      ],
+      closing: "Calls are placed based on defined rules, with rescheduling or escalation handled via callbacks."
     },
     whyChoose: {
       title: "Why Businesses Use mKcalling for Appointments",
@@ -397,6 +422,19 @@ export const useCasesContent = {
         "Utilities and local service providers"
       ],
       note: "This use case is adaptable to different compliance and communication needs."
+    },
+    commonScenarios: {
+      title: "Common Scenarios Across Industries",
+      description: "Payment reminder calls are used to politely follow up on pending payments without aggressive or non-compliant communication.",
+      examples: [
+        "EMI and repayment reminders for **Banking DSAs** and **BFSI platforms**",
+        "Policy renewal reminders for **Insurance providers**",
+        "Fee payment reminders for **Education institutions**",
+        "Balance payment reminders for **Hospitality & Travel businesses**",
+        "COD or pending payment reminders for **E-commerce & D2C brands**",
+        "AMC renewal reminders for **Field Service & Maintenance companies**"
+      ],
+      closing: "Reminder logic, frequency, and escalation rules are fully configurable."
     },
     whyChoose: {
       title: "Why Businesses Use mKcalling for Payment Reminders",
@@ -546,6 +584,19 @@ export const useCasesContent = {
       ],
       note: "This use case adapts easily to different support scenarios."
     },
+    commonScenarios: {
+      title: "Common Scenarios Across Industries",
+      description: "Customer support and follow-up calls help businesses handle routine queries and status updates efficiently.",
+      examples: [
+        "Application or disbursal status updates for **Banking DSAs** and **BFSI teams**",
+        "Policy status queries for **Insurance providers**",
+        "Order and delivery status calls for **E-commerce & D2C brands**",
+        "Pickup, delivery, and delay notifications for **Logistics companies**",
+        "Service coordination and technician updates for **Field Service & Maintenance teams**",
+        "Guest and traveler support calls for **Hospitality & Travel businesses**"
+      ],
+      closing: "AI manages routine conversations, while complex or sensitive cases are escalated via human callbacks."
+    },
     whyChoose: {
       title: "Why Businesses Use mKcalling for Support",
       description: "Close with benefits",
@@ -683,6 +734,19 @@ export const useCasesContent = {
         "Field Service & Maintenance"
       ],
       note: "Verification and onboarding logic can be tailored per industry."
+    },
+    commonScenarios: {
+      title: "Common Scenarios Across Industries",
+      description: "Verification and onboarding calls ensure structured and consistent information exchange during early customer interactions.",
+      examples: [
+        "KYC and document verification for **Banking DSAs** and **BFSI platforms**",
+        "Customer onboarding for **Insurance providers**",
+        "Student enrollment confirmation for **Education institutions**",
+        "Order confirmation calls for **E-commerce & D2C businesses**",
+        "Guest verification for **Hospitality & Travel providers**",
+        "Service request confirmation for **Field Service & Maintenance companies**"
+      ],
+      closing: "These calls follow predefined scripts and rules, ensuring accuracy and auditability."
     },
     whyChoose: {
       title: "Why Businesses Use mKcalling for Verification & Onboarding",
@@ -822,6 +886,19 @@ export const useCasesContent = {
         "Field Service & Maintenance"
       ],
       note: "Feedback calling adapts easily to different industries and customer journeys."
+    },
+    commonScenarios: {
+      title: "Common Scenarios Across Industries",
+      description: "Feedback and NPS calls help businesses understand customer experience and identify improvement areas.",
+      examples: [
+        "Post-disbursal feedback for **Banking DSAs**",
+        "Customer experience feedback for **BFSI and Insurance providers**",
+        "Patient or student experience feedback for **Healthcare and Education institutions**",
+        "Post-visit or post-service feedback for **Real Estate and Automotive businesses**",
+        "Post-delivery feedback for **E-commerce & Logistics companies**",
+        "Post-service feedback for **Field Service & Maintenance teams**"
+      ],
+      closing: "Feedback insights are captured through call summaries and transcripts for easy review."
     },
     whyChoose: {
       title: "Why Businesses Use mKcalling for Feedback",

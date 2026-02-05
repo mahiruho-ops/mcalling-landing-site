@@ -7,6 +7,7 @@ import { Card } from "./ui/card";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Checkbox } from "./ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { Send } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -28,6 +29,13 @@ interface InterestFormData {
   countryCode: string;
   phone: string;
   industry: string;
+  primaryUseCase: string[];
+  callingDirection: string;
+  monthlyCallingMinutes: string;
+  preferredLanguages: string[];
+  goLiveTimeline: string;
+  currentCallingSetup: string;
+  crmTools: string;
 }
 
 export const InterestForm = () => {
@@ -37,30 +45,59 @@ export const InterestForm = () => {
   // Detect country on mount
   const [detectedCountry, setDetectedCountry] = useState<CountryCode>(defaultCountry);
   
-  useEffect(() => {
-    setDetectedCountry(detectCountryFromBrowser());
-  }, []);
-
+  // Initialize formData with defaultCountry to avoid hydration mismatch
   const [formData, setFormData] = useState<InterestFormData>({
     name: "",
     email: "",
     company: "",
     message: "",
     interestType: null,
-    countryCode: detectedCountry.dialCode,
+    countryCode: `${defaultCountry.dialCode}-${defaultCountry.code}`,
     phone: "",
     industry: "",
+    primaryUseCase: [],
+    callingDirection: "",
+    monthlyCallingMinutes: "",
+    preferredLanguages: [],
+    goLiveTimeline: "",
+    currentCallingSetup: "",
+    crmTools: "",
   });
 
-  // Update country code when detected country changes
+  // Detect country and update form data on mount (client-side only)
   useEffect(() => {
-    setFormData(prev => ({ ...prev, countryCode: detectedCountry.dialCode }));
-  }, [detectedCountry]);
+    if (typeof window === 'undefined') return;
+    
+    try {
+      const detected = detectCountryFromBrowser();
+      setDetectedCountry(detected);
+      // Store as composite value (dialCode-countryCode) to ensure uniqueness
+      setFormData(prev => ({ ...prev, countryCode: `${detected.dialCode}-${detected.code}` }));
+    } catch (error) {
+      console.error('Error detecting country:', error);
+      // Keep default country code on error
+    }
+  }, []);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
-  const selectedCountry = countryCodes.find(c => c.dialCode === formData.countryCode) || defaultCountry;
+  // Parse country code from formData (handles both old format "dialCode" and new format "dialCode-countryCode")
+  const parseCountryCode = (code: string): { dialCode: string; countryCode: string } => {
+    if (code.includes('-')) {
+      const [dialCode, countryCode] = code.split('-');
+      return { dialCode, countryCode };
+    }
+    // Legacy format: just dial code, find first matching country
+    const country = countryCodes.find(c => c.dialCode === code) || defaultCountry;
+    return { dialCode: country.dialCode, countryCode: country.code };
+  };
+
+  const parsedCountry = parseCountryCode(formData.countryCode);
+  const selectedCountry = countryCodes.find(c => c.code === parsedCountry.countryCode) || defaultCountry;
+  const validCountryCode = countryCodes.some(c => c.code === parsedCountry.countryCode)
+    ? `${selectedCountry.dialCode}-${selectedCountry.code}`
+    : `${defaultCountry.dialCode}-${defaultCountry.code}`;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -161,8 +198,8 @@ export const InterestForm = () => {
 
       if (result.success) {
         toast({
-          title: "Thank you for your interest!",
-          description: "Our team will contact you soon to schedule a demo.",
+          title: "Demo request received",
+          description: "We'll contact you shortly to confirm a demo slot. Typical response time: within business hours.",
         });
         setFormData({ 
           name: "", 
@@ -170,9 +207,16 @@ export const InterestForm = () => {
           company: "", 
           message: "", 
           interestType: null,
-          countryCode: detectedCountry.dialCode,
+          countryCode: `${detectedCountry.dialCode}-${detectedCountry.code}` || `${defaultCountry.dialCode}-${defaultCountry.code}`,
           phone: "",
           industry: "",
+          primaryUseCase: [],
+          callingDirection: "",
+          monthlyCallingMinutes: "",
+          preferredLanguages: [],
+          goLiveTimeline: "",
+          currentCallingSetup: "",
+          crmTools: "",
         });
         setCaptchaToken(null);
         // Reset CAPTCHA
@@ -204,15 +248,31 @@ export const InterestForm = () => {
         <div className="max-w-2xl mx-auto">
           <div className="text-center space-y-4 mb-12 animate-fade-in-up">
             <h2 className="text-4xl md:text-5xl font-bold">
-              Be the First to Experience{" "}
-              <br />
-              <span className="gradient-text-primary">
-                The Future
-              </span>
+              See mKcalling in Action
             </h2>
             <p className="text-xl text-muted-foreground">
-              Join our waitlist and get early access to the platform
+              Tell us your use case and calling volume — we'll show a live workflow and recommend the right setup.
             </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              mKcalling is live and used for real business calling workflows in India.
+            </p>
+          </div>
+
+          <div className="mb-6 p-4 rounded-lg bg-primary/5 border border-primary/20">
+            <ul className="space-y-2 text-sm text-foreground">
+              <li className="flex items-start gap-2">
+                <span className="text-primary mt-0.5">•</span>
+                <span>Live product. Real workflows. Indian numbers.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary mt-0.5">•</span>
+                <span>Transparent pricing and managed setup.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary mt-0.5">•</span>
+                <span>No AI prompting or training required from your team.</span>
+              </li>
+            </ul>
           </div>
 
           <Card className="p-8 bg-card border-primary/30 shadow-card animate-fade-in-up">
@@ -250,15 +310,18 @@ export const InterestForm = () => {
                 </label>
                 <div className="flex gap-2">
                   <Select
-                    value={formData.countryCode}
-                    onValueChange={(value) => setFormData({ ...formData, countryCode: value })}
+                    value={validCountryCode}
+                    onValueChange={(value) => {
+                      // Store the composite value (dialCode-countryCode)
+                      setFormData({ ...formData, countryCode: value });
+                    }}
                   >
                     <SelectTrigger className="w-[140px] bg-background/50 border-border focus:border-primary">
                       <SelectValue placeholder="Code" />
                     </SelectTrigger>
                     <SelectContent className="max-h-[300px]">
                       {countryCodes.map((country) => (
-                        <SelectItem key={country.code} value={country.dialCode}>
+                        <SelectItem key={country.code} value={`${country.dialCode}-${country.code}`}>
                           <span className="flex items-center gap-2">
                             <span>{country.flag}</span>
                             <span>{country.dialCode}</span>
@@ -306,7 +369,7 @@ export const InterestForm = () => {
                   Industry <span className="text-red-500">*</span>
                 </label>
                 <Select
-                  value={formData.industry}
+                  value={formData.industry || undefined}
                   onValueChange={(value) => setFormData({ ...formData, industry: value })}
                 >
                   <SelectTrigger className="bg-background/50 border-border focus:border-primary">
@@ -321,6 +384,152 @@ export const InterestForm = () => {
                     <SelectItem value="Others">Others</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="primaryUseCase" className="text-sm font-medium">
+                  Primary Use Case <span className="text-red-500">*</span>
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-lg bg-background/50 border border-border">
+                  {["Sales & Lead Qualification", "Appointment Booking & Reminders", "Payment Reminders & Collections", "Customer Support & Follow-ups", "Verification & Onboarding", "Feedback & NPS", "Other/Not in this List"].map((useCase) => (
+                    <div key={useCase} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`usecase-${useCase}`}
+                        checked={formData.primaryUseCase.includes(useCase)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setFormData({ ...formData, primaryUseCase: [...formData.primaryUseCase, useCase] });
+                          } else {
+                            setFormData({ ...formData, primaryUseCase: formData.primaryUseCase.filter(uc => uc !== useCase) });
+                          }
+                        }}
+                      />
+                      <Label htmlFor={`usecase-${useCase}`} className="text-sm font-normal cursor-pointer">
+                        {useCase}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="callingDirection" className="text-sm font-medium">
+                  Calling Direction <span className="text-red-500">*</span>
+                </label>
+                <Select
+                  value={formData.callingDirection || undefined}
+                  onValueChange={(value) => setFormData({ ...formData, callingDirection: value })}
+                >
+                  <SelectTrigger className="bg-background/50 border-border focus:border-primary">
+                    <SelectValue placeholder="Select calling direction" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Inbound">Inbound</SelectItem>
+                    <SelectItem value="Outbound">Outbound</SelectItem>
+                    <SelectItem value="Both">Both</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="monthlyCallingMinutes" className="text-sm font-medium">
+                  Estimated Monthly Calling Minutes <span className="text-red-500">*</span>
+                </label>
+                <Select
+                  value={formData.monthlyCallingMinutes || undefined}
+                  onValueChange={(value) => setFormData({ ...formData, monthlyCallingMinutes: value })}
+                >
+                  <SelectTrigger className="bg-background/50 border-border focus:border-primary">
+                    <SelectValue placeholder="Select estimated minutes" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0–1,500">0–1,500</SelectItem>
+                    <SelectItem value="1,501–3,000">1,501–3,000</SelectItem>
+                    <SelectItem value="3,001–5,000">3,001–5,000</SelectItem>
+                    <SelectItem value="5,001–10,000">5,001–10,000</SelectItem>
+                    <SelectItem value="10,001–20,000">10,001–20,000</SelectItem>
+                    <SelectItem value="20,001+">20,001+</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">
+                  Preferred Languages <span className="text-red-500">*</span>
+                </label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 p-4 rounded-lg bg-background/50 border border-border">
+                  {["English", "Hindi", "Marathi", "Tamil", "Telugu", "Kannada", "Malayalam", "Bengali", "Gujarati", "Punjabi", "Others"].map((lang) => (
+                    <div key={lang} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`lang-${lang}`}
+                        checked={formData.preferredLanguages.includes(lang)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setFormData({ ...formData, preferredLanguages: [...formData.preferredLanguages, lang] });
+                          } else {
+                            setFormData({ ...formData, preferredLanguages: formData.preferredLanguages.filter(l => l !== lang) });
+                          }
+                        }}
+                      />
+                      <Label htmlFor={`lang-${lang}`} className="text-sm font-normal cursor-pointer">
+                        {lang}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="goLiveTimeline" className="text-sm font-medium">
+                  Go-live Timeline <span className="text-red-500">*</span>
+                </label>
+                <Select
+                  value={formData.goLiveTimeline || undefined}
+                  onValueChange={(value) => setFormData({ ...formData, goLiveTimeline: value })}
+                >
+                  <SelectTrigger className="bg-background/50 border-border focus:border-primary">
+                    <SelectValue placeholder="Select timeline" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Immediately (0–2 weeks)">Immediately (0–2 weeks)</SelectItem>
+                    <SelectItem value="2–4 weeks">2–4 weeks</SelectItem>
+                    <SelectItem value="1–2 months">1–2 months</SelectItem>
+                    <SelectItem value="Not sure yet">Not sure yet</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="currentCallingSetup" className="text-sm font-medium">
+                  Current Calling Setup <span className="text-red-500">*</span>
+                </label>
+                <Select
+                  value={formData.currentCallingSetup || undefined}
+                  onValueChange={(value) => setFormData({ ...formData, currentCallingSetup: value })}
+                >
+                  <SelectTrigger className="bg-background/50 border-border focus:border-primary">
+                    <SelectValue placeholder="Select current setup" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="In-house calling team">In-house calling team</SelectItem>
+                    <SelectItem value="Outsourced / BPO">Outsourced / BPO</SelectItem>
+                    <SelectItem value="Mixed">Mixed</SelectItem>
+                    <SelectItem value="Not doing calls currently">Not doing calls currently</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="crmTools" className="text-sm font-medium">
+                  CRM / Tools (Optional)
+                </label>
+                <Input
+                  id="crmTools"
+                  value={formData.crmTools}
+                  onChange={(e) => setFormData({ ...formData, crmTools: e.target.value })}
+                  className="bg-background/50 border-border focus:border-primary"
+                  placeholder="e.g., Zoho, Freshsales, LeadSquared, HubSpot, Others"
+                />
               </div>
 
               <div className="space-y-2">
@@ -387,7 +596,7 @@ export const InterestForm = () => {
               </Button>
 
               <p className="text-xs text-center text-muted-foreground">
-                Our AI Agent will call you to schedule demo for you. No spam, ever.
+                After you submit, our scheduling assistant will call you to confirm a demo slot. By submitting, you agree to receive a scheduling call related to your request.
               </p>
             </form>
           </Card>

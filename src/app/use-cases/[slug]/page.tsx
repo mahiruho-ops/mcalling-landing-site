@@ -449,6 +449,25 @@ export default async function UseCasePage({ params }: Params) {
                 </div>
               )}
 
+              {/* SECTION 7.5: Common Scenarios Across Industries */}
+              {(useCase as any).commonScenarios && (
+                <div className="mb-12 p-8 rounded-xl bg-card border border-primary/30">
+                  <h2 className="text-2xl font-bold mb-2">{(useCase as any).commonScenarios.title}</h2>
+                  <p className="text-muted-foreground mb-6">{(useCase as any).commonScenarios.description}</p>
+                  <div className="space-y-3 mb-4">
+                    {(useCase as any).commonScenarios.examples.map((example: string, index: number) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <span className="text-primary mt-1">•</span>
+                        <span className="text-foreground" dangerouslySetInnerHTML={{ __html: example.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                      </div>
+                    ))}
+                  </div>
+                  {(useCase as any).commonScenarios.closing && (
+                    <p className="text-foreground font-medium mt-4">{(useCase as any).commonScenarios.closing}</p>
+                  )}
+                </div>
+              )}
+
               {/* SECTION 8: Why Sales Teams Choose mKcalling */}
               {(useCase as any).whyChoose && (
                 <div className="mb-12">

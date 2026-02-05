@@ -1,12 +1,12 @@
 export const scheduleDemoContent = {
   hero: {
-    headline: "Schedule a Demo of mKcalling",
-    subheadline: "See how mKcalling automates inbound and outbound business calls using AI — fully configured and managed for you.",
-    supportingLine: "No obligation. No technical preparation required."
+    headline: "See mKcalling in Action",
+    subheadline: "Tell us your use case and calling volume — we'll show a live workflow and recommend the right setup.",
+    supportingLine: "mKcalling is live and used for real business calling workflows in India."
   },
   whatToExpect: {
     title: "What to Expect in the Demo",
-    subtitle: "Reduce hesitation",
+    subtitle: "A live walkthrough of mKcalling's capabilities",
     items: [
       "Discussion of your calling use cases",
       "Overview of how AI voice agents work",
@@ -19,7 +19,7 @@ export const scheduleDemoContent = {
   },
   whoIsThisFor: {
     title: "Who This Demo Is For",
-    subtitle: "Pre-qualify gently",
+    subtitle: "Ideal for businesses that need automated calling",
     goodFit: {
       title: "Good Fit If You Are",
       items: [
@@ -40,18 +40,16 @@ export const scheduleDemoContent = {
     }
   },
   reassurance: {
-    title: "Reassurance Section",
-    subtitle: "Reduce anxiety at the final step",
+    title: "Why Choose mKcalling",
+    subtitle: "Live product. Real workflows. Indian numbers.",
     points: [
-      "No long-term commitment required to start",
-      "Transparent pricing and billing",
-      "Managed onboarding included",
-      "Designed for Indian businesses",
-      "Human support available during business hours"
+      "Live product. Real workflows. Indian numbers.",
+      "Transparent pricing and managed setup.",
+      "No AI prompting or training required from your team."
     ]
   },
   cta: {
-    title: "Ready to See AI Calling in Action?",
+    title: "See mKcalling in Action",
     buttonText: "Schedule a Demo"
   }
 };

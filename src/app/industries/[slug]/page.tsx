@@ -39,11 +39,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (slug === "banking-dsa") {
     return {
       title: "Banking DSA AI Calling | mKcalling",
-      description: "Automate Banking DSA calling workflows — lead follow-ups, application status, document reminders, and payment follow-ups with mKcalling. Configured and managed for Indian businesses.",
+      description: "Automate lead follow-ups, verification, and customer communication for Banking DSAs with mKcalling — configured and managed for Indian businesses.",
       alternates: { canonical: `/industries/${slug}` },
       openGraph: {
         title: "Banking DSA AI Calling | mKcalling",
-        description: "Automate Banking DSA calling workflows — lead follow-ups, application status, document reminders, and payment follow-ups with mKcalling. Configured and managed for Indian businesses.",
+        description: "Automate lead follow-ups, verification, and customer communication for Banking DSAs with mKcalling — configured and managed for Indian businesses.",
         type: "article",
         url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
         images: ["/mKCalling_Logo.png"],
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       twitter: {
         card: "summary_large_image",
         title: "Banking DSA AI Calling | mKcalling",
-        description: "Automate Banking DSA calling workflows — lead follow-ups, application status, document reminders, and payment follow-ups with mKcalling. Configured and managed for Indian businesses.",
+        description: "Automate lead follow-ups, verification, and customer communication for Banking DSAs with mKcalling — configured and managed for Indian businesses.",
         images: ["/mKCalling_Logo.png"],
       },
     };
@@ -435,7 +435,12 @@ export default async function IndustryPage({ params }: Params) {
                         <h3 className="font-semibold text-lg mb-2 text-foreground group-hover:text-primary transition-colors">
                           {useCase.title}
                         </h3>
-                        <p className="text-sm text-muted-foreground mb-3">{useCase.description}</p>
+                        <p className="text-sm text-muted-foreground mb-2">{useCase.description}</p>
+                        {'useCaseMap' in useCase && useCase.useCaseMap && (
+                          <p className="text-xs text-primary mb-3 font-medium">
+                            → Maps to: {useCase.useCaseMap}
+                          </p>
+                        )}
                         <div className="flex items-center gap-2 text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
                           Learn more
                           <ArrowRight className="w-4 h-4" />
@@ -444,7 +449,12 @@ export default async function IndustryPage({ params }: Params) {
                     ) : (
                       <>
                         <h3 className="font-semibold text-lg mb-2 text-foreground">{useCase.title}</h3>
-                        <p className="text-sm text-muted-foreground">{useCase.description}</p>
+                        <p className="text-sm text-muted-foreground mb-2">{useCase.description}</p>
+                        {'useCaseMap' in useCase && useCase.useCaseMap && (
+                          <p className="text-xs text-primary font-medium">
+                            → Maps to: {useCase.useCaseMap}
+                          </p>
+                        )}
                       </>
                     )}
                   </div>

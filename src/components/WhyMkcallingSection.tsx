@@ -1,4 +1,4 @@
-import { Check, Sparkles, DollarSign, Settings, Globe, Users } from "lucide-react";
+import { Check, Sparkles, DollarSign, Settings, Globe, Users, Languages } from "lucide-react";
 import { homeContent } from "@/content/mkcalling/home";
 
 const iconMap = {
@@ -7,6 +7,7 @@ const iconMap = {
   "Managed Setup & Tuning": Settings,
   "India-First by Design": Globe,
   "Human-in-the-Loop": Users,
+  "Multilingual Indian Language Support": Languages,
 };
 
 export const WhyMkcallingSection = () => {

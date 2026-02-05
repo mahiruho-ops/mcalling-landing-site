@@ -131,6 +131,10 @@ export const homeContent = {
       {
         title: "Human-in-the-Loop",
         description: "Seamless escalation via callback scheduling ensures complex issues reach your team when needed."
+      },
+      {
+        title: "Multilingual Indian Language Support",
+        description: "Support for English, Hindi, Hinglish, Bengali, Marathi, Tamil, Telugu, Kannada, and more. Communicate with customers in their preferred language naturally."
       }
     ]
   },

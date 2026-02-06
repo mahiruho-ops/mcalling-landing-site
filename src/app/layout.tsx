@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import MetaPixel from "@/components/MetaPixel";
 import type { Viewport } from 'next'
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -109,6 +110,9 @@ export default function RootLayout({
         </ThemeProvider>
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+        )}
+        {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
+          <MetaPixel pixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID} />
         )}
         <Analytics />
         <SpeedInsights />

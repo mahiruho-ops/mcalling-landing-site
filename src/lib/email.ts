@@ -126,7 +126,7 @@ const getConfirmationEmailHTML = (data: EmailData): string => {
     <body>
         <div class="container">
             <div class="header">
-                <div class="logo">MChatbot</div>
+                <div class="logo">mKcalling AI</div>
                 <h1>Thank You for Your Interest!</h1>
             </div>
             
@@ -153,17 +153,17 @@ const getConfirmationEmailHTML = (data: EmailData): string => {
                     ${data.message ? `Message: ${data.message}` : ''}
                 </div>
                 
-                <p>Our team will review your information and get back to you within 24-48 hours. We're looking forward to discussing how MChatbot can help with your project!</p>
+                <p>Our team will review your information and get back to you within 24-48 hours. We're looking forward to discussing how mKcalling AI can help with your project!</p>
                 
                 <p>If you have any urgent questions, feel free to reach out to us directly.</p>
                 
                 <p>Best regards,<br>
-                The MChatbot Team</p>
+                The Mahiruho Team</p>
             </div>
             
             <div class="footer">
                 <p>This email was sent to ${data.email} because you submitted an interest form on our website.</p>
-                <p>&copy; 2024 MChatbot. All rights reserved.</p>
+                <p>&copy; 2026 Mahiruho Consulting Services Pvt. Ltd. All rights reserved.</p>
             </div>
         </div>
     </body>
@@ -349,9 +349,9 @@ export const sendConfirmationEmail = async (data: EmailData): Promise<void> => {
     const transporter = createTransporter();
     
     const mailOptions = {
-      from: `"MChatbot" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+      from: `"mKcalling AI" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
       to: data.email,
-      subject: 'Thank You for Your Interest - MChatbot',
+      subject: 'Thank You for Your Interest - mKcalling AI',
       html: getConfirmationEmailHTML(data),
     };
 
@@ -369,7 +369,7 @@ export const sendNotificationEmail = async (data: EmailData): Promise<void> => {
     const transporter = createTransporter();
     
     const mailOptions = {
-      from: `"MChatbot" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+      from: `"mkcalling AI" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
       to: process.env.ADMIN_EMAIL || process.env.SMTP_USER,
       subject: `New Interest Form Submission from ${data.name}`,
       html: getNotificationEmailHTML(data),

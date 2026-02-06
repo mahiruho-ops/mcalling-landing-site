@@ -39,7 +39,7 @@ export const logisticsContent = {
   },
   useCases: {
     title: "Key Logistics Use Cases",
-    subtitle: "Grid of use case cards",
+    subtitle: "",
     items: [
       {
         title: "Pickup Scheduling & Confirmation",
@@ -72,7 +72,7 @@ export const logisticsContent = {
   },
   workflow: {
     title: "Example Workflow (Logistics Calling Journey)",
-    subtitle: "Example Flow",
+    subtitle: "",
     steps: [
       {
         step: "1",
@@ -120,7 +120,7 @@ export const logisticsContent = {
   },
   control: {
     title: "Control, Visibility & Responsible Communication",
-    subtitle: "Keep it practical and trust-focused",
+    subtitle: "",
     points: [
       "DNC handling supported",
       "Controlled call timing and frequency",
@@ -134,7 +134,7 @@ export const logisticsContent = {
   },
   whyChoose: {
     title: "Why Logistics Teams Choose mKcalling",
-    subtitle: "Close with benefits",
+    subtitle: "",
     reasons: [
       "Faster pickup and delivery coordination",
       "Reduced dispatcher and support workload",

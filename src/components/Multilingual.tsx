@@ -27,7 +27,6 @@ export const Multilingual = () => {
                   </div>
                 ))}
               </div>
-              <p className="text-sm text-muted-foreground mt-3">Enterprise glossary and tone guides supported during beta.</p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               {['English', 'Spanish', 'Mandarin', 'Hindi', 'Arabic', 'French', 'German', 'Japanese'].map((lang, i) => (

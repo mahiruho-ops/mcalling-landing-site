@@ -1,4 +1,4 @@
-import { Shield, FileText, Globe, Eye, Heart } from "lucide-react";
+import { Shield, FileText, Globe, Eye, Heart, Lock } from "lucide-react";
 import { homeContent } from "@/content/mkcalling/home";
 
 const iconMap = {
@@ -7,6 +7,7 @@ const iconMap = {
   "India-Hosted Data": Globe,
   "AI Disclosure": Eye,
   "Ethical Practices": Heart,
+  "Role-Based Access Control": Lock,
 };
 
 export const TrustSection = () => {

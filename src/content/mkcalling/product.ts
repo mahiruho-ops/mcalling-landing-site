@@ -12,7 +12,7 @@ export const productContent = {
   },
   whatItIs: {
     title: "What mKcalling Is (and Is Not)",
-    subtitle: "Removing buyer confusion early",
+    subtitle: "",
     is: {
       title: "What mKcalling Is",
       items: [
@@ -34,7 +34,7 @@ export const productContent = {
   },
   capabilities: {
     title: "Core Platform Capabilities",
-    subtitle: "Platform depth without technical overload",
+    subtitle: "",
     items: [
       {
         title: "AI Voice Agents",
@@ -65,7 +65,7 @@ export const productContent = {
   },
   managedService: {
     title: "Managed Service — What We Do for You",
-    subtitle: "Highlight the biggest differentiator",
+    subtitle: "",
     description: "You don't need AI engineers, prompt specialists, or voice bot experts. We handle the setup so you can focus on your business.",
     includes: [
       "Requirement discovery workshops",
@@ -78,13 +78,13 @@ export const productContent = {
   },
   humanInLoop: {
     title: "Human-in-the-Loop Safety",
-    subtitle: "Build trust",
+    subtitle: "",
     description: "AI handles routine conversations. When human intervention is needed, AI schedules a callback. This prevents wrong commitments or poor customer experience. Human control without manual effort.",
     note: "Note: Live transfers are part of future roadmap, not current release."
   },
   integrations: {
     title: "Integrations & Extensibility",
-    subtitle: "Show flexibility without overpromising",
+    subtitle: "",
     native: {
       title: "Native Integrations",
       items: [
@@ -103,7 +103,7 @@ export const productContent = {
   },
   whyChoose: {
     title: "Why Businesses Choose mKcalling",
-    subtitle: "Reinforce differentiation",
+    subtitle: "",
     reasons: [
       "No hidden AI or telephony costs",
       "Billing only on connected talk time",

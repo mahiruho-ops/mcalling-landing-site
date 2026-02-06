@@ -4,12 +4,28 @@ import { sendInterestFormEmails } from '@/lib/email';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, company, message, interestType, countryCode, phone, industry, captchaToken } = body;
+    const { name, email, company, message, interestType, countryCode, phone, industry, primaryUseCase, callingDirection, monthlyCallingMinutes, preferredLanguages, goLiveTimeline, currentCallingSetup, crmTools, captchaToken } = body;
 
-    // Validate required fields
-    if (!name || !email || !interestType || !phone || !industry) {
+    // Validate required fields (all except company and crmTools)
+    if (!name || !email || !interestType || !phone || !industry || !primaryUseCase || !callingDirection || !monthlyCallingMinutes || !preferredLanguages || !goLiveTimeline || !currentCallingSetup) {
       return NextResponse.json(
-        { success: false, message: 'Name, email, interest type, phone, and industry are required' },
+        { success: false, message: 'All fields are required except Company Name and CRM/Tools' },
+        { status: 400 }
+      );
+    }
+
+    // Validate primaryUseCase is an array with at least one item
+    if (!Array.isArray(primaryUseCase) || primaryUseCase.length === 0) {
+      return NextResponse.json(
+        { success: false, message: 'At least one primary use case must be selected' },
+        { status: 400 }
+      );
+    }
+
+    // Validate preferredLanguages is an array with at least one item
+    if (!Array.isArray(preferredLanguages) || preferredLanguages.length === 0) {
+      return NextResponse.json(
+        { success: false, message: 'At least one preferred language must be selected' },
         { status: 400 }
       );
     }
@@ -54,6 +70,13 @@ export async function POST(request: NextRequest) {
       countryCode,
       phone,
       industry,
+      primaryUseCase,
+      callingDirection,
+      monthlyCallingMinutes,
+      preferredLanguages,
+      goLiveTimeline,
+      currentCallingSetup,
+      crmTools,
       timestamp: new Date().toISOString()
     });
 
@@ -66,7 +89,14 @@ export async function POST(request: NextRequest) {
       interestType,
       countryCode,
       phone,
-      industry
+      industry,
+      primaryUseCase,
+      callingDirection,
+      monthlyCallingMinutes,
+      preferredLanguages,
+      goLiveTimeline,
+      currentCallingSetup,
+      crmTools
     });
 
     return NextResponse.json({

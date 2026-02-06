@@ -39,19 +39,19 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (slug === "banking-dsa") {
     return {
       title: "Banking DSA AI Calling | mKcalling",
-      description: "Automate Banking DSA calling workflows — lead follow-ups, application status, document reminders, and payment follow-ups with mKcalling. Configured and managed for Indian businesses.",
+      description: "Automate lead follow-ups, verification, and customer communication for Banking DSAs with mKcalling — configured and managed for Indian businesses.",
       alternates: { canonical: `/industries/${slug}` },
       openGraph: {
         title: "Banking DSA AI Calling | mKcalling",
-        description: "Automate Banking DSA calling workflows — lead follow-ups, application status, document reminders, and payment follow-ups with mKcalling. Configured and managed for Indian businesses.",
+        description: "Automate lead follow-ups, verification, and customer communication for Banking DSAs with mKcalling — configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/industries/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
         card: "summary_large_image",
         title: "Banking DSA AI Calling | mKcalling",
-        description: "Automate Banking DSA calling workflows — lead follow-ups, application status, document reminders, and payment follow-ups with mKcalling. Configured and managed for Indian businesses.",
+        description: "Automate lead follow-ups, verification, and customer communication for Banking DSAs with mKcalling — configured and managed for Indian businesses.",
         images: ["/mKCalling_Logo.png"],
       },
     };
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "Healthcare AI Calling | mKcalling",
         description: "Automate healthcare appointment booking, reminders, and patient follow-ups with mKcalling. Configured and managed for Indian healthcare teams.",
         type: "article",
-        url: `https://mkcalling.ai/industries/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -89,7 +89,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "Education AI Calling | mKcalling",
         description: "Automate admissions follow-ups, counseling calls, and fee reminders with mKcalling — an AI calling platform configured and managed for Indian education providers.",
         type: "article",
-        url: `https://mkcalling.ai/industries/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -111,7 +111,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "Real Estate AI Calling | mKcalling",
         description: "Automate real estate lead follow-ups, site visit scheduling, and post-visit calls with mKcalling — configured and managed for Indian real estate teams.",
         type: "article",
-        url: `https://mkcalling.ai/industries/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -133,7 +133,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "BFSI & Fintech AI Calling | mKcalling",
         description: "Automate verification, reminders, and customer communication for BFSI and fintech teams with mKcalling — configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/industries/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -155,7 +155,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "Insurance AI Calling | mKcalling",
         description: "Automate insurance renewal reminders, onboarding, and customer follow-ups with mKcalling — configured and managed for Indian insurance teams.",
         type: "article",
-        url: `https://mkcalling.ai/industries/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -177,7 +177,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "Hospitality & Travel AI Calling | mKcalling",
         description: "Automate booking confirmations, reminders, guest support, and feedback calls with mKcalling — configured and managed for Indian hospitality and travel teams.",
         type: "article",
-        url: `https://mkcalling.ai/industries/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -199,7 +199,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "E-commerce & D2C AI Calling | mKcalling",
         description: "Automate order confirmation, delivery coordination, customer support, and feedback calls with mKcalling — configured and managed for Indian e-commerce and D2C brands.",
         type: "article",
-        url: `https://mkcalling.ai/industries/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -221,7 +221,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "Logistics AI Calling | mKcalling",
         description: "Automate pickup coordination, delivery updates, and customer communication with mKcalling — configured and managed for Indian logistics teams.",
         type: "article",
-        url: `https://mkcalling.ai/industries/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -243,7 +243,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "Automotive AI Calling | mKcalling",
         description: "Automate sales follow-ups, test drive scheduling, service reminders, and customer communication with mKcalling — configured and managed for Indian automotive businesses.",
         type: "article",
-        url: `https://mkcalling.ai/industries/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -265,7 +265,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "Field Service & Maintenance AI Calling | mKcalling",
         description: "Automate installation, maintenance, and AMC communication with mKcalling — configured and managed for Indian field service businesses.",
         type: "article",
-        url: `https://mkcalling.ai/industries/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -285,7 +285,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       title: `${industry.name} | mKcalling`,
       description: `Learn how mKcalling automates calling for ${industry.name} businesses — configured and managed for Indian companies.`,
       type: "article",
-      url: `https://mkcalling.ai/industries/${slug}`,
+      url: `https://mkcalling.mchatbot.ai/industries/${slug}`,
       images: ["/mKCalling_Logo.png"],
     },
     twitter: {
@@ -435,7 +435,15 @@ export default async function IndustryPage({ params }: Params) {
                         <h3 className="font-semibold text-lg mb-2 text-foreground group-hover:text-primary transition-colors">
                           {useCase.title}
                         </h3>
-                        <p className="text-sm text-muted-foreground mb-3">{useCase.description}</p>
+                        <p className="text-sm text-muted-foreground mb-2">{useCase.description}</p>
+                        {(() => {
+                          const useCaseMap = 'useCaseMap' in useCase ? (useCase as any).useCaseMap : null;
+                          return useCaseMap && typeof useCaseMap === 'string' ? (
+                            <p className="text-xs text-primary mb-3 font-medium">
+                              → Maps to: {useCaseMap}
+                            </p>
+                          ) : null;
+                        })()}
                         <div className="flex items-center gap-2 text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
                           Learn more
                           <ArrowRight className="w-4 h-4" />
@@ -444,7 +452,15 @@ export default async function IndustryPage({ params }: Params) {
                     ) : (
                       <>
                         <h3 className="font-semibold text-lg mb-2 text-foreground">{useCase.title}</h3>
-                        <p className="text-sm text-muted-foreground">{useCase.description}</p>
+                        <p className="text-sm text-muted-foreground mb-2">{useCase.description}</p>
+                        {(() => {
+                          const useCaseMap = 'useCaseMap' in useCase ? (useCase as any).useCaseMap : null;
+                          return useCaseMap && typeof useCaseMap === 'string' ? (
+                            <p className="text-xs text-primary font-medium">
+                              → Maps to: {useCaseMap}
+                            </p>
+                          ) : null;
+                        })()}
                       </>
                     )}
                   </div>

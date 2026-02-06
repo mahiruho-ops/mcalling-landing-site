@@ -26,6 +26,13 @@ interface EmailData {
   countryCode?: string;
   phone?: string;
   industry?: string;
+  primaryUseCase?: string | string[];
+  callingDirection?: string;
+  monthlyCallingMinutes?: string;
+  preferredLanguages?: string | string[];
+  goLiveTimeline?: string;
+  currentCallingSetup?: string;
+  crmTools?: string;
 }
 
 // Create transporter
@@ -136,6 +143,13 @@ const getConfirmationEmailHTML = (data: EmailData): string => {
                     ${data.company ? `Company: ${data.company}<br>` : ''}
                     ${data.industry ? `Industry: ${data.industry}<br>` : ''}
                     ${data.interestType ? `Interest Type: ${data.interestType}<br>` : ''}
+                    ${data.primaryUseCase ? `Primary Use Case: ${Array.isArray(data.primaryUseCase) ? data.primaryUseCase.join(', ') : data.primaryUseCase}<br>` : ''}
+                    ${data.callingDirection ? `Calling Direction: ${data.callingDirection}<br>` : ''}
+                    ${data.monthlyCallingMinutes ? `Estimated Monthly Calling Minutes: ${data.monthlyCallingMinutes}<br>` : ''}
+                    ${data.preferredLanguages ? `Preferred Languages: ${Array.isArray(data.preferredLanguages) ? data.preferredLanguages.join(', ') : data.preferredLanguages}<br>` : ''}
+                    ${data.goLiveTimeline ? `Go-live Timeline: ${data.goLiveTimeline}<br>` : ''}
+                    ${data.currentCallingSetup ? `Current Calling Setup: ${data.currentCallingSetup}<br>` : ''}
+                    ${data.crmTools ? `CRM / Tools: ${data.crmTools}<br>` : ''}
                     ${data.message ? `Message: ${data.message}` : ''}
                 </div>
                 
@@ -260,6 +274,48 @@ const getNotificationEmailHTML = (data: EmailData): string => {
                 <div class="field">
                     <span class="label">Interest Type:</span>
                     <span class="value">${data.interestType}</span>
+                </div>
+                ` : ''}
+                ${data.primaryUseCase ? `
+                <div class="field">
+                    <span class="label">Primary Use Case:</span>
+                    <span class="value">${Array.isArray(data.primaryUseCase) ? data.primaryUseCase.join(', ') : data.primaryUseCase}</span>
+                </div>
+                ` : ''}
+                ${data.callingDirection ? `
+                <div class="field">
+                    <span class="label">Calling Direction:</span>
+                    <span class="value">${data.callingDirection}</span>
+                </div>
+                ` : ''}
+                ${data.monthlyCallingMinutes ? `
+                <div class="field">
+                    <span class="label">Estimated Monthly Calling Minutes:</span>
+                    <span class="value">${data.monthlyCallingMinutes}</span>
+                </div>
+                ` : ''}
+                ${data.preferredLanguages ? `
+                <div class="field">
+                    <span class="label">Preferred Languages:</span>
+                    <span class="value">${Array.isArray(data.preferredLanguages) ? data.preferredLanguages.join(', ') : data.preferredLanguages}</span>
+                </div>
+                ` : ''}
+                ${data.goLiveTimeline ? `
+                <div class="field">
+                    <span class="label">Go-live Timeline:</span>
+                    <span class="value">${data.goLiveTimeline}</span>
+                </div>
+                ` : ''}
+                ${data.currentCallingSetup ? `
+                <div class="field">
+                    <span class="label">Current Calling Setup:</span>
+                    <span class="value">${data.currentCallingSetup}</span>
+                </div>
+                ` : ''}
+                ${data.crmTools ? `
+                <div class="field">
+                    <span class="label">CRM / Tools:</span>
+                    <span class="value">${data.crmTools}</span>
                 </div>
                 ` : ''}
                 ${data.message ? `

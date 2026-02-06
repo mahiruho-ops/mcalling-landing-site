@@ -38,7 +38,7 @@ export const useCasesIndexContent = {
   ],
   inboundOutbound: {
     title: "Inbound vs Outbound Coverage",
-    subtitle: "Clarify scope",
+    subtitle: "",
     inbound: {
       title: "Inbound AI Calling",
       features: [
@@ -60,7 +60,7 @@ export const useCasesIndexContent = {
   },
   aiHuman: {
     title: "How AI + Humans Work Together",
-    subtitle: "Build trust",
+    subtitle: "",
     points: [
       "AI voice agents handle routine, repeatable conversations",
       "Business rules determine when escalation is needed",
@@ -71,7 +71,7 @@ export const useCasesIndexContent = {
   },
   industries: {
     title: "Works Across Industries",
-    subtitle: "Bridge to Industries page",
+    subtitle: "",
     industries: [
       "Healthcare",
       "Education",
@@ -90,7 +90,7 @@ export const useCasesIndexContent = {
   },
   whyChoose: {
     title: "Why Businesses Use mKcalling for These Use Cases",
-    subtitle: "Reinforce differentiation without repetition",
+    subtitle: "",
     reasons: [
       "No AI setup or prompting by clients",
       "All-inclusive pricing with free minutes",

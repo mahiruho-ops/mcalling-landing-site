@@ -38,7 +38,7 @@ export const healthcareContent = {
   },
   useCases: {
     title: "Key Healthcare Use Cases",
-    subtitle: "Grid of use case cards",
+    subtitle: "",
     items: [
       {
         title: "Appointment Booking (Inbound + Outbound)",
@@ -74,7 +74,7 @@ export const healthcareContent = {
   },
   workflow: {
     title: "Example Workflow (Healthcare Calling Journey)",
-    subtitle: "Example Flow",
+    subtitle: "",
     steps: [
       {
         step: "1",
@@ -122,7 +122,7 @@ export const healthcareContent = {
   },
   trust: {
     title: "Trust, Respect & Patient Communication",
-    subtitle: "Keep it practical and non-legal",
+    subtitle: "",
     points: [
       "DNC handling supported",
       "Respectful call timing and frequency defined by your rules",
@@ -135,7 +135,7 @@ export const healthcareContent = {
   },
   whyChoose: {
     title: "Why Healthcare Providers Choose mKcalling",
-    subtitle: "Close with benefits",
+    subtitle: "",
     reasons: [
       "Reduced load on front-desk staff",
       "Always-on availability for basic calling needs",

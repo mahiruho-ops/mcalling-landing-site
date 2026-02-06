@@ -9,7 +9,6 @@ export const Security = () => {
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Protect your data, govern access and track performance.
             </p>
-            <p className="text-sm text-muted-foreground mt-2">Security review available during beta. SOC 2 in progress.</p>
           </div>
 
           <div className="grid md:grid-cols-4 gap-6">

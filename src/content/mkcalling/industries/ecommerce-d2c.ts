@@ -39,7 +39,7 @@ export const ecommerceD2cContent = {
   },
   useCases: {
     title: "Key E-commerce & D2C Use Cases",
-    subtitle: "Grid of use case cards",
+    subtitle: "",
     items: [
       {
         title: "Order Confirmation & COD Verification",
@@ -74,7 +74,7 @@ export const ecommerceD2cContent = {
   },
   workflow: {
     title: "Example Workflow (E-commerce & D2C Calling Journey)",
-    subtitle: "Example Flow",
+    subtitle: "",
     steps: [
       {
         step: "1",
@@ -122,7 +122,7 @@ export const ecommerceD2cContent = {
   },
   control: {
     title: "Control, Visibility & Customer Communication",
-    subtitle: "Keep it trust-focused and practical",
+    subtitle: "",
     points: [
       "DNC handling supported",
       "Controlled call timing and frequency",
@@ -136,7 +136,7 @@ export const ecommerceD2cContent = {
   },
   whyChoose: {
     title: "Why E-commerce & D2C Teams Choose mKcalling",
-    subtitle: "Close with benefits",
+    subtitle: "",
     reasons: [
       "Faster order and delivery confirmations",
       "Reduced load on support teams",

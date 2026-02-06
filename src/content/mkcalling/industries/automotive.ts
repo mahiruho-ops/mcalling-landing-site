@@ -39,7 +39,7 @@ export const automotiveContent = {
   },
   useCases: {
     title: "Key Automotive Use Cases",
-    subtitle: "Grid of use case cards",
+    subtitle: "",
     items: [
       {
         title: "Sales Inquiry Follow-ups",
@@ -76,7 +76,7 @@ export const automotiveContent = {
   },
   workflow: {
     title: "Example Workflow (Automotive Calling Journey)",
-    subtitle: "Example Flow",
+    subtitle: "",
     steps: [
       {
         step: "1",
@@ -128,7 +128,7 @@ export const automotiveContent = {
   },
   control: {
     title: "Control, Visibility & Customer Communication",
-    subtitle: "Keep it trust-focused and practical",
+    subtitle: "",
     points: [
       "DNC handling supported",
       "Controlled call timing and frequency",
@@ -142,7 +142,7 @@ export const automotiveContent = {
   },
   whyChoose: {
     title: "Why Automotive Businesses Choose mKcalling",
-    subtitle: "Close with benefits",
+    subtitle: "",
     reasons: [
       "Faster response to sales inquiries",
       "Reduced load on sales and service teams",

@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "AI Sales Calling & Lead Qualification | mKcalling",
         description: "Automate sales and lead qualification calls with mKcalling — an AI calling platform, configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/use-cases/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "AI Appointment Booking & Reminder Calls | mKcalling",
         description: "Automate appointment booking and reminder calls with mKcalling — an AI calling platform, configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/use-cases/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -77,7 +77,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "AI Payment Reminder & Collection Calls | mKcalling",
         description: "Automate payment reminder and follow-up calls with mKcalling — an AI calling platform, configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/use-cases/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -99,7 +99,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "AI Customer Support & Follow-up Calls | mKcalling",
         description: "Handle inbound support and outbound follow-up calls using mKcalling — an AI calling platform, configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/use-cases/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -121,7 +121,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "AI Verification & Onboarding Calls | mKcalling",
         description: "Automate verification and onboarding calls with mKcalling — an AI calling platform, configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/use-cases/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -143,7 +143,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: "AI Feedback & NPS Calling | mKcalling",
         description: "Collect customer feedback and NPS using AI voice agents with mKcalling — configured and managed for Indian businesses.",
         type: "article",
-        url: `https://mkcalling.ai/use-cases/${slug}`,
+        url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
         images: ["/mKCalling_Logo.png"],
       },
       twitter: {
@@ -163,7 +163,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       title: `${useCase.title} | mKcalling`,
       description: useCase.description,
       type: "article",
-      url: `https://mkcalling.ai/use-cases/${slug}`,
+      url: `https://mkcalling.mchatbot.ai/use-cases/${slug}`,
       images: ["/mKCalling_Logo.png"],
     },
     twitter: {
@@ -445,6 +445,25 @@ export default async function UseCasePage({ params }: Params) {
                   </div>
                   {(useCase as any).whereItWorks.note && (
                     <p className="text-sm text-muted-foreground italic">{(useCase as any).whereItWorks.note}</p>
+                  )}
+                </div>
+              )}
+
+              {/* SECTION 7.5: Common Scenarios Across Industries */}
+              {(useCase as any).commonScenarios && (
+                <div className="mb-12 p-8 rounded-xl bg-card border border-primary/30">
+                  <h2 className="text-2xl font-bold mb-2">{(useCase as any).commonScenarios.title}</h2>
+                  <p className="text-muted-foreground mb-6">{(useCase as any).commonScenarios.description}</p>
+                  <div className="space-y-3 mb-4">
+                    {(useCase as any).commonScenarios.examples.map((example: string, index: number) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <span className="text-primary mt-1">•</span>
+                        <span className="text-foreground" dangerouslySetInnerHTML={{ __html: example.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                      </div>
+                    ))}
+                  </div>
+                  {(useCase as any).commonScenarios.closing && (
+                    <p className="text-foreground font-medium mt-4">{(useCase as any).commonScenarios.closing}</p>
                   )}
                 </div>
               )}

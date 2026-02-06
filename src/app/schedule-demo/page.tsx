@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { scheduleDemoContent } from "@/content/mkcalling/scheduleDemo";
-import { InterestForm } from "@/components/InterestForm";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Check, CheckCircle2, Users, X, Shield, Phone, Calendar, TrendingUp } from "lucide-react";
@@ -84,18 +83,7 @@ export default function ScheduleDemoPage() {
             </div>
           </div>
 
-          {/* SECTION 4: Contact / Demo Form */}
-          <div id="interest" className="mb-16 p-8 rounded-xl bg-card border border-border/50">
-            <div className="max-w-2xl mx-auto">
-              <h2 className="text-2xl font-semibold mb-2 text-center">Request a Demo</h2>
-              <p className="text-muted-foreground mb-6 text-center">
-                Fill out the form below and we'll get back to you to schedule a demo.
-              </p>
-              <InterestForm />
-            </div>
-          </div>
-
-          {/* SECTION 5: Reassurance Section */}
+          {/* SECTION 4: Reassurance Section */}
           <div className="mb-16">
             <div className="text-center space-y-4 mb-8">
               <h2 className="text-3xl md:text-4xl font-bold">{reassurance.title}</h2>
@@ -113,7 +101,7 @@ export default function ScheduleDemoPage() {
             </div>
           </div>
 
-          {/* SECTION 6: CTA (Reinforced) */}
+          {/* SECTION 5: CTA (Reinforced) */}
           <div className="text-center p-12 rounded-xl bg-card border border-primary/30">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">{cta.title}</h2>
             <div className="pt-4">

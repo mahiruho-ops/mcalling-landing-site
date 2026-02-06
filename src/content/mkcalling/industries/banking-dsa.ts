@@ -1,154 +1,168 @@
 export const bankingDsaContent = {
   hero: {
-    headline: "AI Calling for Banking DSAs — Follow-ups, Status Calls, and Reminders at Scale",
-    subheadline: "mKcalling helps Banking DSAs automate inbound and outbound calls for lead qualification, application follow-ups, document reminders, and payment/EMI follow-ups — fully configured and managed for you.",
+    headline: "AI Calling for Banking DSAs — Lead Follow-ups, Verification, and Customer Coordination",
+    subheadline: "mKcalling helps Banking DSAs automate inbound and outbound calls for lead qualification, verification, payment reminders, and customer follow-ups — fully configured and managed for you.",
     bullets: [
-      "High-volume outbound calling with predictable pricing",
-      "Multilingual calling for Indian borrowers",
-      "Call recordings, transcripts, and summaries for visibility",
-      "Human escalation via callback when needed"
+      "Faster lead follow-ups without adding callers",
+      "Structured verification and onboarding calls",
+      "Polite payment and EMI reminder communication",
+      "Human escalation via callback when required"
     ],
     primaryCTA: "Schedule a Demo",
     secondaryCTA: "View Pricing"
   },
   whyNeed: {
     title: "Why Banking DSAs Need AI Calling",
-    subtitle: "Relatable Banking DSA problems",
+    subtitle: "Banking DSAs depend heavily on voice calls",
     dependsOn: {
-      title: "Banking DSAs depend heavily on calling for:",
+      title: "Banking DSAs depend heavily on voice calls for:",
       items: [
-        "New lead follow-ups (speed matters)",
-        "Document collection coordination",
-        "Application status updates",
-        "Customer queries and clarifications",
-        "EMI/payment follow-ups"
+        "New lead follow-ups from campaigns and referrals",
+        "Eligibility and interest qualification",
+        "KYC and document verification coordination",
+        "Application and disbursal status updates",
+        "EMI and repayment reminders",
+        "Ongoing customer support queries"
       ]
     },
     challenges: {
-      title: "But manual calling becomes difficult due to:",
+      title: "Manual calling becomes difficult due to:",
       items: [
-        "Lead drop-offs because of delayed follow-ups",
-        "Limited calling bandwidth during peak campaigns",
-        "Inconsistent communication across callers",
-        "Language barriers across regions",
-        "High cost and attrition of telecalling teams",
-        "Missed inbound calls outside working hours"
+        "High daily lead volumes",
+        "Delayed follow-ups leading to drop-offs",
+        "Limited telecaller bandwidth",
+        "Inconsistent communication quality",
+        "Language diversity across customers",
+        "Missed calls outside working hours"
       ]
     },
-    bridgeLine: "mKcalling automates routine calls so your team can focus on high-value interactions."
+    bridgeLine: "mKcalling automates routine DSA communication while keeping control with your team."
   },
   useCases: {
-    title: "Key Banking DSA Use Cases",
-    subtitle: "Grid of use case cards",
+    title: "Key Banking DSA Scenarios (Mapped to Use Cases)",
+    subtitle: "All scenarios below are supported through mKcalling's canonical use-case capabilities.",
     items: [
       {
-        title: "Lead Qualification Calls",
-        description: "Ask basic questions (interest, city, salary range, type of loan). Capture intent and schedule callback.",
+        title: "Lead Follow-ups & Qualification",
+        description: "Initial outreach, interest qualification, and callback scheduling",
+        useCaseMap: "Sales & Lead Qualification",
         link: "/use-cases/sales-lead-qualification"
       },
       {
-        title: "Application Status Updates",
-        description: "Inform customers about stages (submitted, processing, pending docs). Reduce inbound query load."
-      },
-      {
-        title: "Document Collection Reminders",
-        description: "Polite reminders for missing documents. Coordinate appointment/time for pickup/drop."
-      },
-      {
-        title: "EMI / Payment Follow-ups",
-        description: "Respectful reminders and follow-ups. Escalation via callback for complex cases.",
-        link: "/use-cases/payment-reminders-collections"
-      },
-      {
-        title: "Verification & Onboarding Calls",
-        description: "Structured verification and onboarding steps.",
+        title: "Eligibility & KYC Coordination",
+        description: "Structured calls for document collection and onboarding steps",
+        useCaseMap: "Verification & Onboarding",
         link: "/use-cases/verification-onboarding"
       },
       {
-        title: "Feedback & Service Follow-ups",
-        description: "Post-disbursal service follow-up and feedback.",
+        title: "Application Status Updates",
+        description: "Proactive and reactive calls for application or disbursal status",
+        useCaseMap: "Customer Support & Follow-ups",
+        link: "/use-cases/customer-support-followups"
+      },
+      {
+        title: "EMI & Repayment Reminder Calls",
+        description: "Polite, rule-based reminder calls without aggressive language",
+        useCaseMap: "Payment Reminders & Collections",
+        link: "/use-cases/payment-reminders-collections"
+      },
+      {
+        title: "Ongoing Customer Support Calls",
+        description: "Inbound and outbound support for customer queries and follow-ups",
+        useCaseMap: "Customer Support & Follow-ups",
+        link: "/use-cases/customer-support-followups"
+      },
+      {
+        title: "Post-disbursal Feedback",
+        description: "Experience and satisfaction feedback collection",
+        useCaseMap: "Feedback & NPS",
         link: "/use-cases/feedback-nps"
       }
     ],
-    note: "AI handles routine conversations. When human support is needed, mKcalling schedules a callback automatically."
+    note: "When conversations require human judgment, mKcalling schedules a callback automatically."
   },
   workflow: {
-    title: "Example Workflow (Banking DSA Calling Journey)",
-    subtitle: "Example Flow",
+    title: "Example Banking DSA Calling Workflow",
+    subtitle: "",
     steps: [
       {
         step: "1",
-        description: "Lead enters from campaigns/partners/forms"
+        description: "Lead is generated from campaign or referral"
       },
       {
         step: "2",
-        description: "AI calls instantly (or as per schedule) and qualifies lead"
+        description: "AI voice agent initiates follow-up call"
       },
       {
         step: "3",
-        description: "If qualified, AI schedules a callback for your RM/sales agent"
+        description: "Interest and eligibility are qualified"
       },
       {
         step: "4",
-        description: "AI follows up for document reminders and pending actions"
+        description: "Verification or onboarding calls are placed"
       },
       {
         step: "5",
-        description: "AI provides application status updates proactively"
+        description: "Status update or reminder calls are scheduled"
       },
       {
         step: "6",
-        description: "AI performs reminders and follow-ups as per business rules"
+        description: "Exceptions are escalated via callback"
       },
       {
         step: "7",
-        description: "Your team gets call summaries, transcripts, sentiment, and action items"
+        description: "Feedback calls are made post-disbursal"
+      },
+      {
+        step: "8",
+        description: "Team receives summaries, transcripts, sentiment, and action items"
       }
     ],
-    keyMessage: "mKcalling improves speed and consistency — without replacing human decision-making."
+    keyMessage: "mKcalling supports communication workflows — not credit or approval decisions."
   },
   capabilities: {
     title: "Platform Capabilities Relevant to Banking DSAs",
     subtitle: "What Banking DSAs get",
     items: [
       "Inbound + outbound AI calling",
-      "Campaign calling and scheduling",
+      "Rule-based calling workflows",
       "Multilingual voice support",
-      "Call recording + transcripts",
+      "Call recordings and transcripts",
       "AI summaries, sentiment, and action items",
-      "Centralized dashboard for visibility",
-      "API trigger capability from external systems"
+      "Centralized dashboard visibility",
+      "API triggers from CRM or lead platforms (on request)"
     ]
   },
   control: {
     title: "Control, Auditability & Responsible Communication",
-    subtitle: "Keep it practical and generic (no legal guarantees)",
+    subtitle: "This ensures consistent and accountable customer communication",
     points: [
       "DNC handling supported",
-      "Call recordings and logs for review",
+      "Rule-based call timing and frequency",
+      "Call recordings and logs for audit",
       "Data stored in India",
-      "AI disclosure configurable (if you want it announced)",
-      "Rule-based call timing and frequency for responsible outreach",
+      "AI disclosure configurable",
       "Human escalation via callback"
     ],
-    closing: "This section should build trust, especially for finance-related calling."
+    closing: "This ensures consistent and accountable customer communication."
   },
   whyChoose: {
     title: "Why Banking DSAs Choose mKcalling",
-    subtitle: "Close with benefits",
+    subtitle: "",
     reasons: [
-      "Faster lead follow-ups without hiring more callers",
-      "Reduced operational load on RMs/telecallers",
-      "Consistent and multilingual communication",
-      "High-volume calling with predictable costs",
+      "Faster and more consistent lead follow-ups",
+      "Reduced telecaller dependency",
+      "Structured and auditable communication",
+      "Multilingual outreach at scale",
+      "Always-on availability for routine calls",
       "Billing only on connected talk time",
-      "No charges for failed or unanswered attempts",
-      "Managed setup and tuning (no AI expertise required)"
+      "No charges for failed or unanswered calls",
+      "Managed setup (no AI expertise required)"
     ]
   },
   cta: {
-    headline: "Ready to Scale Your Banking DSA Calling Operations?",
-    copy: "Tell us your use cases and expected monthly calling volume — we'll configure the right AI calling setup for your workflow.",
+    headline: "Scale Your Banking DSA Calling Without Scaling Headcount",
+    copy: "Tell us your lead volume and workflows — we'll configure the right AI calling setup for your DSA operations.",
     primaryCTA: "Schedule a Demo",
     secondaryCTA: "View Pricing"
   }

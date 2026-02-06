@@ -131,6 +131,10 @@ export const homeContent = {
       {
         title: "Human-in-the-Loop",
         description: "Seamless escalation via callback scheduling ensures complex issues reach your team when needed."
+      },
+      {
+        title: "Multilingual Indian Language Support",
+        description: "Support for English, Hindi, Hinglish, Bengali, Marathi, Tamil, Telugu, Kannada, and more. Communicate with customers in their preferred language naturally."
       }
     ]
   },
@@ -230,6 +234,10 @@ export const homeContent = {
       {
         title: "Ethical Practices",
         description: "Fair-use practices and ethical AI deployment guidelines"
+      },
+      {
+        title: "Role-Based Access Control",
+        description: "Secure access controls with role-based permissions. Control who can view call data, configure agents, and manage settings within your organization."
       }
     ]
   },

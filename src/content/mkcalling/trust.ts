@@ -7,7 +7,7 @@ export const trustContent = {
   },
   indiaFirst: {
     title: "India-First by Design",
-    subtitle: "Reinforce local readiness",
+    subtitle: "",
     description: "mKcalling is built with Indian businesses in mind:",
     points: [
       "Indian phone numbers",
@@ -20,7 +20,7 @@ export const trustContent = {
   },
   callHandling: {
     title: "Call Handling & Recording",
-    subtitle: "Address transparency and auditability",
+    subtitle: "",
     points: [
       "All calls are recorded by default",
       "Call recordings are stored securely in India",
@@ -32,7 +32,7 @@ export const trustContent = {
   },
   consent: {
     title: "Consent, DND & Responsible Outreach",
-    subtitle: "Show ethical communication",
+    subtitle: "",
     points: [
       "Do-Not-Call (DNC) handling supported",
       "Businesses control call timing and frequency",
@@ -43,7 +43,7 @@ export const trustContent = {
   },
   aiTransparency: {
     title: "AI Transparency & Human Control",
-    subtitle: "Build trust in AI usage",
+    subtitle: "",
     points: [
       "AI agents can disclose they are AI (configurable by the business)",
       "AI handles routine conversations only",
@@ -54,7 +54,7 @@ export const trustContent = {
   },
   dataSecurity: {
     title: "Data Access & Security Practices",
-    subtitle: "Reassure without heavy claims",
+    subtitle: "",
     points: [
       "Secure access controls within the platform",
       "Role-based visibility for call data",
@@ -63,9 +63,22 @@ export const trustContent = {
     ],
     closing: "We focus on practical security for everyday business use."
   },
+  roleBasedAccess: {
+    title: "Role-Based Access Control",
+    subtitle: "",
+    description: "Control who can access what within your mKcalling account. Define roles and permissions to ensure the right people have the right level of access.",
+    points: [
+      "Assign role-based permissions to team members",
+      "Control who can view call data, recordings, and transcripts",
+      "Restrict agent configuration and workflow changes to authorized users",
+      "Manage account settings and billing access separately",
+      "Audit logs track all access and permission changes"
+    ],
+    closing: "This ensures your call data and platform settings remain secure while allowing your team to work efficiently."
+  },
   fairUse: {
     title: "Ethical & Fair Use",
-    subtitle: "Protect platform and brand",
+    subtitle: "",
     points: [
       "Industry-standard fair-use practices apply",
       "Ethical, lawful usage is expected from all clients",
@@ -75,13 +88,14 @@ export const trustContent = {
   },
   businessValue: {
     title: "What This Means for Your Business",
-    subtitle: "Translate compliance into value",
+    subtitle: "",
     benefits: [
       "Confidence in automated calling",
       "Clear visibility into conversations",
       "Reduced operational risk",
       "Control over how and when calls are made",
-      "AI support without loss of accountability"
+      "AI support without loss of accountability",
+      "Secure team collaboration with role-based access controls"
     ]
   },
   cta: {

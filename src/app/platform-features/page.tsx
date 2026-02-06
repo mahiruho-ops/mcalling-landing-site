@@ -5,7 +5,7 @@ import { AdvancedAnalytics } from "@/components/AdvancedAnalytics";
 
 export const metadata = {
   title: "Platform Features",
-  description: "Templates, builders, and analytics in MChatbot.",
+  description: "Templates, builders, and analytics in mKcalling AI.",
 };
 
 export default function PlatformFeaturesPage() {

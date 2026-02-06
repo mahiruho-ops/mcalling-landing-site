@@ -5,7 +5,7 @@ import { CustomTools } from "@/components/CustomTools";
 
 export const metadata = {
   title: "AI & Tools",
-  description: "Core AI capabilities and developer tools in MChatbot.",
+  description: "Core AI capabilities and developer tools in mKcalling AI.",
 };
 
 export default function AiToolsPage() {

@@ -436,11 +436,14 @@ export default async function IndustryPage({ params }: Params) {
                           {useCase.title}
                         </h3>
                         <p className="text-sm text-muted-foreground mb-2">{useCase.description}</p>
-                        {'useCaseMap' in useCase && useCase.useCaseMap && (
-                          <p className="text-xs text-primary mb-3 font-medium">
-                            → Maps to: {useCase.useCaseMap}
-                          </p>
-                        )}
+                        {(() => {
+                          const useCaseMap = 'useCaseMap' in useCase ? (useCase as any).useCaseMap : null;
+                          return useCaseMap && typeof useCaseMap === 'string' ? (
+                            <p className="text-xs text-primary mb-3 font-medium">
+                              → Maps to: {useCaseMap}
+                            </p>
+                          ) : null;
+                        })()}
                         <div className="flex items-center gap-2 text-sm text-primary opacity-0 group-hover:opacity-100 transition-opacity">
                           Learn more
                           <ArrowRight className="w-4 h-4" />
@@ -450,11 +453,14 @@ export default async function IndustryPage({ params }: Params) {
                       <>
                         <h3 className="font-semibold text-lg mb-2 text-foreground">{useCase.title}</h3>
                         <p className="text-sm text-muted-foreground mb-2">{useCase.description}</p>
-                        {'useCaseMap' in useCase && useCase.useCaseMap && (
-                          <p className="text-xs text-primary font-medium">
-                            → Maps to: {useCase.useCaseMap}
-                          </p>
-                        )}
+                        {(() => {
+                          const useCaseMap = 'useCaseMap' in useCase ? (useCase as any).useCaseMap : null;
+                          return useCaseMap && typeof useCaseMap === 'string' ? (
+                            <p className="text-xs text-primary font-medium">
+                              → Maps to: {useCaseMap}
+                            </p>
+                          ) : null;
+                        })()}
                       </>
                     )}
                   </div>

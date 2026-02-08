@@ -6,10 +6,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { name, email, company, message, interestType, countryCode, phone, industry, primaryUseCase, callingDirection, monthlyCallingMinutes, preferredLanguages, goLiveTimeline, currentCallingSetup, crmTools, captchaToken } = body;
 
-    // Validate required fields (all except company and crmTools)
+    // Validate required fields (all except company, message, and crmTools)
     if (!name || !email || !interestType || !phone || !industry || !primaryUseCase || !callingDirection || !monthlyCallingMinutes || !preferredLanguages || !goLiveTimeline || !currentCallingSetup) {
       return NextResponse.json(
-        { success: false, message: 'All fields are required except Company Name and CRM/Tools' },
+        { success: false, message: 'All fields are required except Company Name, Message, and CRM/Tools' },
         { status: 400 }
       );
     }

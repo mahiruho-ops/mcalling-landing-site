@@ -38,22 +38,15 @@ interface InterestFormData {
   crmTools: string;
 }
 
-export const InterestForm = () => {
-  const { toast } = useToast();
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
-  
-  // Detect country on mount
-  const [detectedCountry, setDetectedCountry] = useState<CountryCode>(defaultCountry);
-  const [isMounted, setIsMounted] = useState(false);
-  
-  // Initialize formData with defaultCountry to avoid hydration mismatch
-  const [formData, setFormData] = useState<InterestFormData>({
+/** Single source of truth for empty form state; used for initial state and reset on success. */
+function getInitialFormState(country: CountryCode): InterestFormData {
+  return {
     name: "",
     email: "",
     company: "",
     message: "",
     interestType: null,
-    countryCode: `${defaultCountry.dialCode}-${defaultCountry.code}`,
+    countryCode: `${country.dialCode}-${country.code}`,
     phone: "",
     industry: "",
     primaryUseCase: [],
@@ -63,22 +56,63 @@ export const InterestForm = () => {
     goLiveTimeline: "",
     currentCallingSetup: "",
     crmTools: "",
-  });
+  };
+}
 
-  // Detect country and update form data on mount (client-side only)
+export const InterestForm = () => {
+  const { toast } = useToast();
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  
+  // Detect country on mount
+  const [detectedCountry, setDetectedCountry] = useState<CountryCode>(defaultCountry);
+  const [isMounted, setIsMounted] = useState(false);
+  
+  // Initialize formData with defaultCountry to avoid hydration mismatch
+  const [formData, setFormData] = useState<InterestFormData>(() => getInitialFormState(defaultCountry));
+  const [formResetKey, setFormResetKey] = useState(0);
+
+  // Detect country on mount: prefer IP-based (via API), else browser locale/timezone, else India
   useEffect(() => {
     setIsMounted(true);
-    if (typeof window === 'undefined') return;
-    
-    try {
-      const detected = detectCountryFromBrowser();
-      setDetectedCountry(detected);
-      // Store as composite value (dialCode-countryCode) to ensure uniqueness
-      setFormData(prev => ({ ...prev, countryCode: `${detected.dialCode}-${detected.code}` }));
-    } catch (error) {
-      console.error('Error detecting country:', error);
-      // Keep default country code on error
-    }
+    if (typeof window === "undefined") return;
+
+    let cancelled = false;
+
+    const applyCountry = (country: CountryCode) => {
+      if (cancelled) return;
+      setDetectedCountry(country);
+      setFormData((prev) => ({ ...prev, countryCode: `${country.dialCode}-${country.code}` }));
+    };
+
+    (async () => {
+      try {
+        const res = await fetch("/api/geo");
+        if (!res.ok) throw new Error("Geo API error");
+        const data = await res.json();
+        const code = data?.countryCode?.toUpperCase?.();
+        if (code) {
+          const fromApi = countryCodes.find((c) => c.code === code);
+          if (fromApi) {
+            applyCountry(fromApi);
+            return;
+          }
+        }
+      } catch (e) {
+        // Fall through to browser-based detection
+      }
+
+      try {
+        const fromBrowser = detectCountryFromBrowser();
+        applyCountry(fromBrowser);
+      } catch (error) {
+        console.error("Error detecting country:", error);
+        applyCountry(defaultCountry);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -203,23 +237,8 @@ export const InterestForm = () => {
           title: "Demo request received",
           description: "We'll contact you shortly to confirm a demo slot. Typical response time: within business hours.",
         });
-        setFormData({ 
-          name: "", 
-          email: "", 
-          company: "", 
-          message: "", 
-          interestType: null,
-          countryCode: `${detectedCountry.dialCode}-${detectedCountry.code}` || `${defaultCountry.dialCode}-${defaultCountry.code}`,
-          phone: "",
-          industry: "",
-          primaryUseCase: [],
-          callingDirection: "",
-          monthlyCallingMinutes: "",
-          preferredLanguages: [],
-          goLiveTimeline: "",
-          currentCallingSetup: "",
-          crmTools: "",
-        });
+        setFormData(getInitialFormState(detectedCountry));
+        setFormResetKey((k) => k + 1);
         setCaptchaToken(null);
         // Reset CAPTCHA
         if (recaptchaRef.current) {
@@ -278,7 +297,7 @@ export const InterestForm = () => {
           </div>
 
           <Card className="p-8 bg-card border-primary/30 shadow-card animate-fade-in-up">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form key={formResetKey} onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <label htmlFor="name" className="text-sm font-medium">
                   Name <span className="text-red-500">*</span>

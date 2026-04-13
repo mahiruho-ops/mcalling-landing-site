@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
@@ -13,6 +14,47 @@ import { Send } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { industriesData } from "@/content/mkcalling/industries";
 import { countryCodes, defaultCountry, detectCountryFromBrowser, validatePhoneNumber, type CountryCode } from "@/lib/countryCodes";
+import { INTEREST_MESSAGE_MAX_LENGTH } from "@/lib/interest-form-limits";
+import {
+  clearPricingContextFromStorage,
+  readPricingContextFromStorage,
+  type PricingContextV1,
+} from "@/lib/pricing-context";
+import { cn } from "@/lib/utils";
+
+const INTEREST_PRIMARY_USE_CASES = [
+  "Sales & Lead Qualification",
+  "Appointment Booking & Reminders",
+  "Payment Reminders & Collections",
+  "Customer Support & Follow-ups",
+  "Verification & Onboarding",
+  "Feedback & NPS",
+  "Other/Not in this List",
+] as const;
+
+const INTEREST_LANGUAGES = [
+  "English",
+  "Hindi",
+  "Marathi",
+  "Tamil",
+  "Telugu",
+  "Kannada",
+  "Malayalam",
+  "Bengali",
+  "Gujarati",
+  "Punjabi",
+  "Others",
+] as const;
+
+const interestFormCheckboxClassName =
+  "shrink-0 rounded-[3px] border-2 border-primary/50 data-[state=checked]:border-primary";
+
+function interestSelectableRowClass(selected: boolean) {
+  return cn(
+    "flex items-center gap-3 rounded-lg border border-border/50 px-3 py-2.5 cursor-pointer hover:bg-muted/30",
+    selected && "border-primary/50 bg-primary/5",
+  );
+}
 
 export enum InterestType {
   IMPLEMENTATION_PARTNER = "Implementation Partner",
@@ -70,6 +112,16 @@ export const InterestForm = () => {
   // Initialize formData with defaultCountry to avoid hydration mismatch
   const [formData, setFormData] = useState<InterestFormData>(() => getInitialFormState(defaultCountry));
   const [formResetKey, setFormResetKey] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [pricingContext, setPricingContext] = useState<PricingContextV1 | null>(null);
+  const [pricingContextReady, setPricingContextReady] = useState(false);
+  const fromEstimator = pricingContext !== null;
+  /** SMB estimator already maps connected minutes into an interest-form bucket — hide duplicate question. */
+  const smbMonthlyMinutesFromContext =
+    pricingContext?.source === "smb" &&
+    Boolean(pricingContext.interestFormPrefill.monthlyCallingMinutes?.trim());
+  const requireMonthlyCallingMinutesField = !smbMonthlyMinutesFromContext;
 
   // Detect country on mount: prefer IP-based (via API), else browser locale/timezone, else India
   useEffect(() => {
@@ -115,8 +167,26 @@ export const InterestForm = () => {
     };
   }, []);
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  useEffect(() => {
+    if (!isMounted) return;
+    const stored = readPricingContextFromStorage();
+    if (stored) {
+      setPricingContext(stored);
+      setFormData((prev) => ({
+        ...prev,
+        primaryUseCase:
+          stored.interestFormPrefill.primaryUseCase.length > 0
+            ? stored.interestFormPrefill.primaryUseCase
+            : prev.primaryUseCase,
+        monthlyCallingMinutes:
+          stored.interestFormPrefill.monthlyCallingMinutes ?? prev.monthlyCallingMinutes,
+        callingDirection: stored.interestFormPrefill.callingDirection ?? prev.callingDirection,
+        currentCallingSetup:
+          stored.interestFormPrefill.currentCallingSetup ?? prev.currentCallingSetup,
+      }));
+    }
+    setPricingContextReady(true);
+  }, [isMounted]);
 
   // Parse country code from formData (handles both old format "dialCode" and new format "dialCode-countryCode")
   const parseCountryCode = (code: string): { dialCode: string; countryCode: string } => {
@@ -196,16 +266,90 @@ export const InterestForm = () => {
       return;
     }
 
-    // Validate industry
-    if (!formData.industry.trim()) {
+    if (!formData.company.trim()) {
       toast({
-        title: "Industry Required",
-        description: "Please select your industry.",
+        title: "Company required",
+        description: "Please enter your company name.",
         variant: "destructive",
       });
       return;
     }
-    
+
+    if (!fromEstimator) {
+      if (!formData.industry.trim()) {
+        toast({
+          title: "Industry Required",
+          description: "Please select your industry.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (!formData.primaryUseCase.length) {
+        toast({
+          title: "Primary use case required",
+          description: "Select at least one primary use case.",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
+    if (!formData.preferredLanguages.length) {
+      toast({
+        title: "Preferred languages required",
+        description: "Select at least one language — use checkboxes for all that apply.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!formData.goLiveTimeline.trim()) {
+      toast({
+        title: "Go-live timeline required",
+        description: "Please select your target timeline.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!fromEstimator) {
+      if (!formData.callingDirection.trim()) {
+        toast({
+          title: "Calling direction required",
+          description: "Please select inbound, outbound, or both.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (!formData.currentCallingSetup.trim()) {
+        toast({
+          title: "Current setup required",
+          description: "Please tell us how you handle calls today.",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
+    if (requireMonthlyCallingMinutesField && !formData.monthlyCallingMinutes.trim()) {
+      toast({
+        title: "Estimated minutes required",
+        description: "Please select an estimated monthly calling minutes range.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (formData.message.length > INTEREST_MESSAGE_MAX_LENGTH) {
+      toast({
+        title: "Message too long",
+        description: `Please keep your message to ${INTEREST_MESSAGE_MAX_LENGTH} characters or fewer.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Check if CAPTCHA is completed
     if (!captchaToken) {
       toast({
@@ -218,6 +362,11 @@ export const InterestForm = () => {
 
     setIsSubmitting(true);
 
+    const monthlyCallingMinutesPayload =
+      smbMonthlyMinutesFromContext && pricingContext?.interestFormPrefill.monthlyCallingMinutes
+        ? pricingContext.interestFormPrefill.monthlyCallingMinutes.trim()
+        : formData.monthlyCallingMinutes.trim();
+
     try {
       const response = await fetch('/api/interest', {
         method: 'POST',
@@ -226,7 +375,9 @@ export const InterestForm = () => {
         },
         body: JSON.stringify({
           ...formData,
+          monthlyCallingMinutes: monthlyCallingMinutesPayload,
           captchaToken,
+          ...(pricingContext ? { pricingContext } : {}),
         }),
       });
 
@@ -237,6 +388,8 @@ export const InterestForm = () => {
           title: "Demo request received",
           description: "We'll contact you shortly to confirm a demo slot. Typical response time: within business hours.",
         });
+        clearPricingContextFromStorage();
+        setPricingContext(null);
         setFormData(getInitialFormState(detectedCountry));
         setFormResetKey((k) => k + 1);
         setCaptchaToken(null);
@@ -268,7 +421,7 @@ export const InterestForm = () => {
       <div className="container mx-auto px-6">
         <div className="max-w-2xl mx-auto">
           <div className="text-center space-y-4 mb-12 animate-fade-in-up">
-            <h2 className="text-4xl md:text-5xl font-bold">
+            <h2 className="text-4xl md:text-5xl font-bold normal-case">
               See mKcalling in Action
             </h2>
             <p className="text-xl text-muted-foreground">
@@ -279,25 +432,42 @@ export const InterestForm = () => {
             </p>
           </div>
 
-          <div className="mb-6 p-4 rounded-lg bg-primary/5 border border-primary/20">
-            <ul className="space-y-2 text-sm text-foreground">
-              <li className="flex items-start gap-2">
-                <span className="text-primary mt-0.5">•</span>
-                <span>Live product. Real workflows. Indian numbers.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary mt-0.5">•</span>
-                <span>Transparent pricing and managed setup.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary mt-0.5">•</span>
-                <span>No AI prompting or training required from your team.</span>
-              </li>
-            </ul>
-          </div>
-
           <Card className="p-8 bg-card border-primary/30 shadow-card animate-fade-in-up">
             <form key={formResetKey} onSubmit={handleSubmit} className="space-y-6">
+              {pricingContextReady && !fromEstimator ? (
+                <div className="rounded-lg border border-primary/25 bg-primary/5 px-4 py-3 text-sm text-muted-foreground">
+                  <span className="font-medium text-foreground">Tip:</span> Running the{" "}
+                  <Link href="/pricing" className="text-primary underline-offset-4 hover:underline font-medium">
+                    pricing estimator
+                  </Link>{" "}
+                  first gives you indicative numbers and makes your consultation more productive — you can still submit this
+                  form without it.
+                </div>
+              ) : null}
+              {fromEstimator ? (
+                <div className="rounded-lg border border-border/60 bg-muted/20 px-4 py-3 space-y-2">
+                  <p className="text-sm font-semibold text-foreground">
+                    Pricing session attached ({pricingContext?.source === "enterprise" ? "Enterprise discovery" : "SMB estimate"}
+                    )
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    The details below will be sent with your request. You can still adjust use case or volume fields if you
+                    like.
+                  </p>
+                  {smbMonthlyMinutesFromContext && pricingContext?.interestFormPrefill.monthlyCallingMinutes ? (
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-medium text-foreground">Interest form — minutes band:</span>{" "}
+                      {pricingContext.interestFormPrefill.monthlyCallingMinutes} (from your SMB estimate; no need to pick
+                      again below).
+                    </p>
+                  ) : null}
+                  <ul className="text-xs text-muted-foreground list-disc pl-4 space-y-1">
+                    {pricingContext?.summaryLines.map((line, i) => (
+                      <li key={i}>{line}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
               <div className="space-y-2">
                 <label htmlFor="name" className="text-sm font-medium">
                   Name <span className="text-red-500">*</span>
@@ -380,7 +550,7 @@ export const InterestForm = () => {
 
               <div className="space-y-2">
                 <label htmlFor="company" className="text-sm font-medium">
-                  Company
+                  Company <span className="text-red-500">*</span>
                 </label>
                 <Input
                   id="company"
@@ -393,7 +563,10 @@ export const InterestForm = () => {
 
               <div className="space-y-2">
                 <label htmlFor="industry" className="text-sm font-medium">
-                  Industry <span className="text-red-500">*</span>
+                  Industry {!fromEstimator ? <span className="text-red-500">*</span> : null}
+                  {fromEstimator ? (
+                    <span className="text-muted-foreground font-normal"> (optional)</span>
+                  ) : null}
                 </label>
                 {isMounted ? (
                   <Select
@@ -419,35 +592,50 @@ export const InterestForm = () => {
                 )}
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="primaryUseCase" className="text-sm font-medium">
-                  Primary Use Case <span className="text-red-500">*</span>
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-lg bg-background/50 border border-border">
-                  {["Sales & Lead Qualification", "Appointment Booking & Reminders", "Payment Reminders & Collections", "Customer Support & Follow-ups", "Verification & Onboarding", "Feedback & NPS", "Other/Not in this List"].map((useCase) => (
-                    <div key={useCase} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`usecase-${useCase}`}
-                        checked={formData.primaryUseCase.includes(useCase)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setFormData({ ...formData, primaryUseCase: [...formData.primaryUseCase, useCase] });
-                          } else {
-                            setFormData({ ...formData, primaryUseCase: formData.primaryUseCase.filter(uc => uc !== useCase) });
-                          }
-                        }}
-                      />
-                      <Label htmlFor={`usecase-${useCase}`} className="text-sm font-normal cursor-pointer">
-                        {useCase}
-                      </Label>
-                    </div>
-                  ))}
+              <div className="space-y-3" role="group" aria-labelledby="interest-primary-use-heading">
+                <div>
+                  <label id="interest-primary-use-heading" className="text-sm font-medium">
+                    Primary Use Case {!fromEstimator ? <span className="text-red-500">*</span> : null}
+                    {fromEstimator ? (
+                      <span className="text-muted-foreground font-normal"> (optional — pre-filled from estimator)</span>
+                    ) : null}
+                  </label>
+                  <p className="text-xs text-muted-foreground mt-1">Select all that apply.</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {INTEREST_PRIMARY_USE_CASES.map((useCase, index) => {
+                    const inputId = `interest-puc-${index}`;
+                    const checked = formData.primaryUseCase.includes(useCase);
+                    return (
+                      <label key={useCase} htmlFor={inputId} className={cn(interestSelectableRowClass(checked), "min-h-[2.75rem]")}>
+                        <Checkbox
+                          id={inputId}
+                          className={interestFormCheckboxClassName}
+                          checked={checked}
+                          onCheckedChange={(isChecked) => {
+                            if (isChecked === true) {
+                              setFormData({ ...formData, primaryUseCase: [...formData.primaryUseCase, useCase] });
+                            } else {
+                              setFormData({
+                                ...formData,
+                                primaryUseCase: formData.primaryUseCase.filter((uc) => uc !== useCase),
+                              });
+                            }
+                          }}
+                        />
+                        <span className="text-sm">{useCase}</span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
 
               <div className="space-y-2">
                 <label htmlFor="callingDirection" className="text-sm font-medium">
-                  Calling Direction <span className="text-red-500">*</span>
+                  Calling Direction {!fromEstimator ? <span className="text-red-500">*</span> : null}
+                  {fromEstimator ? (
+                    <span className="text-muted-foreground font-normal"> (optional — pre-filled where applicable)</span>
+                  ) : null}
                 </label>
                 {isMounted ? (
                   <Select
@@ -470,57 +658,76 @@ export const InterestForm = () => {
                 )}
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="monthlyCallingMinutes" className="text-sm font-medium">
-                  Estimated Monthly Calling Minutes <span className="text-red-500">*</span>
-                </label>
-                {isMounted ? (
-                  <Select
-                    value={formData.monthlyCallingMinutes || undefined}
-                    onValueChange={(value) => setFormData({ ...formData, monthlyCallingMinutes: value })}
-                  >
-                    <SelectTrigger className="bg-background/50 border-border focus:border-primary">
-                      <SelectValue placeholder="Select estimated minutes" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0–1,500">0–1,500</SelectItem>
-                      <SelectItem value="1,501–3,000">1,501–3,000</SelectItem>
-                      <SelectItem value="3,001–5,000">3,001–5,000</SelectItem>
-                      <SelectItem value="5,001–10,000">5,001–10,000</SelectItem>
-                      <SelectItem value="10,001–20,000">10,001–20,000</SelectItem>
-                      <SelectItem value="20,001+">20,001+</SelectItem>
-                    </SelectContent>
-                  </Select>
-                ) : (
-                  <div className="h-10 rounded-md border border-input bg-background/50 px-3 py-2 flex items-center">
-                    <span className="text-sm text-muted-foreground">Select estimated minutes</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  Preferred Languages <span className="text-red-500">*</span>
-                </label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 p-4 rounded-lg bg-background/50 border border-border">
-                  {["English", "Hindi", "Hinglish", "Marathi", "Tamil", "Telugu", "Kannada", "Malayalam", "Bengali", "Gujarati", "Punjabi", "Others"].map((lang) => (
-                    <div key={lang} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`lang-${lang}`}
-                        checked={formData.preferredLanguages.includes(lang)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setFormData({ ...formData, preferredLanguages: [...formData.preferredLanguages, lang] });
-                          } else {
-                            setFormData({ ...formData, preferredLanguages: formData.preferredLanguages.filter(l => l !== lang) });
-                          }
-                        }}
-                      />
-                      <Label htmlFor={`lang-${lang}`} className="text-sm font-normal cursor-pointer">
-                        {lang}
-                      </Label>
+              {requireMonthlyCallingMinutesField ? (
+                <div className="space-y-2">
+                  <label htmlFor="monthlyCallingMinutes" className="text-sm font-medium">
+                    Estimated Monthly Calling Minutes{" "}
+                    <span className="text-red-500">*</span>
+                    {fromEstimator && pricingContext?.source === "enterprise" ? (
+                      <span className="text-muted-foreground font-normal"> (required — not in enterprise discovery form)</span>
+                    ) : null}
+                  </label>
+                  {isMounted ? (
+                    <Select
+                      value={formData.monthlyCallingMinutes || undefined}
+                      onValueChange={(value) => setFormData({ ...formData, monthlyCallingMinutes: value })}
+                    >
+                      <SelectTrigger className="bg-background/50 border-border focus:border-primary">
+                        <SelectValue placeholder="Select estimated minutes" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="0–1,500">0–1,500</SelectItem>
+                        <SelectItem value="1,501–3,000">1,501–3,000</SelectItem>
+                        <SelectItem value="3,001–5,000">3,001–5,000</SelectItem>
+                        <SelectItem value="5,001–10,000">5,001–10,000</SelectItem>
+                        <SelectItem value="10,001–20,000">10,001–20,000</SelectItem>
+                        <SelectItem value="20,001+">20,001+</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <div className="h-10 rounded-md border border-input bg-background/50 px-3 py-2 flex items-center">
+                      <span className="text-sm text-muted-foreground">Select estimated minutes</span>
                     </div>
-                  ))}
+                  )}
+                </div>
+              ) : null}
+
+              <div className="space-y-3" role="group" aria-labelledby="interest-preferred-languages-heading">
+                <div>
+                  <label id="interest-preferred-languages-heading" className="text-sm font-medium">
+                    Preferred Languages <span className="text-red-500">*</span>
+                  </label>
+                  <p className="text-xs text-muted-foreground mt-1">Select all that apply.</p>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {INTEREST_LANGUAGES.map((lang) => {
+                    const inputId = `interest-lang-${lang.replace(/\s+/g, "-").toLowerCase()}`;
+                    const checked = formData.preferredLanguages.includes(lang);
+                    return (
+                      <label
+                        key={lang}
+                        htmlFor={inputId}
+                        className={cn(interestSelectableRowClass(checked), "min-h-[2.75rem]")}
+                      >
+                        <Checkbox
+                          id={inputId}
+                          className={interestFormCheckboxClassName}
+                          checked={checked}
+                          onCheckedChange={(isChecked) => {
+                            if (isChecked === true) {
+                              setFormData({ ...formData, preferredLanguages: [...formData.preferredLanguages, lang] });
+                            } else {
+                              setFormData({
+                                ...formData,
+                                preferredLanguages: formData.preferredLanguages.filter((l) => l !== lang),
+                              });
+                            }
+                          }}
+                        />
+                        <span className="text-sm">{lang}</span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -552,7 +759,10 @@ export const InterestForm = () => {
 
               <div className="space-y-2">
                 <label htmlFor="currentCallingSetup" className="text-sm font-medium">
-                  Current Calling Setup <span className="text-red-500">*</span>
+                  Current Calling Setup {!fromEstimator ? <span className="text-red-500">*</span> : null}
+                  {fromEstimator ? (
+                    <span className="text-muted-foreground font-normal"> (optional — pre-filled where applicable)</span>
+                  ) : null}
                 </label>
                 {isMounted ? (
                   <Select
@@ -596,10 +806,14 @@ export const InterestForm = () => {
                 <Textarea
                   id="message"
                   value={formData.message}
+                  maxLength={INTEREST_MESSAGE_MAX_LENGTH}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   className="bg-background/50 border-border focus:border-primary min-h-[120px]"
                   placeholder="Tell us about your use case..."
                 />
+                <p className="text-xs text-muted-foreground">
+                  Optional. Up to {INTEREST_MESSAGE_MAX_LENGTH.toLocaleString("en-IN")} characters.
+                </p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="interestType" className="text-sm font-medium">

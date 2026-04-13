@@ -61,7 +61,7 @@ export const Header = () => {
               </Link>
             ))}
             <ThemeToggle />
-            <Link href="/schedule-demo">
+            <Link href="/schedule-demo#interest">
               <Button size="sm" className="bg-primary text-primary-foreground hover:shadow-glow-primary transition-all border border-primary/50">
                 Schedule a Demo
               </Button>
@@ -82,7 +82,7 @@ export const Header = () => {
               </Link>
             ))}
             <div className="flex items-center gap-3 pt-2">
-              <Link href="/schedule-demo" onClick={() => setOpen(false)} className="flex-1">
+              <Link href="/schedule-demo#interest" onClick={() => setOpen(false)} className="flex-1">
                 <Button size="sm" className="w-full bg-primary text-primary-foreground border border-primary/50">
                   Schedule a Demo
                 </Button>

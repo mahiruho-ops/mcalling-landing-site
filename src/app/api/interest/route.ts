@@ -1,21 +1,101 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendInterestFormEmails } from '@/lib/email';
+import { INTEREST_MESSAGE_MAX_LENGTH } from '@/lib/interest-form-limits';
+import { parsePricingContext } from '@/lib/pricing-context';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, company, message, interestType, countryCode, phone, industry, primaryUseCase, callingDirection, monthlyCallingMinutes, preferredLanguages, goLiveTimeline, currentCallingSetup, crmTools, captchaToken } = body;
+    const {
+      name,
+      email,
+      company,
+      message,
+      interestType,
+      countryCode,
+      phone,
+      industry,
+      primaryUseCase: primaryUseCaseRaw,
+      callingDirection,
+      monthlyCallingMinutes,
+      preferredLanguages,
+      goLiveTimeline,
+      currentCallingSetup,
+      crmTools,
+      captchaToken,
+      pricingContext: pricingContextBody,
+    } = body;
+    const primaryUseCase = Array.isArray(primaryUseCaseRaw) ? primaryUseCaseRaw : [];
 
-    // Validate required fields (all except company, message, and crmTools)
-    if (!name || !email || !interestType || !phone || !industry || !primaryUseCase || !callingDirection || !monthlyCallingMinutes || !preferredLanguages || !goLiveTimeline || !currentCallingSetup) {
+    const messageStr = typeof message === 'string' ? message : message != null ? String(message) : '';
+    if (messageStr.length > INTEREST_MESSAGE_MAX_LENGTH) {
       return NextResponse.json(
-        { success: false, message: 'All fields are required except Company Name, Message, and CRM/Tools' },
+        {
+          success: false,
+          message: `Message must be at most ${INTEREST_MESSAGE_MAX_LENGTH} characters.`,
+        },
+        { status: 400 },
+      );
+    }
+
+    const goLiveTimelineStr = typeof goLiveTimeline === 'string' ? goLiveTimeline.trim() : '';
+    if (!goLiveTimelineStr) {
+      return NextResponse.json(
+        { success: false, message: 'Go-live timeline is required' },
+        { status: 400 },
+      );
+    }
+
+    const companyStr = typeof company === 'string' ? company.trim() : '';
+    if (!companyStr) {
+      return NextResponse.json(
+        { success: false, message: 'Company name is required' },
+        { status: 400 },
+      );
+    }
+
+    let parsedPricingContext = null as ReturnType<typeof parsePricingContext>;
+    if (pricingContextBody != null) {
+      try {
+        const raw = typeof pricingContextBody === 'string' ? JSON.parse(pricingContextBody) : pricingContextBody;
+        parsedPricingContext = parsePricingContext(raw);
+      } catch {
+        parsedPricingContext = null;
+      }
+    }
+    const hasValidPricingContext = parsedPricingContext !== null;
+
+    // Validate required fields (all except message and crmTools; company validated above as trimmed)
+    if (!name || !email || !interestType || !phone || !preferredLanguages) {
+      return NextResponse.json(
+        { success: false, message: 'Name, email, interest type, phone, and preferred languages are required' },
         { status: 400 }
       );
     }
 
-    // Validate primaryUseCase is an array with at least one item
-    if (!Array.isArray(primaryUseCase) || primaryUseCase.length === 0) {
+    if (!hasValidPricingContext) {
+      if (!industry || !primaryUseCase || !callingDirection || !monthlyCallingMinutes || !currentCallingSetup) {
+        return NextResponse.json(
+          { success: false, message: 'All fields are required except Message and CRM/Tools' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Validate primaryUseCase is an array with at least one item (skip when estimator context supplies it server-side via prefill — still require client sent array or allow empty if context)
+    if (!Array.isArray(primaryUseCase)) {
+      return NextResponse.json(
+        { success: false, message: 'Primary use case must be a valid selection' },
+        { status: 400 }
+      );
+    }
+    if (!hasValidPricingContext && primaryUseCase.length === 0) {
+      return NextResponse.json(
+        { success: false, message: 'At least one primary use case must be selected' },
+        { status: 400 }
+      );
+    }
+    if (hasValidPricingContext && primaryUseCase.length === 0 && parsedPricingContext!.interestFormPrefill.primaryUseCase.length === 0) {
       return NextResponse.json(
         { success: false, message: 'At least one primary use case must be selected' },
         { status: 400 }
@@ -60,43 +140,76 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const primaryUseCaseEffective =
+      hasValidPricingContext && primaryUseCase.length === 0
+        ? parsedPricingContext!.interestFormPrefill.primaryUseCase
+        : primaryUseCase;
+
+    const smbMonthlyMinutesFromContext =
+      hasValidPricingContext &&
+      parsedPricingContext!.source === "smb" &&
+      Boolean(String(parsedPricingContext!.interestFormPrefill.monthlyCallingMinutes || "").trim());
+
+    const monthlyCallingMinutesEffective =
+      smbMonthlyMinutesFromContext && !String(monthlyCallingMinutes || "").trim()
+        ? String(parsedPricingContext!.interestFormPrefill.monthlyCallingMinutes).trim()
+        : String(monthlyCallingMinutes || "").trim();
+
+    if (!monthlyCallingMinutesEffective) {
+      return NextResponse.json(
+        { success: false, message: "Estimated monthly calling minutes are required (or run the SMB estimator first)." },
+        { status: 400 },
+      );
+    }
+
     // Log the submission data
     console.log('Interest form submission:', {
       name,
       email,
-      company,
-      message,
+      company: companyStr,
+      message: messageStr,
       interestType,
       countryCode,
       phone,
       industry,
-      primaryUseCase,
+      primaryUseCase: primaryUseCaseEffective,
       callingDirection,
-      monthlyCallingMinutes,
+      monthlyCallingMinutes: monthlyCallingMinutesEffective,
       preferredLanguages,
-      goLiveTimeline,
+      goLiveTimeline: goLiveTimelineStr,
       currentCallingSetup,
       crmTools,
+      hasValidPricingContext,
       timestamp: new Date().toISOString()
     });
+
+    const pricingEmailExtras =
+      hasValidPricingContext && parsedPricingContext
+        ? {
+            pricingEstimatorSource: parsedPricingContext.source,
+            pricingEstimatorSummary: parsedPricingContext.summaryLines.join('\n'),
+            pricingEstimatorJson: JSON.stringify(parsedPricingContext),
+          }
+        : {};
 
     // Send both confirmation and notification emails
     await sendInterestFormEmails({
       name,
       email,
-      company,
-      message,
+      company: companyStr,
+      message: messageStr,
       interestType,
       countryCode,
       phone,
       industry,
-      primaryUseCase,
+      primaryUseCase: primaryUseCaseEffective,
       callingDirection,
-      monthlyCallingMinutes,
+      monthlyCallingMinutes: monthlyCallingMinutesEffective,
       preferredLanguages,
-      goLiveTimeline,
+      goLiveTimeline: goLiveTimelineStr,
       currentCallingSetup,
-      crmTools
+      crmTools,
+      ...pricingEmailExtras,
     });
 
     return NextResponse.json({

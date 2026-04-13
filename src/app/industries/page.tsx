@@ -109,7 +109,7 @@ export default function IndustriesPage() {
           {/* SECTION 3: Why mKcalling fits across industries */}
           <div className="mb-16 p-8 rounded-xl bg-card border border-border/50">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">{whyFits.title}</h2>
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 normal-case">{whyFits.title}</h2>
               <p className="text-muted-foreground mb-6">{whyFits.subtitle}</p>
               <div className="grid md:grid-cols-2 gap-4">
                 {whyFits.points.map((point, index) => (

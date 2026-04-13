@@ -143,7 +143,7 @@ export default function UseCasesIndex() {
           {/* SECTION 6: Why Businesses Use mKcalling */}
           <div className="mb-16">
             <div className="text-center space-y-4 mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold">{whyChoose.title}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold normal-case">{whyChoose.title}</h2>
               <p className="text-muted-foreground">{whyChoose.subtitle}</p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">

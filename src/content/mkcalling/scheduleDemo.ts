@@ -45,7 +45,8 @@ export const scheduleDemoContent = {
     points: [
       "Live product. Real workflows. Indian numbers.",
       "Transparent pricing and managed setup.",
-      "No AI prompting or training required from your team."
+      "No AI prompting or training required from your team.",
+      "Powered by Mahiruho — 12+ years delivering IT solutions to government bodies and private companies, with structured delivery and long-term support."
     ]
   },
   cta: {

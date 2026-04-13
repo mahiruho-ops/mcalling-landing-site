@@ -8,7 +8,7 @@ export const Multilingual = () => {
           <div className="grid md:grid-cols-2 gap-12 items-center ">
             <div>
               <Globe className="w-16 h-16 text-primary mb-6" />
-              <h2 className="text-5xl font-bold mb-6">Converse in Any Language -{" "}
+              <h2 className="text-5xl font-bold mb-6 normal-case">Converse in Any Language -{" "}
               <span className="gradient-text-primary">
               Text or Voice
             </span>
@@ -44,7 +44,7 @@ export const Multilingual = () => {
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center space-y-4 mb-16 animate-fade-in-up">
-            <h2 className="text-4xl md:text-5xl font-bold">
+            <h2 className="text-4xl md:text-5xl font-bold normal-case">
               Converse in Any Language -{" "}
               <span className="gradient-text-primary">
                 Text or Voice

@@ -119,7 +119,7 @@ export const industriesIndexContent = {
     secondaryCTA: "View Use Cases"
   },
   whyFits: {
-    title: "Why mKcalling fits across industries",
+    title: "Why mKcalling Fits Across Industries",
     subtitle: "",
     points: [
       "All-inclusive pricing (no hidden LLM/STT/TTS/telephony costs)",

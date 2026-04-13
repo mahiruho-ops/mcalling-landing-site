@@ -80,6 +80,7 @@ const geistMono = Geist_Mono({
 
 
 import { BackToTop } from "@/components/BackToTop";
+import HeatMap from "@/components/HeatMap";
 
 export default function RootLayout({
   children,
@@ -115,6 +116,7 @@ export default function RootLayout({
         {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
           <MetaPixel pixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID} />
         )}
+        <HeatMap />
         <Analytics />
         <SpeedInsights />
       </body>

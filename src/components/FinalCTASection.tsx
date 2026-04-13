@@ -12,7 +12,7 @@ export const FinalCTASection = () => {
       <div className="container mx-auto px-6 relative">
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in-up">
           <div className="space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold">
+            <h2 className="text-4xl md:text-5xl font-bold normal-case">
               {finalCTA.title}
             </h2>
             <p className="text-xl text-muted-foreground">

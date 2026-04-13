@@ -232,7 +232,7 @@ export default async function UseCasePage({ params }: Params) {
 
               {/* SECTION 2: Problem */}
               <div className="mb-12 p-8 rounded-xl bg-card border border-border/50">
-                <h2 className="text-2xl font-bold mb-4">{useCase.problem.title}</h2>
+                <h2 className="text-2xl font-bold mb-4 normal-case">{useCase.problem.title}</h2>
                 <p className="text-muted-foreground mb-6">{(useCase.problem as any).description}</p>
                 <ul className="space-y-3 mb-4">
                   {useCase.problem.points.map((point, index) => (
@@ -249,7 +249,7 @@ export default async function UseCasePage({ params }: Params) {
 
               {/* SECTION 3: Solution */}
               <div className="mb-12 p-8 rounded-xl bg-card border border-primary/30">
-                <h2 className="text-2xl font-bold mb-4">{(useCase.solution as any).title}</h2>
+                <h2 className="text-2xl font-bold mb-4 normal-case">{(useCase.solution as any).title}</h2>
                 <p className="text-muted-foreground mb-6">{(useCase.solution as any).description}</p>
                 <div className="space-y-3 mb-6">
                   {((useCase.solution as any).capabilities || (useCase.solution as any).features || []).map((item: string, index: number) => (
@@ -266,7 +266,7 @@ export default async function UseCasePage({ params }: Params) {
 
               {/* SECTION 4: Workflow */}
               <div className="mb-12">
-                <h2 className="text-2xl font-bold mb-2">{(useCase.workflow as any).title}</h2>
+                <h2 className="text-2xl font-bold mb-2 normal-case">{(useCase.workflow as any).title}</h2>
                 <p className="text-muted-foreground mb-6">{(useCase.workflow as any).description}</p>
                 <div className="space-y-4">
                   {useCase.workflow.steps.map((step, index) => (
@@ -286,7 +286,7 @@ export default async function UseCasePage({ params }: Params) {
               {/* SECTION 5: Inbound & Outbound OR Reminders */}
               {(useCase as any).inboundOutbound && (
                 <div className="mb-12">
-                  <h2 className="text-2xl font-bold mb-2">{(useCase as any).inboundOutbound.title}</h2>
+                  <h2 className="text-2xl font-bold mb-2 normal-case">{(useCase as any).inboundOutbound.title}</h2>
                   <p className="text-muted-foreground mb-6">{(useCase as any).inboundOutbound.description}</p>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="p-6 rounded-xl bg-card border border-primary/30">
@@ -326,7 +326,7 @@ export default async function UseCasePage({ params }: Params) {
               {/* SECTION 5 Alternative: Reminders (for appointment-booking-reminders) */}
               {(useCase as any).reminders && (
                 <div className="mb-12 p-8 rounded-xl bg-card border border-primary/30">
-                  <h2 className="text-2xl font-bold mb-2">{(useCase as any).reminders.title}</h2>
+                  <h2 className="text-2xl font-bold mb-2 normal-case">{(useCase as any).reminders.title}</h2>
                   <p className="text-muted-foreground mb-6">{(useCase as any).reminders.description}</p>
                   <div className="space-y-3 mb-4">
                     {(useCase as any).reminders.capabilities.map((capability: string, index: number) => (
@@ -344,7 +344,7 @@ export default async function UseCasePage({ params }: Params) {
               {/* SECTION 5 Alternative: Ethical & Controlled Communication (for payment-reminders-collections) */}
               {(useCase as any).ethical && (
                 <div className="mb-12 p-8 rounded-xl bg-card border border-primary/30">
-                  <h2 className="text-2xl font-bold mb-2">{(useCase as any).ethical.title}</h2>
+                  <h2 className="text-2xl font-bold mb-2 normal-case">{(useCase as any).ethical.title}</h2>
                   <p className="text-muted-foreground mb-6">{(useCase as any).ethical.description}</p>
                   <div className="space-y-3 mb-4">
                     {(useCase as any).ethical.points.map((point: string, index: number) => (
@@ -362,7 +362,7 @@ export default async function UseCasePage({ params }: Params) {
               {/* SECTION 5 Alternative: Consistency, Control & Auditability (for verification-onboarding) */}
               {(useCase as any).consistency && (
                 <div className="mb-12 p-8 rounded-xl bg-card border border-primary/30">
-                  <h2 className="text-2xl font-bold mb-2">{(useCase as any).consistency.title}</h2>
+                  <h2 className="text-2xl font-bold mb-2 normal-case">{(useCase as any).consistency.title}</h2>
                   <p className="text-muted-foreground mb-6">{(useCase as any).consistency.description}</p>
                   <div className="space-y-3 mb-4">
                     {(useCase as any).consistency.points.map((point: string, index: number) => (
@@ -380,7 +380,7 @@ export default async function UseCasePage({ params }: Params) {
               {/* SECTION 5 Alternative: Structured Insights & Visibility (for feedback-nps) */}
               {(useCase as any).insights && (
                 <div className="mb-12 p-8 rounded-xl bg-card border border-primary/30">
-                  <h2 className="text-2xl font-bold mb-2">{(useCase as any).insights.title}</h2>
+                  <h2 className="text-2xl font-bold mb-2 normal-case">{(useCase as any).insights.title}</h2>
                   <p className="text-muted-foreground mb-6">{(useCase as any).insights.description}</p>
                   <div className="space-y-3 mb-4">
                     {(useCase as any).insights.points.map((point: string, index: number) => (
@@ -399,7 +399,7 @@ export default async function UseCasePage({ params }: Params) {
               {/* SECTION 6: What You Get */}
               {(useCase as any).whatYouGet && (
                 <div className="mb-12">
-                  <h2 className="text-2xl font-bold mb-2">{(useCase as any).whatYouGet.title}</h2>
+                  <h2 className="text-2xl font-bold mb-2 normal-case">{(useCase as any).whatYouGet.title}</h2>
                   <p className="text-muted-foreground mb-6">{(useCase as any).whatYouGet.description}</p>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="p-6 rounded-xl bg-card border border-primary/30">
@@ -434,7 +434,7 @@ export default async function UseCasePage({ params }: Params) {
               {/* SECTION 7: Where This Use Case Works Best */}
               {(useCase as any).whereItWorks && (
                 <div className="mb-12 p-8 rounded-xl bg-card border border-border/50">
-                  <h2 className="text-2xl font-bold mb-2">{(useCase as any).whereItWorks.title}</h2>
+                  <h2 className="text-2xl font-bold mb-2 normal-case">{(useCase as any).whereItWorks.title}</h2>
                   <p className="text-muted-foreground mb-6">{(useCase as any).whereItWorks.description}</p>
                   <div className="flex flex-wrap gap-3 mb-4">
                     {(useCase as any).whereItWorks.industries.map((industry: string, index: number) => (
@@ -452,7 +452,7 @@ export default async function UseCasePage({ params }: Params) {
               {/* SECTION 7.5: Common Scenarios Across Industries */}
               {(useCase as any).commonScenarios && (
                 <div className="mb-12 p-8 rounded-xl bg-card border border-primary/30">
-                  <h2 className="text-2xl font-bold mb-2">{(useCase as any).commonScenarios.title}</h2>
+                  <h2 className="text-2xl font-bold mb-2 normal-case">{(useCase as any).commonScenarios.title}</h2>
                   <p className="text-muted-foreground mb-6">{(useCase as any).commonScenarios.description}</p>
                   <div className="space-y-3 mb-4">
                     {(useCase as any).commonScenarios.examples.map((example: string, index: number) => (
@@ -471,7 +471,7 @@ export default async function UseCasePage({ params }: Params) {
               {/* SECTION 8: Why Sales Teams Choose mKcalling */}
               {(useCase as any).whyChoose && (
                 <div className="mb-12">
-                  <h2 className="text-2xl font-bold mb-2">{(useCase as any).whyChoose.title}</h2>
+                  <h2 className="text-2xl font-bold mb-2 normal-case">{(useCase as any).whyChoose.title}</h2>
                   <p className="text-muted-foreground mb-6">{(useCase as any).whyChoose.description}</p>
                   <div className="grid md:grid-cols-2 gap-4">
                     {(useCase as any).whyChoose.reasons.map((reason: string, index: number) => (
@@ -486,7 +486,7 @@ export default async function UseCasePage({ params }: Params) {
 
               {/* SECTION 9: CTA */}
               <div className="text-center p-8 rounded-xl bg-card border border-primary/30">
-                <h2 className="text-2xl font-bold mb-4">{(useCase as any).cta.title}</h2>
+                <h2 className="text-2xl font-bold mb-4 normal-case">{(useCase as any).cta.title}</h2>
                 <div className="pt-4">
                   <Link href="/schedule-demo">
                     <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
@@ -512,7 +512,7 @@ export default async function UseCasePage({ params }: Params) {
 
               {/* Problem */}
               <div className="mb-12 p-8 rounded-xl bg-card border border-border/50">
-                <h2 className="text-2xl font-bold mb-4">{(useCase as any).problem.title}</h2>
+                <h2 className="text-2xl font-bold mb-4 normal-case">{(useCase as any).problem.title}</h2>
                 <p className="text-muted-foreground mb-6">{(useCase as any).problem.description}</p>
                 <ul className="space-y-3">
                   {(useCase as any).problem.points.map((point: string, index: number) => (
@@ -526,7 +526,7 @@ export default async function UseCasePage({ params }: Params) {
 
               {/* Solution */}
               <div className="mb-12 p-8 rounded-xl bg-card border border-primary/30">
-                <h2 className="text-2xl font-bold mb-4">{(useCase as any).solution.title}</h2>
+                <h2 className="text-2xl font-bold mb-4 normal-case">{(useCase as any).solution.title}</h2>
                 <p className="text-muted-foreground mb-6">{(useCase as any).solution.description}</p>
                 <div className="grid md:grid-cols-2 gap-4">
                   {(useCase as any).solution.features.map((feature: string, index: number) => (
@@ -540,7 +540,7 @@ export default async function UseCasePage({ params }: Params) {
 
               {/* Workflow */}
               <div className="mb-12">
-                <h2 className="text-2xl font-bold mb-6">{(useCase as any).workflow.title}</h2>
+                <h2 className="text-2xl font-bold mb-6 normal-case">{(useCase as any).workflow.title}</h2>
                 <div className="space-y-4">
                   {(useCase as any).workflow.steps.map((step: any, index: number) => (
                     <div key={index} className="flex gap-4 p-6 rounded-xl bg-card border border-border/50">
@@ -555,7 +555,7 @@ export default async function UseCasePage({ params }: Params) {
 
               {/* Integrations */}
               <div className="mb-12 p-8 rounded-xl bg-card border border-border/50">
-                <h2 className="text-2xl font-bold mb-4">Integrations</h2>
+                <h2 className="text-2xl font-bold mb-4 capitalize">Integrations</h2>
                 <p className="text-muted-foreground mb-4">
                   mKcalling integrates with your existing systems for seamless workflows.
                 </p>
@@ -570,7 +570,7 @@ export default async function UseCasePage({ params }: Params) {
 
               {/* CTA */}
               <div className="text-center p-8 rounded-xl bg-card border border-primary/30">
-                <h2 className="text-2xl font-bold mb-4">Ready to get started?</h2>
+                <h2 className="text-2xl font-bold mb-4 capitalize">Ready to get started?</h2>
                 <p className="text-muted-foreground mb-6">
                   See how mKcalling can help with {(useCase as any).title.toLowerCase()}.
                 </p>

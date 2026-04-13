@@ -48,7 +48,7 @@ export default function ProductPage() {
           {/* SECTION 2: What mKcalling Is (and Is Not) */}
           <div className="mb-16">
             <div className="text-center space-y-4 mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold">{whatItIs.title}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold normal-case">{whatItIs.title}</h2>
               <p className="text-muted-foreground">{whatItIs.subtitle}</p>
             </div>
             <div className="grid md:grid-cols-2 gap-8">
@@ -203,7 +203,7 @@ export default function ProductPage() {
 
           {/* SECTION 8: CTA */}
           <div className="text-center p-12 rounded-xl bg-card border border-primary/30">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">{cta.title}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 normal-case">{cta.title}</h2>
             <div className="pt-4">
               <Link href="/schedule-demo">
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">

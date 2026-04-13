@@ -33,6 +33,38 @@ interface EmailData {
   goLiveTimeline?: string;
   currentCallingSetup?: string;
   crmTools?: string;
+  /** SMB / enterprise pricing tool context */
+  pricingEstimatorSource?: string;
+  pricingEstimatorSummary?: string;
+  pricingEstimatorJson?: string;
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+/** Escape plain text for HTML body (emails, admin notifications). */
+function h(s: string | undefined | null): string {
+  return escapeHtml(s ?? "");
+}
+
+/** Escape joined list or string (e.g. use cases, languages). */
+function hList(v: string | string[] | undefined | null): string {
+  if (v === undefined || v === null) return "";
+  const joined = Array.isArray(v) ? v.join(", ") : v;
+  return escapeHtml(joined);
+}
+
+/** Strip control chars / newlines from user text used in email Subject (header injection / broken subjects). */
+function safeEmailSubjectFragment(s: string | undefined): string {
+  if (!s || typeof s !== "string") return "Unknown";
+  const t = s.replace(/[\r\n\u0000-\u001F\u007F]/g, " ").trim().slice(0, 120);
+  return t || "Unknown";
 }
 
 // Create transporter
@@ -131,26 +163,27 @@ const getConfirmationEmailHTML = (data: EmailData): string => {
             </div>
             
             <div class="content">
-                <p>Hi ${data.name},</p>
+                <p>Hi ${h(data.name)},</p>
                 
                 <p>Thank you for reaching out to us! We've received your interest form submission and are excited to learn more about your project.</p>
                 
                 <div class="highlight">
                     <strong>Your submission details:</strong><br>
-                    Name: ${data.name}<br>
-                    Email: ${data.email}<br>
-                    ${data.phone ? `Phone: ${data.countryCode || ''} ${data.phone}<br>` : ''}
-                    ${data.company ? `Company: ${data.company}<br>` : ''}
-                    ${data.industry ? `Industry: ${data.industry}<br>` : ''}
-                    ${data.interestType ? `Interest Type: ${data.interestType}<br>` : ''}
-                    ${data.primaryUseCase ? `Primary Use Case: ${Array.isArray(data.primaryUseCase) ? data.primaryUseCase.join(', ') : data.primaryUseCase}<br>` : ''}
-                    ${data.callingDirection ? `Calling Direction: ${data.callingDirection}<br>` : ''}
-                    ${data.monthlyCallingMinutes ? `Estimated Monthly Calling Minutes: ${data.monthlyCallingMinutes}<br>` : ''}
-                    ${data.preferredLanguages ? `Preferred Languages: ${Array.isArray(data.preferredLanguages) ? data.preferredLanguages.join(', ') : data.preferredLanguages}<br>` : ''}
-                    ${data.goLiveTimeline ? `Go-live Timeline: ${data.goLiveTimeline}<br>` : ''}
-                    ${data.currentCallingSetup ? `Current Calling Setup: ${data.currentCallingSetup}<br>` : ''}
-                    ${data.crmTools ? `CRM / Tools: ${data.crmTools}<br>` : ''}
-                    ${data.message ? `Message: ${data.message}` : ''}
+                    Name: ${h(data.name)}<br>
+                    Email: ${h(data.email)}<br>
+                    ${data.phone ? `Phone: ${h(data.countryCode)} ${h(data.phone)}<br>` : ''}
+                    ${data.company ? `Company: ${h(data.company)}<br>` : ''}
+                    ${data.industry ? `Industry: ${h(data.industry)}<br>` : ''}
+                    ${data.interestType ? `Interest Type: ${h(data.interestType)}<br>` : ''}
+                    ${data.primaryUseCase ? `Primary Use Case: ${hList(data.primaryUseCase)}<br>` : ''}
+                    ${data.callingDirection ? `Calling Direction: ${h(data.callingDirection)}<br>` : ''}
+                    ${data.monthlyCallingMinutes ? `Estimated Monthly Calling Minutes: ${h(data.monthlyCallingMinutes)}<br>` : ''}
+                    ${data.preferredLanguages ? `Preferred Languages: ${hList(data.preferredLanguages)}<br>` : ''}
+                    ${data.goLiveTimeline ? `Go-live Timeline: ${h(data.goLiveTimeline)}<br>` : ''}
+                    ${data.currentCallingSetup ? `Current Calling Setup: ${h(data.currentCallingSetup)}<br>` : ''}
+                    ${data.crmTools ? `CRM / Tools: ${h(data.crmTools)}<br>` : ''}
+                    ${data.message ? `<br><strong>Message:</strong><br><span style="white-space:pre-wrap;">${h(data.message)}</span>` : ''}
+                    ${data.pricingEstimatorSummary ? `<br><br><strong>Pricing estimator:</strong> We received the selections from your ${data.pricingEstimatorSource === "enterprise" ? "enterprise discovery" : "SMB pricing"} session on our site.` : ""}
                 </div>
                 
                 <p>Our team will review your information and get back to you within 24-48 hours. We're looking forward to discussing how mKcalling AI can help with your project!</p>
@@ -162,7 +195,7 @@ const getConfirmationEmailHTML = (data: EmailData): string => {
             </div>
             
             <div class="footer">
-                <p>This email was sent to ${data.email} because you submitted an interest form on our website.</p>
+                <p>This email was sent to ${h(data.email)} because you submitted an interest form on our website.</p>
                 <p>&copy; 2026 Mahiruho Consulting Services Pvt. Ltd. All rights reserved.</p>
             </div>
         </div>
@@ -246,82 +279,94 @@ const getNotificationEmailHTML = (data: EmailData): string => {
             <div class="submission-details">
                 <div class="field">
                     <span class="label">Name:</span>
-                    <span class="value">${data.name}</span>
+                    <span class="value">${h(data.name)}</span>
                 </div>
                 <div class="field">
                     <span class="label">Email:</span>
-                    <span class="value">${data.email}</span>
+                    <span class="value">${h(data.email)}</span>
                 </div>
                 ${data.phone ? `
                 <div class="field">
                     <span class="label">Phone:</span>
-                    <span class="value">${data.countryCode || ''} ${data.phone}</span>
+                    <span class="value">${h(data.countryCode)} ${h(data.phone)}</span>
                 </div>
                 ` : ''}
                 ${data.company ? `
                 <div class="field">
                     <span class="label">Company:</span>
-                    <span class="value">${data.company}</span>
+                    <span class="value">${h(data.company)}</span>
                 </div>
                 ` : ''}
                 ${data.industry ? `
                 <div class="field">
                     <span class="label">Industry:</span>
-                    <span class="value">${data.industry}</span>
+                    <span class="value">${h(data.industry)}</span>
                 </div>
                 ` : ''}
                 ${data.interestType ? `
                 <div class="field">
                     <span class="label">Interest Type:</span>
-                    <span class="value">${data.interestType}</span>
+                    <span class="value">${h(data.interestType)}</span>
                 </div>
                 ` : ''}
                 ${data.primaryUseCase ? `
                 <div class="field">
                     <span class="label">Primary Use Case:</span>
-                    <span class="value">${Array.isArray(data.primaryUseCase) ? data.primaryUseCase.join(', ') : data.primaryUseCase}</span>
+                    <span class="value">${hList(data.primaryUseCase)}</span>
                 </div>
                 ` : ''}
                 ${data.callingDirection ? `
                 <div class="field">
                     <span class="label">Calling Direction:</span>
-                    <span class="value">${data.callingDirection}</span>
+                    <span class="value">${h(data.callingDirection)}</span>
                 </div>
                 ` : ''}
                 ${data.monthlyCallingMinutes ? `
                 <div class="field">
                     <span class="label">Estimated Monthly Calling Minutes:</span>
-                    <span class="value">${data.monthlyCallingMinutes}</span>
+                    <span class="value">${h(data.monthlyCallingMinutes)}</span>
                 </div>
                 ` : ''}
                 ${data.preferredLanguages ? `
                 <div class="field">
                     <span class="label">Preferred Languages:</span>
-                    <span class="value">${Array.isArray(data.preferredLanguages) ? data.preferredLanguages.join(', ') : data.preferredLanguages}</span>
+                    <span class="value">${hList(data.preferredLanguages)}</span>
                 </div>
                 ` : ''}
                 ${data.goLiveTimeline ? `
                 <div class="field">
                     <span class="label">Go-live Timeline:</span>
-                    <span class="value">${data.goLiveTimeline}</span>
+                    <span class="value">${h(data.goLiveTimeline)}</span>
                 </div>
                 ` : ''}
                 ${data.currentCallingSetup ? `
                 <div class="field">
                     <span class="label">Current Calling Setup:</span>
-                    <span class="value">${data.currentCallingSetup}</span>
+                    <span class="value">${h(data.currentCallingSetup)}</span>
                 </div>
                 ` : ''}
                 ${data.crmTools ? `
                 <div class="field">
                     <span class="label">CRM / Tools:</span>
-                    <span class="value">${data.crmTools}</span>
+                    <span class="value">${h(data.crmTools)}</span>
                 </div>
                 ` : ''}
                 ${data.message ? `
                 <div class="field">
                     <span class="label">Message:</span>
-                    <span class="value">${data.message}</span>
+                    <span class="value" style="white-space:pre-wrap;">${h(data.message)}</span>
+                </div>
+                ` : ''}
+                ${data.pricingEstimatorSummary ? `
+                <div class="field" style="margin-top:16px;padding-top:16px;border-top:1px solid #e5e7eb;">
+                    <span class="label">Pricing estimator (${escapeHtml(data.pricingEstimatorSource || "unknown")}):</span>
+                    <pre style="white-space:pre-wrap;font-size:12px;background:#f3f4f6;padding:12px;border-radius:6px;margin-top:8px;">${escapeHtml(data.pricingEstimatorSummary)}</pre>
+                </div>
+                ` : ''}
+                ${data.pricingEstimatorJson ? `
+                <div class="field">
+                    <span class="label">Full pricing context (JSON):</span>
+                    <pre style="white-space:pre-wrap;font-size:11px;background:#1f2937;color:#e5e7eb;padding:12px;border-radius:6px;max-height:320px;overflow:auto;margin-top:8px;">${escapeHtml(data.pricingEstimatorJson)}</pre>
                 </div>
                 ` : ''}
             </div>
@@ -371,7 +416,7 @@ export const sendNotificationEmail = async (data: EmailData): Promise<void> => {
     const mailOptions = {
       from: `"mkcalling AI" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
       to: process.env.ADMIN_EMAIL || process.env.SMTP_USER,
-      subject: `New Interest Form Submission from ${data.name}`,
+      subject: `New Interest Form Submission from ${safeEmailSubjectFragment(data.name)}`,
       html: getNotificationEmailHTML(data),
     };
 

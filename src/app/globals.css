@@ -105,6 +105,11 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Title-style headings: capitalize each word; use `normal-case` on h2 when brand casing must stay exact (e.g. mKcalling). */
+  main h2 {
+    @apply capitalize;
+  }
 }
 
 @layer utilities {

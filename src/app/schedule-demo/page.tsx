@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { scheduleDemoContent } from "@/content/mkcalling/scheduleDemo";
+import { ScheduleDemoEstimatorTip } from "@/components/ScheduleDemoEstimatorTip";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Check, CheckCircle2, Users, X, Shield, Phone, Calendar, TrendingUp } from "lucide-react";
@@ -22,6 +23,8 @@ export default function ScheduleDemoPage() {
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">{hero.subheadline}</p>
             <p className="text-muted-foreground">{hero.supportingLine}</p>
           </div>
+
+          <ScheduleDemoEstimatorTip />
 
           {/* SECTION 2: What to Expect in the Demo */}
           <div className="mb-16 p-8 rounded-xl bg-card border border-primary/30">
@@ -86,11 +89,11 @@ export default function ScheduleDemoPage() {
           {/* SECTION 4: Reassurance Section */}
           <div className="mb-16">
             <div className="text-center space-y-4 mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold">{reassurance.title}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold normal-case">{reassurance.title}</h2>
               <p className="text-muted-foreground">{reassurance.subtitle}</p>
             </div>
             <div className="max-w-4xl mx-auto">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid sm:grid-cols-2 gap-4">
                 {reassurance.points.map((point, index) => (
                   <div key={index} className="flex items-start gap-3 p-4 rounded-lg bg-card border border-border/50">
                     <Shield className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
@@ -103,7 +106,7 @@ export default function ScheduleDemoPage() {
 
           {/* SECTION 5: CTA (Reinforced) */}
           <div className="text-center p-12 rounded-xl bg-card border border-primary/30">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">{cta.title}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 normal-case">{cta.title}</h2>
             <div className="pt-4">
               <Link href="#interest">
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">

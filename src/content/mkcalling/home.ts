@@ -134,7 +134,7 @@ export const homeContent = {
       },
       {
         title: "Multilingual Indian Language Support",
-        description: "Support for English, Hindi, Hinglish, Bengali, Marathi, Tamil, Telugu, Kannada, and more. Communicate with customers in their preferred language naturally."
+        description: "Support for English, Hindi, Bengali, Marathi, Tamil, Telugu, Kannada, and more, with mix-lingual tuning so customers hear natural, context-appropriate language—including blended Hindi–English when it fits the conversation."
       }
     ]
   },

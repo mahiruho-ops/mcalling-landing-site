@@ -557,7 +557,7 @@ export default async function IndustryPage({ params }: Params) {
             {/* SECTION 7: Why [Industry] Chooses mKcalling */}
             <div className="mb-16">
               <div className="text-center space-y-4 mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold">{whyChoose.title}</h2>
+                <h2 className="text-3xl md:text-4xl font-bold normal-case">{whyChoose.title}</h2>
                 <p className="text-muted-foreground">{whyChoose.subtitle}</p>
               </div>
               <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
@@ -638,7 +638,7 @@ export default async function IndustryPage({ params }: Params) {
 
           {/* CTA */}
           <div className="text-center p-12 rounded-xl bg-card border border-primary/30">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">See How mKcalling Works for {industry.name}</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 normal-case">See How mKcalling Works for {industry.name}</h2>
             <p className="text-muted-foreground mb-6">
               Schedule a demo to learn how we can automate your calling operations.
             </p>

@@ -9,7 +9,7 @@ import type { Viewport } from 'next'
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Toaster } from "@/components/ui/toaster";
-import { InterestForm } from "@/components/InterestForm";
+import { ConditionalInterestForm } from "@/components/ConditionalInterestForm";
 import { Metadata } from "next";
 import { seoContent } from "@/content/mkcalling/seo";
 
@@ -103,7 +103,7 @@ export default function RootLayout({
            <Header />
            <main>
             {children}
-            <InterestForm />
+            <ConditionalInterestForm />
             </main>
             <Footer />
             <Toaster />

@@ -10,7 +10,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "migrate:scheduler": "node --env-file=.env scripts/run-scheduler-migration.mjs",
+    "migrate:bookings": "node --env-file=.env scripts/run-migration-002.mjs",
+    "check:migrations": "node --env-file=.env scripts/check-migrations.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.12",
@@ -48,12 +51,15 @@
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
     "geoip-lite": "^1.4.10",
+    "googleapis": "^171.4.0",
     "gray-matter": "^4.0.3",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.546.0",
+    "luxon": "^3.7.2",
     "next": "16.1.6",
     "next-themes": "^0.4.6",
     "nodemailer": "^7.0.9",
+    "pg": "^8.20.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-google-recaptcha": "^3.1.0",
@@ -68,8 +74,10 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/luxon": "^3.7.1",
     "@types/node": "^20",
     "@types/nodemailer": "^7.0.2",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.21",

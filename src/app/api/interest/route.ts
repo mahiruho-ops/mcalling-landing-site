@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sendInterestFormEmails } from '@/lib/email';
 import { INTEREST_MESSAGE_MAX_LENGTH } from '@/lib/interest-form-limits';
 import { parsePricingContext } from '@/lib/pricing-context';
+import { getSchedulerConfig } from '@/lib/scheduler-config';
+import { finalizeSlotAndCreateMeeting } from '@/lib/scheduler-service';
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,6 +24,7 @@ export async function POST(request: NextRequest) {
       goLiveTimeline,
       currentCallingSetup,
       crmTools,
+      schedulerHoldToken,
       captchaToken,
       pricingContext: pricingContextBody,
     } = body;
@@ -50,6 +53,17 @@ export async function POST(request: NextRequest) {
     if (!companyStr) {
       return NextResponse.json(
         { success: false, message: 'Company name is required' },
+        { status: 400 },
+      );
+    }
+    const nameStr = typeof name === 'string' ? name.trim() : '';
+    const emailStr = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    const phoneStr = typeof phone === 'string' ? phone.trim() : '';
+    const schedulerConfig = getSchedulerConfig();
+    const schedulerHoldTokenStr = typeof schedulerHoldToken === 'string' ? schedulerHoldToken.trim() : '';
+    if (schedulerConfig.enabled && !schedulerHoldTokenStr) {
+      return NextResponse.json(
+        { success: false, message: 'Select and hold a consultation slot before submitting the form' },
         { status: 400 },
       );
     }
@@ -150,16 +164,66 @@ export async function POST(request: NextRequest) {
       parsedPricingContext!.source === "smb" &&
       Boolean(String(parsedPricingContext!.interestFormPrefill.monthlyCallingMinutes || "").trim());
 
-    const monthlyCallingMinutesEffective =
+    const enterpriseFromContext =
+      hasValidPricingContext && parsedPricingContext!.source === "enterprise";
+
+    let monthlyCallingMinutesEffective =
       smbMonthlyMinutesFromContext && !String(monthlyCallingMinutes || "").trim()
         ? String(parsedPricingContext!.interestFormPrefill.monthlyCallingMinutes).trim()
         : String(monthlyCallingMinutes || "").trim();
+
+    if (!monthlyCallingMinutesEffective && enterpriseFromContext) {
+      monthlyCallingMinutesEffective = "Not specified (enterprise discovery)";
+    }
 
     if (!monthlyCallingMinutesEffective) {
       return NextResponse.json(
         { success: false, message: "Estimated monthly calling minutes are required (or run the SMB estimator first)." },
         { status: 400 },
       );
+    }
+
+    let schedulerBooking: {
+      bookingRef: string;
+      slotStartIso: string;
+      slotEndIso: string;
+      slotLabel: string;
+      timezone: string;
+      googleEventId: string;
+      googleEventHtmlLink: string;
+      googleMeetLink: string | null;
+      bookingManagementUrl?: string;
+    } | null = null;
+
+    if (schedulerConfig.enabled) {
+      schedulerBooking = await finalizeSlotAndCreateMeeting({
+        holdToken: schedulerHoldTokenStr,
+        timezone: schedulerConfig.timezone,
+        contact: {
+          name: nameStr,
+          email: emailStr,
+          phone: phoneStr,
+          company: companyStr,
+        },
+        interestPayload: {
+          name,
+          email,
+          company: companyStr,
+          message: messageStr,
+          interestType,
+          countryCode,
+          phone,
+          industry,
+          primaryUseCase: primaryUseCaseEffective,
+          callingDirection,
+          monthlyCallingMinutes: monthlyCallingMinutesEffective,
+          preferredLanguages,
+          goLiveTimeline: goLiveTimelineStr,
+          currentCallingSetup,
+          crmTools,
+          pricingContext: pricingContextBody ?? null,
+        },
+      });
     }
 
     // Log the submission data
@@ -179,6 +243,15 @@ export async function POST(request: NextRequest) {
       goLiveTimeline: goLiveTimelineStr,
       currentCallingSetup,
       crmTools,
+      schedulerHoldToken: schedulerHoldTokenStr || undefined,
+      schedulerBookingRef: schedulerBooking?.bookingRef,
+      schedulerSlotStartIso: schedulerBooking?.slotStartIso,
+      schedulerSlotEndIso: schedulerBooking?.slotEndIso,
+      schedulerSlotLabel: schedulerBooking?.slotLabel,
+      schedulerTimezone: schedulerBooking?.timezone,
+      schedulerGoogleEventId: schedulerBooking?.googleEventId,
+      schedulerGoogleEventHtmlLink: schedulerBooking?.googleEventHtmlLink,
+      schedulerGoogleMeetLink: schedulerBooking?.googleMeetLink || undefined,
       hasValidPricingContext,
       timestamp: new Date().toISOString()
     });
@@ -209,6 +282,15 @@ export async function POST(request: NextRequest) {
       goLiveTimeline: goLiveTimelineStr,
       currentCallingSetup,
       crmTools,
+      schedulerBookingRef: schedulerBooking?.bookingRef,
+      schedulerSlotStartIso: schedulerBooking?.slotStartIso,
+      schedulerSlotEndIso: schedulerBooking?.slotEndIso,
+      schedulerSlotLabel: schedulerBooking?.slotLabel,
+      schedulerTimezone: schedulerBooking?.timezone,
+      schedulerGoogleEventId: schedulerBooking?.googleEventId,
+      schedulerGoogleEventHtmlLink: schedulerBooking?.googleEventHtmlLink,
+      schedulerGoogleMeetLink: schedulerBooking?.googleMeetLink || undefined,
+      bookingManagementUrl: schedulerBooking?.bookingManagementUrl,
       ...pricingEmailExtras,
     });
 

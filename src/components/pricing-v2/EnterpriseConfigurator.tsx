@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -26,7 +26,10 @@ const enterpriseOptionLabelClass = (selected: boolean) =>
     selected && "border-cyan-500/40 bg-cyan-500/5",
   );
 
+const scheduleEnterpriseDiscoveryHref = "/schedule-demo#interest";
+
 export function EnterpriseConfigurator() {
+  const router = useRouter();
   const { enterprise, gst } = pricingPageContent;
   const [scale, setScale] = useState<string>(enterprise.fields.scale.options[0].value);
   const [selectedDomains, setSelectedDomains] = useState<string[]>([enterprise.fields.domain.options[0].value]);
@@ -72,6 +75,21 @@ export function EnterpriseConfigurator() {
     .map((o) => o.label);
 
   const submit = () => setShowResult(true);
+
+  const persistEnterprisePricingContext = () => {
+    buildAndSaveEnterprisePricingContext({
+      scale,
+      scaleLabel,
+      domainValues: selectedDomains,
+      domainLabels,
+      currentSetup,
+      setupLabel,
+      integrationIds: integrations,
+      integrationLabels,
+      serviceValues: selectedServices,
+      serviceLabels,
+    });
+  };
 
   return (
     <section id="enterprise-configurator" className="py-16 md:py-20 scroll-mt-28 border-t border-border/40 bg-card/15">
@@ -283,26 +301,22 @@ export function EnterpriseConfigurator() {
                     </ul>
                   </div>
 
-                  <Button asChild size="lg" className="w-full bg-gradient-primary hover:shadow-glow-primary">
-                    <Link
-                      href="/schedule-demo#interest"
-                      onClick={() => {
-                        buildAndSaveEnterprisePricingContext({
-                          scale,
-                          scaleLabel,
-                          domainValues: selectedDomains,
-                          domainLabels,
-                          currentSetup,
-                          setupLabel,
-                          integrationIds: integrations,
-                          integrationLabels,
-                          serviceValues: selectedServices,
-                          serviceLabels,
-                        });
-                      }}
-                    >
-                      {enterprise.result.ctas.discovery}
-                    </Link>
+                  <Button
+                    type="button"
+                    size="lg"
+                    className="w-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-900 dark:text-cyan-100 hover:bg-cyan-500/20"
+                    onPointerDown={persistEnterprisePricingContext}
+                    onClick={() => {
+                      persistEnterprisePricingContext();
+                      router.push(scheduleEnterpriseDiscoveryHref);
+                    }}
+                    onAuxClick={(e) => {
+                      if (e.button !== 1) return;
+                      persistEnterprisePricingContext();
+                      window.open(scheduleEnterpriseDiscoveryHref, "_blank", "noopener,noreferrer");
+                    }}
+                  >
+                    {enterprise.result.ctas.discovery}
                   </Button>
                 </div>
               )}

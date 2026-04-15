@@ -105,7 +105,12 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 focus:bg-accent focus:text-accent-foreground",
+      "relative flex w-full cursor-pointer select-none items-center rounded-md py-2 pl-8 pr-2 text-sm outline-none transition-[background-color,box-shadow,color] duration-100",
+      "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      /* Radix uses data-highlighted for keyboard + pointer; hover was barely visible with focus: only */
+      "data-[highlighted]:bg-primary/20 data-[highlighted]:text-foreground data-[highlighted]:ring-2 data-[highlighted]:ring-inset data-[highlighted]:ring-primary/50",
+      "dark:data-[highlighted]:bg-primary/35 dark:data-[highlighted]:ring-primary/60",
+      "focus:bg-primary/15 focus:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
       className,
     )}
     {...props}

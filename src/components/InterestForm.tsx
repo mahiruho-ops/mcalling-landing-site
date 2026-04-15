@@ -80,6 +80,34 @@ interface InterestFormData {
   crmTools: string;
 }
 
+interface SchedulerSlotOption {
+  startIso: string;
+  endIso: string;
+  label: string;
+}
+
+interface SchedulerHoldState {
+  holdToken: string;
+  expiresAt: string;
+  slot: SchedulerSlotOption;
+}
+
+const SCHEDULER_ENABLED = process.env.NEXT_PUBLIC_SCHEDULER_ENABLED !== "false";
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function getTodayIsoDate() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function formatHoldExpiry(expiresAtIso: string): string {
+  const dt = new Date(expiresAtIso);
+  if (Number.isNaN(dt.getTime())) return "";
+  return new Intl.DateTimeFormat("en-IN", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(dt);
+}
+
 /** Single source of truth for empty form state; used for initial state and reset on success. */
 function getInitialFormState(country: CountryCode): InterestFormData {
   return {
@@ -114,6 +142,13 @@ export const InterestForm = () => {
   const [formResetKey, setFormResetKey] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>(getTodayIsoDate());
+  const [earliestSelectableDate, setEarliestSelectableDate] = useState<string | null>(null);
+  const [availableSlots, setAvailableSlots] = useState<SchedulerSlotOption[]>([]);
+  const [slotsLoading, setSlotsLoading] = useState(false);
+  const [slotsError, setSlotsError] = useState<string | null>(null);
+  const [holdState, setHoldState] = useState<SchedulerHoldState | null>(null);
+  const [holdBusy, setHoldBusy] = useState(false);
   const [pricingContext, setPricingContext] = useState<PricingContextV1 | null>(null);
   const [pricingContextReady, setPricingContextReady] = useState(false);
   const fromEstimator = pricingContext !== null;
@@ -121,7 +156,9 @@ export const InterestForm = () => {
   const smbMonthlyMinutesFromContext =
     pricingContext?.source === "smb" &&
     Boolean(pricingContext.interestFormPrefill.monthlyCallingMinutes?.trim());
-  const requireMonthlyCallingMinutesField = !smbMonthlyMinutesFromContext;
+  /** SMB prefill or enterprise discovery — volume band is not collected again here. */
+  const requireMonthlyCallingMinutesField =
+    !smbMonthlyMinutesFromContext && pricingContext?.source !== "enterprise";
 
   // Detect country on mount: prefer IP-based (via API), else browser locale/timezone, else India
   useEffect(() => {
@@ -188,6 +225,25 @@ export const InterestForm = () => {
     setPricingContextReady(true);
   }, [isMounted]);
 
+  useEffect(() => {
+    if (!isMounted || !SCHEDULER_ENABLED) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const res = await fetch("/api/scheduler/bounds");
+        const data = await res.json();
+        if (cancelled || !data.success || !data.earliestSelectableDate) return;
+        setEarliestSelectableDate(data.earliestSelectableDate);
+        setSelectedDate((prev) => (prev < data.earliestSelectableDate ? data.earliestSelectableDate : prev));
+      } catch {
+        // ignore; date min falls back to today until bounds load
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [isMounted]);
+
   // Parse country code from formData (handles both old format "dialCode" and new format "dialCode-countryCode")
   const parseCountryCode = (code: string): { dialCode: string; countryCode: string } => {
     if (code.includes('-')) {
@@ -201,9 +257,147 @@ export const InterestForm = () => {
 
   const parsedCountry = parseCountryCode(formData.countryCode);
   const selectedCountry = countryCodes.find(c => c.code === parsedCountry.countryCode) || defaultCountry;
+  const isValidEmail = EMAIL_REGEX.test(formData.email.trim());
+  const isValidPhone = validatePhoneNumber(formData.phone, selectedCountry);
+  const schedulerReadyForHold = Boolean(formData.name.trim() && isValidEmail && isValidPhone && formData.company.trim());
   const validCountryCode = countryCodes.some(c => c.code === parsedCountry.countryCode)
     ? `${selectedCountry.dialCode}-${selectedCountry.code}`
     : `${defaultCountry.dialCode}-${defaultCountry.code}`;
+  const holdExpiryLabel = holdState ? formatHoldExpiry(holdState.expiresAt) : "";
+
+  const resetSchedulerHold = (changedField: string) => {
+    if (!holdState) return;
+    setHoldState(null);
+    toast({
+      title: "Time slot cleared",
+      description: `You updated ${changedField}. Please select a fresh consultation slot before submitting.`,
+      variant: "destructive",
+    });
+  };
+
+  useEffect(() => {
+    if (!SCHEDULER_ENABLED || !schedulerReadyForHold) {
+      setAvailableSlots([]);
+      setSlotsError(null);
+      return;
+    }
+
+    let cancelled = false;
+    const fetchSlots = async () => {
+      setSlotsLoading(true);
+      setSlotsError(null);
+      try {
+        const res = await fetch(`/api/scheduler/slots?date=${encodeURIComponent(selectedDate)}`);
+        const payload = await res.json();
+        if (!res.ok || !payload.success) {
+          throw new Error(payload.message || "Unable to load slots");
+        }
+        if (!cancelled) setAvailableSlots(payload.slots || []);
+      } catch (error) {
+        if (!cancelled) {
+          setAvailableSlots([]);
+          setSlotsError(error instanceof Error ? error.message : "Unable to load slots");
+        }
+      } finally {
+        if (!cancelled) setSlotsLoading(false);
+      }
+    };
+
+    void fetchSlots();
+    return () => {
+      cancelled = true;
+    };
+  }, [schedulerReadyForHold, selectedDate]);
+
+  useEffect(() => {
+    if (!holdState) return;
+    const timer = window.setInterval(() => {
+      if (new Date(holdState.expiresAt).getTime() <= Date.now()) {
+        setHoldState(null);
+        toast({
+          title: "Slot hold expired",
+          description: "Your selected slot hold expired. Please pick another available slot.",
+          variant: "destructive",
+        });
+      }
+    }, 10000);
+    return () => window.clearInterval(timer);
+  }, [holdState, toast]);
+
+  useEffect(() => {
+    if (!holdState || !schedulerReadyForHold) return;
+    const refresh = window.setInterval(async () => {
+      try {
+        await fetch("/api/scheduler/hold", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            slotStartIso: holdState.slot.startIso,
+            slotEndIso: holdState.slot.endIso,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim(),
+            company: formData.company.trim(),
+            holdToken: holdState.holdToken,
+          }),
+        });
+      } catch {
+        // Best-effort refresh; explicit failure is surfaced when submit is attempted.
+      }
+    }, 60000);
+    return () => window.clearInterval(refresh);
+  }, [formData.company, formData.email, formData.name, formData.phone, holdState, schedulerReadyForHold]);
+
+  const requestSlotHold = async (slot: SchedulerSlotOption) => {
+    if (!schedulerReadyForHold) {
+      toast({
+        title: "Complete contact details first",
+        description: "Add name, valid email, valid phone, and company before selecting a slot.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setHoldBusy(true);
+    try {
+      const res = await fetch("/api/scheduler/hold", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slotStartIso: slot.startIso,
+          slotEndIso: slot.endIso,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          company: formData.company.trim(),
+          holdToken: holdState?.holdToken,
+        }),
+      });
+      const payload = await res.json();
+      if (!res.ok || !payload.success) {
+        throw new Error(payload.message || "Unable to hold selected slot");
+      }
+      setHoldState({
+        holdToken: payload.holdToken,
+        expiresAt: payload.expiresAt,
+        slot,
+      });
+      toast({
+        title: "Consultation slot selected",
+        description: "Your selected slot is now held. Complete CAPTCHA and submit.",
+      });
+    } catch (error) {
+      toast({
+        title: "Slot unavailable",
+        description: error instanceof Error ? error.message : "Please select another slot.",
+        variant: "destructive",
+      });
+      setHoldState(null);
+    } finally {
+      setHoldBusy(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -228,8 +422,7 @@ export const InterestForm = () => {
     }
 
     // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
+    if (!EMAIL_REGEX.test(formData.email)) {
       toast({
         title: "Invalid Email",
         description: "That email doesn't look quite right. Double-check and try again!",
@@ -341,6 +534,15 @@ export const InterestForm = () => {
       return;
     }
 
+    if (SCHEDULER_ENABLED && !holdState?.holdToken) {
+      toast({
+        title: "Consultation slot required",
+        description: "Please select and hold an available consultation slot before submitting.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (formData.message.length > INTEREST_MESSAGE_MAX_LENGTH) {
       toast({
         title: "Message too long",
@@ -376,6 +578,7 @@ export const InterestForm = () => {
         body: JSON.stringify({
           ...formData,
           monthlyCallingMinutes: monthlyCallingMinutesPayload,
+          schedulerHoldToken: holdState?.holdToken || "",
           captchaToken,
           ...(pricingContext ? { pricingContext } : {}),
         }),
@@ -386,12 +589,26 @@ export const InterestForm = () => {
       if (result.success) {
         toast({
           title: "Demo request received",
-          description: "We'll contact you shortly to confirm a demo slot. Typical response time: within business hours.",
+          description: "Your request and selected consultation slot have been received. Watch for your invite details shortly.",
         });
         clearPricingContextFromStorage();
         setPricingContext(null);
         setFormData(getInitialFormState(detectedCountry));
         setFormResetKey((k) => k + 1);
+        setAvailableSlots([]);
+        setHoldState(null);
+        try {
+          const bRes = await fetch("/api/scheduler/bounds");
+          const bJson = await bRes.json();
+          if (bJson.success && bJson.earliestSelectableDate) {
+            setEarliestSelectableDate(bJson.earliestSelectableDate);
+            setSelectedDate(bJson.earliestSelectableDate);
+          } else {
+            setSelectedDate(getTodayIsoDate());
+          }
+        } catch {
+          setSelectedDate(getTodayIsoDate());
+        }
         setCaptchaToken(null);
         // Reset CAPTCHA
         if (recaptchaRef.current) {
@@ -461,6 +678,12 @@ export const InterestForm = () => {
                       again below).
                     </p>
                   ) : null}
+                  {pricingContext?.source === "enterprise" ? (
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-medium text-foreground">Estimated monthly calling minutes:</span> not collected
+                      again here for enterprise discovery — your session summary above is what we use.
+                    </p>
+                  ) : null}
                   <ul className="text-xs text-muted-foreground list-disc pl-4 space-y-1">
                     {pricingContext?.summaryLines.map((line, i) => (
                       <li key={i}>{line}</li>
@@ -475,7 +698,10 @@ export const InterestForm = () => {
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) => {
+                    resetSchedulerHold("name");
+                    setFormData({ ...formData, name: e.target.value });
+                  }}
                   className="bg-background/50 border-border focus:border-primary"
                   placeholder="Your full name"
                 />
@@ -489,7 +715,10 @@ export const InterestForm = () => {
                   id="email"
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) => {
+                    resetSchedulerHold("email");
+                    setFormData({ ...formData, email: e.target.value });
+                  }}
                   className="bg-background/50 border-border focus:border-primary"
                   placeholder="you@company.com"
                 />
@@ -535,6 +764,7 @@ export const InterestForm = () => {
                     onChange={(e) => {
                       // Only allow digits
                       const value = e.target.value.replace(/\D/g, '');
+                      resetSchedulerHold("phone number");
                       setFormData({ ...formData, phone: value });
                     }}
                     className="flex-1 bg-background/50 border-border focus:border-primary"
@@ -555,7 +785,10 @@ export const InterestForm = () => {
                 <Input
                   id="company"
                   value={formData.company}
-                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  onChange={(e) => {
+                    resetSchedulerHold("company");
+                    setFormData({ ...formData, company: e.target.value });
+                  }}
                   className="bg-background/50 border-border focus:border-primary"
                   placeholder="Your company name"
                 />
@@ -661,11 +894,7 @@ export const InterestForm = () => {
               {requireMonthlyCallingMinutesField ? (
                 <div className="space-y-2">
                   <label htmlFor="monthlyCallingMinutes" className="text-sm font-medium">
-                    Estimated Monthly Calling Minutes{" "}
-                    <span className="text-red-500">*</span>
-                    {fromEstimator && pricingContext?.source === "enterprise" ? (
-                      <span className="text-muted-foreground font-normal"> (required — not in enterprise discovery form)</span>
-                    ) : null}
+                    Estimated Monthly Calling Minutes <span className="text-red-500">*</span>
                   </label>
                   {isMounted ? (
                     <Select
@@ -815,6 +1044,93 @@ export const InterestForm = () => {
                   Optional. Up to {INTEREST_MESSAGE_MAX_LENGTH.toLocaleString("en-IN")} characters.
                 </p>
               </div>
+              <div className="space-y-3 rounded-lg border border-primary/30 bg-primary/5 px-4 py-4">
+                <div>
+                  <p className="text-sm font-medium">
+                    Select your consultation slot <span className="text-red-500">*</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Pick an available slot from our live availability (earliest date respects a one business day lead
+                    time). Your selected slot is held for 15 minutes.
+                  </p>
+                  {!schedulerReadyForHold && SCHEDULER_ENABLED ? (
+                    <p className="text-xs text-amber-600 mt-1">
+                      Unlock the date picker after Name, Email, Company, and a valid phone for the selected country
+                      code are filled.
+                    </p>
+                  ) : null}
+                </div>
+                <div className="grid gap-3 sm:grid-cols-[220px,1fr]">
+                  <div className="space-y-2">
+                    <Label htmlFor="scheduler-date" className="text-xs text-muted-foreground">
+                      Date
+                    </Label>
+                    <Input
+                      id="scheduler-date"
+                      type="date"
+                      value={selectedDate}
+                      min={earliestSelectableDate ?? getTodayIsoDate()}
+                      onChange={(e) => {
+                        setSelectedDate(e.target.value);
+                        setHoldState(null);
+                      }}
+                      className="bg-background/50 border-border focus:border-primary"
+                      disabled={!SCHEDULER_ENABLED || !schedulerReadyForHold}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-xs text-muted-foreground">Available time slots</Label>
+                    <div className="rounded-md border border-border/60 bg-background p-3 min-h-[120px]">
+                      {!schedulerReadyForHold ? (
+                        <p className="text-sm text-muted-foreground">
+                          Complete Name, valid Email, valid Phone, and Company first to view available slots.
+                        </p>
+                      ) : slotsLoading ? (
+                        <p className="text-sm text-muted-foreground">Loading available slots...</p>
+                      ) : slotsError ? (
+                        <p className="text-sm text-destructive">{slotsError}</p>
+                      ) : availableSlots.length === 0 ? (
+                        <p className="text-sm text-muted-foreground">
+                          No open slots for this date. Choose another date.
+                        </p>
+                      ) : (
+                        <div className="flex flex-wrap gap-2">
+                          {availableSlots.map((slot) => {
+                            const selected = holdState?.slot.startIso === slot.startIso;
+                            return (
+                              <Button
+                                key={slot.startIso}
+                                type="button"
+                                size="sm"
+                                variant={selected ? "default" : "outline"}
+                                className="h-8"
+                                disabled={holdBusy}
+                                onClick={() => void requestSlotHold(slot)}
+                              >
+                                {slot.label}
+                              </Button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {holdState ? (
+                  <p className="text-xs text-emerald-600">
+                    Held slot: {holdState.slot.label} on {selectedDate}. Hold valid until {holdExpiryLabel}.
+                  </p>
+                ) : (
+                  <p className="text-xs text-amber-600">
+                    Select a slot to hold it before final submit.
+                  </p>
+                )}
+                {!SCHEDULER_ENABLED ? (
+                  <p className="text-xs text-muted-foreground">
+                    Scheduler feature is currently disabled for this environment.
+                  </p>
+                ) : null}
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="interestType" className="text-sm font-medium">
                   Interest Type <span className="text-red-500">*</span>
@@ -858,7 +1174,7 @@ export const InterestForm = () => {
 
               <Button
                 type="submit"
-                disabled={isSubmitting || !captchaToken}
+                disabled={isSubmitting || !captchaToken || (SCHEDULER_ENABLED && !holdState)}
                 className="w-full bg-gradient-primary hover:shadow-glow-primary transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
                 size="lg"
               >
@@ -867,7 +1183,9 @@ export const InterestForm = () => {
               </Button>
 
               <p className="text-xs text-center text-muted-foreground">
-                After you submit, our scheduling assistant will call you to confirm a demo slot. By submitting, you agree to receive a scheduling call related to your request.
+                By booking and submitting, you agree to receive scheduling and follow-up communications from Mahiruho
+                about this request and related products/services via call, email, SMS, or WhatsApp. You can opt out
+                anytime.
               </p>
             </form>
           </Card>

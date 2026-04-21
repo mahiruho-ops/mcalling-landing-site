@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, useRef, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -37,6 +37,9 @@ export function EnterpriseConfigurator() {
   const [integrations, setIntegrations] = useState<string[]>([]);
   const [selectedServices, setSelectedServices] = useState<string[]>([enterprise.fields.service.options[0].value]);
   const [showResult, setShowResult] = useState(false);
+  const [resultRevealTick, setResultRevealTick] = useState(0);
+  const resultCardRef = useRef<HTMLDivElement | null>(null);
+  const resultBannerRef = useRef<HTMLParagraphElement | null>(null);
 
   const toggleIntegration = (id: string) => {
     setIntegrations((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
@@ -74,7 +77,19 @@ export function EnterpriseConfigurator() {
     .filter((o) => integrations.includes(o.id))
     .map((o) => o.label);
 
-  const submit = () => setShowResult(true);
+  const submit = () => {
+    setShowResult(true);
+    setResultRevealTick((v) => v + 1);
+  };
+
+  useEffect(() => {
+    if (!showResult || resultRevealTick === 0) return;
+    const raf = window.requestAnimationFrame(() => {
+      resultCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      resultBannerRef.current?.focus({ preventScroll: true });
+    });
+    return () => window.cancelAnimationFrame(raf);
+  }, [showResult, resultRevealTick]);
 
   const persistEnterprisePricingContext = () => {
     buildAndSaveEnterprisePricingContext({
@@ -250,8 +265,15 @@ export function EnterpriseConfigurator() {
                   Submit the discovery form to see how we frame enterprise scope — <span className="text-foreground font-medium">no instant monthly quote</span>.
                 </div>
               ) : (
-                <div className="rounded-2xl border border-cyan-500/25 bg-gradient-to-b from-card/90 to-card/50 shadow-card p-6 md:p-8 space-y-6">
-                  <p className="text-sm font-semibold text-cyan-700 dark:text-cyan-400 border border-cyan-500/20 rounded-lg px-3 py-2 bg-cyan-500/5">
+                <div
+                  ref={resultCardRef}
+                  className="rounded-2xl border border-cyan-500/25 bg-gradient-to-b from-card/90 to-card/50 shadow-card p-6 md:p-8 space-y-6"
+                >
+                  <p
+                    ref={resultBannerRef}
+                    tabIndex={-1}
+                    className="text-sm font-semibold text-cyan-700 dark:text-cyan-400 border border-cyan-500/20 rounded-lg px-3 py-2 bg-cyan-500/5"
+                  >
                     {enterprise.result.banner}
                   </p>
 

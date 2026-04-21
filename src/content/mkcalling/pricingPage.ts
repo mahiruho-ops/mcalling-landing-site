@@ -134,7 +134,7 @@ export const pricingPageContent = {
       setupLabel: "One-time setup & workflow enablement",
       setupUsageCreditTitle: "Included usage credit (from setup)",
       setupUsageCreditLine:
-        "{minutes} connected minutes of usage credit, calculated as one-time setup (ex-GST) ÷ your tier rate of ₹{rate}/min (ex-GST).",
+        "Complimentary {minutes} connected minutes of usage credit, calculated as one-time setup (ex-GST) ÷ your tier rate of ₹{rate}/min (ex-GST).",
       setupUsageCreditValidity:
         "Credit applies to metered connected talk time at your plan rate (ex-GST), for {months} months from go-live.",
       setupUsageCreditFootnote:

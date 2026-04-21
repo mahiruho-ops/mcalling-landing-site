@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useCallback, type ReactNode } from "react";
+import { useMemo, useState, useCallback, useRef, useEffect, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -71,6 +71,9 @@ export function SMBConfigurator() {
   const [complexity, setComplexity] = useState<"basic" | "standard" | "advanced">("standard");
   const [addons, setAddons] = useState<string[]>([]);
   const [result, setResult] = useState<SmbEstimateResult | null>(null);
+  const [resultRevealTick, setResultRevealTick] = useState(0);
+  const resultCardRef = useRef<HTMLDivElement | null>(null);
+  const resultPlanHeadingRef = useRef<HTMLParagraphElement | null>(null);
 
   const minutePreview = useMemo(
     () => estimatedMonthlyMinutesRange(dailyVolume, avgDurationMin),
@@ -106,7 +109,17 @@ export function SMBConfigurator() {
         addons,
       }),
     );
+    setResultRevealTick((v) => v + 1);
   };
+
+  useEffect(() => {
+    if (!result || resultRevealTick === 0) return;
+    const raf = window.requestAnimationFrame(() => {
+      resultCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      resultPlanHeadingRef.current?.focus({ preventScroll: true });
+    });
+    return () => window.cancelAnimationFrame(raf);
+  }, [result, resultRevealTick]);
 
   const persistSmbPricingContext = useCallback(() => {
     if (!result) return;
@@ -389,9 +402,18 @@ export function SMBConfigurator() {
                   suggested plan and cost breakdown.
                 </div>
               ) : (
-                <div className="rounded-2xl border border-primary/30 bg-gradient-to-b from-card/80 to-card/40 shadow-glow-primary/20 p-6 md:p-8 space-y-6">
+                <div
+                  ref={resultCardRef}
+                  className="rounded-2xl border border-primary/30 bg-gradient-to-b from-card/80 to-card/40 shadow-glow-primary/20 p-6 md:p-8 space-y-6"
+                >
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-primary">{smb.result.planLabel}</p>
+                    <p
+                      ref={resultPlanHeadingRef}
+                      tabIndex={-1}
+                      className="text-xs font-semibold uppercase tracking-wide text-primary"
+                    >
+                      {smb.result.planLabel}
+                    </p>
                     <p className="text-3xl font-bold gradient-text-primary mt-1">{result.tier}</p>
                     <p className="text-sm text-muted-foreground mt-2">{result.tierBlurb}</p>
                   </div>
@@ -408,9 +430,11 @@ export function SMBConfigurator() {
                         <div className="border-t border-border/40 pt-3 space-y-1.5">
                           <p className="text-xs font-medium text-foreground">{smb.result.setupUsageCreditTitle}</p>
                           <p className="text-xs text-muted-foreground leading-relaxed">
-                            {smb.result.setupUsageCreditLine
-                              .replace("{minutes}", result.freeConnectedMinutesFromSetup.toLocaleString("en-IN"))
-                              .replace("{rate}", String(result.perMinuteExGst))}
+                            <span className="font-semibold text-primary">
+                              Complimentary {result.freeConnectedMinutesFromSetup.toLocaleString("en-IN")} connected minutes
+                            </span>{" "}
+                            of usage credit, calculated as one-time setup (ex-GST) ÷ your tier rate of ₹
+                            {result.perMinuteExGst}/min (ex-GST).
                           </p>
                           <p className="text-xs text-muted-foreground leading-relaxed">
                             {smb.result.setupUsageCreditValidity.replace(

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useCallback, useRef, useEffect, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, type ReadonlyURLSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -11,9 +11,6 @@ import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { pricingPageContent } from "@/content/mkcalling/pricingPage";
 import {
-  SMB_CHANNEL_DID_ANNUAL_EX_GST,
-  SMB_USAGE_CREDIT_VALIDITY_MONTHS_FROM_GOLIVE,
-  computeSmbEstimate,
   estimatedMonthlyMinutesRange,
   formatDurationMin,
   formatInr,
@@ -22,7 +19,14 @@ import {
   type SmbDailyVolume,
   type SmbEstimateResult,
 } from "@/lib/pricing-estimate";
+import {
+  BillingApiError,
+  calculateSmbEstimate,
+  createSmbQuoteIntent,
+  type SmbEstimatePublicConfig,
+} from "@/lib/billing-api-client";
 import { buildAndSaveSmbPricingContext } from "@/lib/pricing-context";
+import { buildSignupUrl } from "@/lib/auth-app-redirect";
 import { cn } from "@/lib/utils";
 import { Calculator } from "lucide-react";
 
@@ -60,8 +64,29 @@ function smbCheckboxOptionLabelClass(selected: boolean) {
 const smbCheckboxClassName =
   "shrink-0 rounded-[3px] border-2 border-primary/50 data-[state=checked]:border-primary";
 
+const UTM_KEYS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+] as const;
+
+function pickUtmFromSearchParams(
+  p: URLSearchParams | ReadonlyURLSearchParams | null,
+): Record<string, string> | undefined {
+  if (!p) return undefined;
+  const out: Record<string, string> = {};
+  for (const k of UTM_KEYS) {
+    const v = p.get(k);
+    if (v && v.trim().length > 0) out[k] = v.trim();
+  }
+  return Object.keys(out).length > 0 ? out : undefined;
+}
+
 export function SMBConfigurator() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { smb, gst } = pricingPageContent;
   const [dailyVolume, setDailyVolume] = useState<SmbDailyVolume>(initialVolume);
   const [selectedUseCases, setSelectedUseCases] = useState<string[]>([smb.fields.useCases.options[0].value]);
@@ -71,6 +96,11 @@ export function SMBConfigurator() {
   const [complexity, setComplexity] = useState<"basic" | "standard" | "advanced">("standard");
   const [addons, setAddons] = useState<string[]>([]);
   const [result, setResult] = useState<SmbEstimateResult | null>(null);
+  const [publicConfig, setPublicConfig] = useState<SmbEstimatePublicConfig | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [creatingAccount, setCreatingAccount] = useState(false);
+  const [accountError, setAccountError] = useState<string | null>(null);
   const [resultRevealTick, setResultRevealTick] = useState(0);
   const resultCardRef = useRef<HTMLDivElement | null>(null);
   const resultPlanHeadingRef = useRef<HTMLParagraphElement | null>(null);
@@ -97,19 +127,31 @@ export function SMBConfigurator() {
     setAddons((prev) => (prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]));
   };
 
-  const runEstimate = () => {
+  const runEstimate = async () => {
     if (selectedUseCases.length < 1) return;
-    setResult(
-      computeSmbEstimate({
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await calculateSmbEstimate({
         dailyVolume,
         useCases: selectedUseCases,
         concurrency,
         avgCallDurationMin: avgDurationMin,
         complexity,
         addons,
-      }),
-    );
-    setResultRevealTick((v) => v + 1);
+      });
+      setResult(response.estimate);
+      setPublicConfig(response.publicConfig);
+      setResultRevealTick((v) => v + 1);
+    } catch (err) {
+      const message =
+        err instanceof BillingApiError
+          ? err.message
+          : "Couldn't calculate the estimate right now. Please try again in a moment.";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -122,8 +164,8 @@ export function SMBConfigurator() {
   }, [result, resultRevealTick]);
 
   const persistSmbPricingContext = useCallback(() => {
-    if (!result) return;
-    buildAndSaveSmbPricingContext({
+    if (!result) return null;
+    return buildAndSaveSmbPricingContext({
       inputs: {
         dailyVolume,
         useCases: selectedUseCases,
@@ -159,6 +201,32 @@ export function SMBConfigurator() {
   ]);
 
   const scheduleConsultationHref = "/schedule-demo#interest";
+
+  const handleCreateAccount = useCallback(async () => {
+    if (!result || creatingAccount) return;
+    const ctx = persistSmbPricingContext();
+    if (!ctx) return;
+    setCreatingAccount(true);
+    setAccountError(null);
+    try {
+      const utm = pickUtmFromSearchParams(searchParams);
+      const { quote_intent_id, claim_token } = await createSmbQuoteIntent({
+        pricing_context: ctx,
+        ...(utm ? { utm } : {}),
+      });
+      window.location.href = buildSignupUrl({
+        quoteIntentId: quote_intent_id,
+        claimToken: claim_token,
+      });
+    } catch (err) {
+      const message =
+        err instanceof BillingApiError
+          ? err.message
+          : "Couldn't start signup right now. Please try again in a moment.";
+      setAccountError(message);
+      setCreatingAccount(false);
+    }
+  }, [result, creatingAccount, persistSmbPricingContext, searchParams]);
 
   return (
     <section id="smb-configurator" className="pt-8 md:pt-10 pb-16 md:pb-20 scroll-mt-28">
@@ -386,12 +454,20 @@ export function SMBConfigurator() {
                 size="lg"
                 className="w-full bg-gradient-primary hover:shadow-glow-primary"
                 onClick={runEstimate}
-                disabled={selectedUseCases.length < 1}
+                disabled={selectedUseCases.length < 1 || loading}
               >
-                {smb.submit}
+                {loading ? "Calculating…" : smb.submit}
               </Button>
               {selectedUseCases.length < 1 ? (
                 <p className="text-xs text-center text-amber-700 dark:text-amber-400">{smb.result.useCaseValidation}</p>
+              ) : null}
+              {error ? (
+                <p
+                  role="alert"
+                  className="text-xs text-center text-destructive border border-destructive/30 rounded-lg px-3 py-2 bg-destructive/5"
+                >
+                  {error}
+                </p>
               ) : null}
             </div>
 
@@ -436,12 +512,14 @@ export function SMBConfigurator() {
                             of usage credit, calculated as one-time setup (ex-GST) ÷ your tier rate of ₹
                             {result.perMinuteExGst}/min (ex-GST).
                           </p>
-                          <p className="text-xs text-muted-foreground leading-relaxed">
-                            {smb.result.setupUsageCreditValidity.replace(
-                              "{months}",
-                              String(SMB_USAGE_CREDIT_VALIDITY_MONTHS_FROM_GOLIVE),
-                            )}
-                          </p>
+                          {publicConfig ? (
+                            <p className="text-xs text-muted-foreground leading-relaxed">
+                              {smb.result.setupUsageCreditValidity.replace(
+                                "{months}",
+                                String(publicConfig.usageCreditValidityMonthsFromGoLive),
+                              )}
+                            </p>
+                          ) : null}
                           <p className="text-[11px] text-muted-foreground leading-relaxed italic">
                             {smb.result.setupUsageCreditFootnote}
                           </p>
@@ -453,7 +531,9 @@ export function SMBConfigurator() {
                       <p className="text-xs font-medium text-muted-foreground">{smb.result.channelLabel}</p>
                       <p className="text-xs text-muted-foreground leading-relaxed">{smb.result.channelSub}</p>
                       <p className="text-sm text-foreground">
-                        {result.effectiveConcurrency} path(s) × {formatInr(SMB_CHANNEL_DID_ANNUAL_EX_GST)} / year ={" "}
+                        {result.effectiveConcurrency} path(s)
+                        {publicConfig ? <> × {formatInr(publicConfig.channelDidAnnualExGst)} / year</> : null}
+                        {" = "}
                         <span className="font-semibold tabular-nums">{formatInr(result.channelAnnualExGst)}</span> / year
                       </p>
                       <p className="text-sm text-muted-foreground">
@@ -530,8 +610,10 @@ export function SMBConfigurator() {
                           <span className="text-foreground tabular-nums">
                             {result.freeConnectedMinutesFromSetup.toLocaleString("en-IN")} min
                           </span>{" "}
-                          at ₹{result.perMinuteExGst}/min (ex-GST), within{" "}
-                          {SMB_USAGE_CREDIT_VALIDITY_MONTHS_FROM_GOLIVE} months of go-live
+                          at ₹{result.perMinuteExGst}/min (ex-GST)
+                          {publicConfig ? (
+                            <>, within {publicConfig.usageCreditValidityMonthsFromGoLive} months of go-live</>
+                          ) : null}
                         </li>
                       ) : null}
                       <li>
@@ -559,23 +641,44 @@ export function SMBConfigurator() {
                     <p className="text-xs text-muted-foreground leading-relaxed">{smb.result.guidanceBody}</p>
                   </div>
 
-                  <Button
-                    type="button"
-                    size="lg"
-                    className="w-full bg-gradient-primary hover:shadow-glow-primary"
-                    onPointerDown={persistSmbPricingContext}
-                    onClick={() => {
-                      persistSmbPricingContext();
-                      router.push(scheduleConsultationHref);
-                    }}
-                    onAuxClick={(e) => {
-                      if (e.button !== 1) return;
-                      persistSmbPricingContext();
-                      window.open(scheduleConsultationHref, "_blank", "noopener,noreferrer");
-                    }}
-                  >
-                    {smb.result.ctas.consultation}
-                  </Button>
+                  <div className="space-y-3">
+                    <Button
+                      type="button"
+                      size="lg"
+                      className="w-full bg-gradient-primary hover:shadow-glow-primary"
+                      onClick={handleCreateAccount}
+                      disabled={creatingAccount}
+                      aria-busy={creatingAccount}
+                    >
+                      {creatingAccount ? "Starting signup…" : smb.result.ctas.createAccount}
+                    </Button>
+                    {accountError ? (
+                      <p
+                        role="alert"
+                        className="text-xs text-center text-destructive border border-destructive/30 rounded-lg px-3 py-2 bg-destructive/5"
+                      >
+                        {accountError}
+                      </p>
+                    ) : null}
+                    <Button
+                      type="button"
+                      size="lg"
+                      variant="outline"
+                      className="w-full"
+                      onPointerDown={persistSmbPricingContext}
+                      onClick={() => {
+                        persistSmbPricingContext();
+                        router.push(scheduleConsultationHref);
+                      }}
+                      onAuxClick={(e) => {
+                        if (e.button !== 1) return;
+                        persistSmbPricingContext();
+                        window.open(scheduleConsultationHref, "_blank", "noopener,noreferrer");
+                      }}
+                    >
+                      {smb.result.ctas.consultation}
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>

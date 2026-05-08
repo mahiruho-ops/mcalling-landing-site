@@ -44,6 +44,8 @@ Marketing website for MChat Bot - an AI-powered chatbot platform.
 | `EHLO_DOMAIN` | Domain for SMTP EHLO |
 | `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` | reCAPTCHA v3 site key |
 | `RECAPTCHA_SECRET_KEY` | reCAPTCHA v3 secret key |
+| `NEXT_PUBLIC_BILLING_API_BASE_URL` | Base URL for the billing-api (SMB pricing estimator). E.g. `http://localhost:8081` for dev. |
+| `NEXT_PUBLIC_AUTH_APP_BASE_URL` | Base URL for the auth app. The Create Account CTA redirects to `${this}/signup?quote_intent_id=...&claim_token=...`. E.g. `https://auth.mchatbot.ai` for prod. |
 
 ## Deployment
 

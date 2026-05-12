@@ -31,7 +31,7 @@ export const Header = () => {
                 width={240} 
                 height={140} 
                 priority 
-                className="h-16 md:h-20 w-auto object-contain"
+                className="h-12 w-auto object-contain"
               />
             </Link>
           </div>

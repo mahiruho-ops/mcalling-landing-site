@@ -195,7 +195,7 @@ export function buildAndSaveSmbPricingContext(args: {
   inputs: SmbEstimateInput;
   result: SmbEstimateResult;
   labels: PricingContextLabelSnapshot;
-}): void {
+}): PricingContextV1 {
   const { inputs, result, labels } = args;
   const summaryLines = buildSmbSummaryLines({ labels, result });
   const interestFormPrefill: PricingContextV1["interestFormPrefill"] = {
@@ -213,6 +213,7 @@ export function buildAndSaveSmbPricingContext(args: {
     interestFormPrefill,
   };
   writePricingContextToStorage(ctx);
+  return ctx;
 }
 
 function buildEnterpriseSummaryLines(args: PricingContextV1["enterprise"]): string[] {

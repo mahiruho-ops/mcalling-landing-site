@@ -161,6 +161,7 @@ export const pricingPageContent = {
       integrationNote: "Custom integration or heavier workflow design may add scope during implementation.",
       ctas: {
         consultation: "Schedule a Consultation",
+        createAccount: "Create Account & Continue",
       },
     },
   },

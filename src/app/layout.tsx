@@ -3,8 +3,8 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/theme-provider";
-import GoogleAnalytics from "@/components/GoogleAnalytics";
-import MetaPixel from "@/components/MetaPixel";
+import { AnalyticsWithConsent } from "@/components/AnalyticsWithConsent";
+import { CookieConsentBanner } from "@/components/CookieConsentBanner";
 import type { Viewport } from 'next'
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -108,14 +108,13 @@ export default function RootLayout({
             <Footer />
             <Toaster />
             <BackToTop />
+            <CookieConsentBanner />
           </div>
         </ThemeProvider>
-        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
-          <GoogleAnalytics measurementId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
-        )}
-        {process.env.NEXT_PUBLIC_META_PIXEL_ID && (
-          <MetaPixel pixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID} />
-        )}
+        <AnalyticsWithConsent
+          gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}
+          metaPixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID}
+        />
         <HeatMap />
         <Analytics />
         <SpeedInsights />

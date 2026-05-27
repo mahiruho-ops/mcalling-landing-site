@@ -22,7 +22,6 @@ import {
   estimatedMonthlyMinutesRange,
   formatDurationMin,
   formatInr,
-  formatInrRange,
   type SmbConcurrency,
   type SmbDailyVolume,
   type SmbEstimateResult,
@@ -37,6 +36,8 @@ import { buildAndSaveSmbPricingContext } from "@/lib/pricing-context";
 import { buildSignupUrl } from "@/lib/auth-app-redirect";
 import { cn } from "@/lib/utils";
 import { Calculator } from "lucide-react";
+import { MinuteRechargePackagesTable } from "@/components/pricing-v2/MinuteRechargePackagesTable";
+import { EstimateSetupSummary } from "@/components/pricing-v2/EstimateSetupSummary";
 
 const initialVolume: SmbDailyVolume = "v100_250";
 const DEFAULT_DURATION = 3;
@@ -579,42 +580,15 @@ function SMBConfiguratorContent() {
                       <p className="text-xs text-muted-foreground italic">{smb.result.channelBilledAnnually}</p>
                     </div>
 
-                    <div className="rounded-xl border border-border/50 bg-background/50 p-4 space-y-2">
-                      <p className="text-xs font-medium text-muted-foreground">{smb.result.usageLabel}</p>
-                      <p className="text-xs text-muted-foreground leading-relaxed">{smb.result.usageSub}</p>
-                      <p className="text-sm text-foreground tabular-nums">
-                        ~{result.minutesLow.toLocaleString("en-IN")} – {result.minutesHigh.toLocaleString("en-IN")} min/mo @ ₹
-                        {result.perMinuteExGst}/min ({result.tier}) →{" "}
-                        <span className="font-semibold">{formatInrRange(result.usageMonthlyLowExGst, result.usageMonthlyHighExGst)}</span>
-                        / month
-                      </p>
-                    </div>
-                  </div>
-
-                  <Separator />
-
-                  <div className="space-y-3">
-                    <div className="space-y-1">
-                      <p className="text-sm font-semibold text-foreground">{smb.result.typicalMonthlyTitle}</p>
-                      <p className="text-xs text-muted-foreground">{smb.result.typicalMonthlyHint}</p>
-                      <p className="text-xl font-semibold tabular-nums">
-                        {formatInrRange(result.typicalMonthlyExGstLow, result.typicalMonthlyExGstHigh)}
-                      </p>
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-sm font-semibold text-foreground">{smb.result.firstYearTitle}</p>
-                      <p className="text-xs text-muted-foreground">{smb.result.firstYearHint}</p>
-                      <p className="text-lg font-semibold tabular-nums">
-                        {formatInrRange(result.firstYearExGstLow, result.firstYearExGstHigh)}
-                      </p>
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-sm font-semibold text-foreground">{smb.result.ongoingYearTitle}</p>
-                      <p className="text-xs text-muted-foreground">{smb.result.ongoingYearHint}</p>
-                      <p className="text-lg font-semibold tabular-nums">
-                        {formatInrRange(result.ongoingYearExGstLow, result.ongoingYearExGstHigh)}
-                      </p>
-                    </div>
+                    <MinuteRechargePackagesTable
+                      title={smb.result.rechargePackagesTitle}
+                      intro={smb.result.rechargePackagesIntro}
+                      minutesColumnLabel={smb.result.rechargePackagesMinutesColumn}
+                      validityColumnLabel={smb.result.rechargePackagesValidityColumn}
+                      rateLine={smb.result.rechargePackagesRateLine
+                        .replace("{tier}", result.tier)
+                        .replace("{rate}", String(result.perMinuteExGst))}
+                    />
                   </div>
 
                   <p className="text-xs text-muted-foreground border border-border/50 rounded-lg px-3 py-2 bg-muted/20">
@@ -623,44 +597,21 @@ function SMBConfiguratorContent() {
 
                   <Separator />
 
-                  <div>
-                    <p className="text-sm font-semibold mb-2">{smb.result.summaryTitle}</p>
-                    <ul className="text-sm text-muted-foreground space-y-2 list-disc pl-5">
-                      <li>
-                        Avg. duration: <span className="text-foreground">{formatDurationMin(result.avgCallDurationMin)}</span> — est.{" "}
-                        <span className="text-foreground tabular-nums">
-                          {result.minutesLow.toLocaleString("en-IN")}–{result.minutesHigh.toLocaleString("en-IN")}
-                        </span>{" "}
-                        connected min/month
-                      </li>
-                      <li>
-                        Concurrent capacity: <span className="text-foreground">{result.effectiveConcurrency}</span>
-                        {result.inferredConcurrency ? " (inferred from volume)" : ""}
-                      </li>
-                      <li>
-                        Use cases selected: <span className="text-foreground">{selectedUseCases.length}</span>
-                      </li>
-                      {result.freeConnectedMinutesFromSetup > 0 ? (
-                        <li>
-                          Usage credit from setup:{" "}
-                          <span className="text-foreground tabular-nums">
-                            {result.freeConnectedMinutesFromSetup.toLocaleString("en-IN")} min
-                          </span>{" "}
-                          at ₹{result.perMinuteExGst}/min (ex-GST)
-                          {publicConfig ? (
-                            <>, within {publicConfig.usageCreditValidityMonthsFromGoLive} months of go-live</>
-                          ) : null}
-                        </li>
-                      ) : null}
-                      <li>
-                        Workflow complexity: <span className="text-foreground capitalize">{complexity}</span>
-                      </li>
-                      <li>
-                        Custom integration likely:{" "}
-                        <span className="text-foreground">{result.integrationLikely ? "Yes" : "Unlikely from selections"}</span>
-                      </li>
-                    </ul>
-                  </div>
+                  <EstimateSetupSummary
+                    title={smb.result.summaryTitle}
+                    result={result}
+                    complexity={complexity}
+                    selectedUseCaseCount={selectedUseCases.length}
+                    usageCreditValidityMonths={publicConfig?.usageCreditValidityMonthsFromGoLive}
+                    summaryPlanRateLine={smb.result.summaryPlanRateLine}
+                    summaryDurationLine={smb.result.summaryDurationLine}
+                    summaryConcurrencyLine={smb.result.summaryConcurrencyLine}
+                    summaryUseCasesLine={smb.result.summaryUseCasesLine}
+                    summaryUsageCreditLine={smb.result.summaryUsageCreditLine}
+                    summaryComplexityLine={smb.result.summaryComplexityLine}
+                    summaryIntegrationLine={smb.result.summaryIntegrationLine}
+                    summaryIntegrationUnlikely={smb.result.summaryIntegrationUnlikely}
+                  />
 
                   {result.showLowVolumeNote && (
                     <p className="text-xs text-amber-700 dark:text-amber-400/90 border border-amber-500/25 rounded-lg px-3 py-2 bg-amber-500/5">

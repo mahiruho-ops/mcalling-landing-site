@@ -81,6 +81,9 @@ const UTM_KEYS = [
   "utm_content",
 ] as const;
 
+/** Set before auth redirect; cleared when user returns via back / bfcache. */
+const SMB_SIGNUP_PENDING_KEY = "mcs-smb-signup-pending";
+
 function pickUtmFromSearchParams(
   p: URLSearchParams | ReadonlyURLSearchParams | null,
 ): Record<string, string> | undefined {
@@ -141,6 +144,24 @@ function SMBConfiguratorContent() {
   const [resultRevealTick, setResultRevealTick] = useState(0);
   const resultCardRef = useRef<HTMLDivElement | null>(null);
   const resultPlanHeadingRef = useRef<HTMLParagraphElement | null>(null);
+
+  /** Browser back from auth restores this page from bfcache with React state intact — unlock CTA. */
+  useEffect(() => {
+    const clearSignupPending = () => {
+      if (!sessionStorage.getItem(SMB_SIGNUP_PENDING_KEY)) return;
+      sessionStorage.removeItem(SMB_SIGNUP_PENDING_KEY);
+      setCreatingAccount(false);
+    };
+
+    clearSignupPending();
+
+    const onPageShow = () => {
+      clearSignupPending();
+    };
+
+    window.addEventListener("pageshow", onPageShow);
+    return () => window.removeEventListener("pageshow", onPageShow);
+  }, []);
 
   const minutePreview = useMemo(
     () => estimatedMonthlyMinutesRange(dailyVolume, avgDurationMin),
@@ -251,6 +272,7 @@ function SMBConfiguratorContent() {
         pricing_context: ctx,
         ...(utm ? { utm } : {}),
       });
+      sessionStorage.setItem(SMB_SIGNUP_PENDING_KEY, "1");
       window.location.href = buildSignupUrl({
         quoteIntentId: quote_intent_id,
         claimToken: claim_token,

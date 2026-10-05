@@ -11,6 +11,7 @@ import { pricingPageContent } from "@/content/mkcalling/pricingPage";
 import { buildAndSaveEnterprisePricingContext } from "@/lib/pricing-context";
 import { cn } from "@/lib/utils";
 import { Building2 } from "lucide-react";
+import { Atmosphere } from "@/components/site/Atmosphere";
 
 /** Cyan radios/checkboxes — avoids theme `primary` (purple) in this section. */
 const enterpriseRadioItemClassName =
@@ -107,15 +108,16 @@ export function EnterpriseConfigurator() {
   };
 
   return (
-    <section id="enterprise-configurator" className="py-16 md:py-20 scroll-mt-28 border-t border-border/40 bg-card/15">
-      <div className="container mx-auto px-6">
+    <section id="enterprise-configurator" className="relative scroll-mt-28 overflow-hidden border-b border-border py-16 md:py-20">
+      <Atmosphere variant="soft" />
+      <div className="container relative mx-auto px-6">
         <div className="max-w-6xl mx-auto space-y-10">
-          <div className="text-center space-y-3 max-w-3xl mx-auto">
+          <div className="max-w-2xl space-y-3">
             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/5 px-3 py-1 text-xs font-medium text-cyan-700 dark:text-cyan-400">
               <Building2 className="h-3.5 w-3.5" aria-hidden />
               Enterprise
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold">{enterprise.sectionTitle}</h2>
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{enterprise.sectionTitle}</h2>
             <p className="text-muted-foreground text-lg">{enterprise.sectionSubtitle}</p>
           </div>
 

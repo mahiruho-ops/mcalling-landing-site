@@ -1,6 +1,7 @@
 import { Headphones, Phone, Timer, Workflow } from "lucide-react";
 import { pricingPageContent } from "@/content/mkcalling/pricingPage";
 import { cn } from "@/lib/utils";
+import { Atmosphere } from "@/components/site/Atmosphere";
 
 const icons = {
   workflow: Workflow,
@@ -13,11 +14,12 @@ export function PricingHowItWorks() {
   const { howItWorks } = pricingPageContent;
 
   return (
-    <section id="how-pricing-works" className="py-16 md:py-20 scroll-mt-28 border-y border-border/40 bg-card/20">
-      <div className="container mx-auto px-6">
+    <section id="how-pricing-works" className="relative scroll-mt-28 overflow-hidden border-b border-border py-16 md:py-20">
+      <Atmosphere variant="mist" />
+      <div className="container relative mx-auto px-6">
         <div className="max-w-6xl mx-auto space-y-12">
-          <div className="text-center space-y-3 max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold">{howItWorks.title}</h2>
+          <div className="max-w-2xl space-y-3">
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{howItWorks.title}</h2>
             <p className="text-muted-foreground text-lg">{howItWorks.subtitle}</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">

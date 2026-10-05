@@ -20,25 +20,26 @@ export const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/50 backdrop-blur-xl">
-      <div className="container mx-auto px-6 py-3 md:py-4">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/90 backdrop-blur-xl">
+      <div className="mx-auto max-w-6xl px-6 py-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="flex items-center gap-2">
-              <Image 
-                src="/mKCalling_Logo.png" 
-                alt="mKcalling logo" 
-                width={240} 
-                height={140} 
-                priority 
-                className="h-12 w-auto object-contain"
-              />
-            </Link>
-          </div>
+          <Link href="/" className="flex shrink-0 items-center gap-2">
+            <Image
+              src="/m-logo.png"
+              alt=""
+              width={40}
+              height={40}
+              priority
+              className="h-10 w-10 shrink-0 object-contain"
+            />
+            <span className="bg-gradient-to-r from-[var(--product-wordmark-from)] via-[var(--product-wordmark-mid)] to-[var(--product-wordmark-to)] bg-clip-text text-lg font-semibold tracking-tight text-transparent">
+              mKcalling
+            </span>
+          </Link>
           
           {/* Mobile menu button */}
           <button
-            className="md:hidden inline-flex items-center justify-center p-2 rounded-lg border border-border/50 hover:bg-card transition-colors"
+            className="inline-flex items-center justify-center rounded-lg border border-border p-2 transition-colors hover:bg-card lg:hidden"
             aria-label="Toggle navigation"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
@@ -46,7 +47,7 @@ export const Header = () => {
             {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
 
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden items-center gap-5 lg:flex" aria-label="Primary">
             {navItems.filter(item => !item.cta).map((item) => (
               <Link 
                 key={item.href}
@@ -70,7 +71,7 @@ export const Header = () => {
         </div>
         {/* Mobile nav panel */}
         {open && (
-          <div className="md:hidden mt-3 border border-border/50 rounded-xl bg-card/60 backdrop-blur-sm p-4 space-y-3">
+          <div className="mt-3 space-y-3 rounded-xl border border-border bg-card p-4 shadow-card lg:hidden">
             {navItems.filter(item => !item.cta).map((item) => (
               <Link 
                 key={item.href}

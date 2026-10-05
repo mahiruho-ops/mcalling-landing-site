@@ -18,6 +18,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Slider } from "@/components/ui/slider";
 import { pricingPageContent } from "@/content/mkcalling/pricingPage";
+import { Atmosphere } from "@/components/site/Atmosphere";
 import {
   estimatedMonthlyMinutesRange,
   formatDurationMin,
@@ -103,11 +104,12 @@ export function SMBConfigurator() {
 function SMBConfiguratorFallback() {
   const { smb } = pricingPageContent;
   return (
-    <section id="smb-configurator" className="pt-8 md:pt-10 pb-16 md:pb-20 scroll-mt-28" aria-busy="true">
-      <div className="container mx-auto px-6">
+    <section id="smb-configurator" className="relative scroll-mt-28 overflow-hidden border-b border-border pb-16 pt-8 md:pb-20 md:pt-10" aria-busy="true">
+      <Atmosphere variant="mist" />
+      <div className="container relative mx-auto px-6">
         <div className="max-w-6xl mx-auto space-y-8">
-          <div className="text-center space-y-2 max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold">{smb.sectionTitle}</h2>
+          <div className="max-w-2xl space-y-2">
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{smb.sectionTitle}</h2>
             <p className="text-muted-foreground text-lg">{smb.sectionSubtitle}</p>
           </div>
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
@@ -265,15 +267,16 @@ function SMBConfiguratorContent() {
   }, [result, creatingAccount, persistSmbPricingContext, searchParams]);
 
   return (
-    <section id="smb-configurator" className="pt-8 md:pt-10 pb-16 md:pb-20 scroll-mt-28">
-      <div className="container mx-auto px-6">
+    <section id="smb-configurator" className="relative scroll-mt-28 overflow-hidden border-b border-border pb-16 pt-8 md:pb-20 md:pt-10">
+      <Atmosphere variant="mist" />
+      <div className="container relative mx-auto px-6">
         <div className="max-w-6xl mx-auto space-y-8">
-          <div className="text-center space-y-2 max-w-3xl mx-auto">
+          <div className="max-w-2xl space-y-2">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
               <Calculator className="h-3.5 w-3.5" aria-hidden />
               SMB
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold">{smb.sectionTitle}</h2>
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{smb.sectionTitle}</h2>
             <p className="text-muted-foreground text-lg">{smb.sectionSubtitle}</p>
             <p className="text-xs text-muted-foreground">{gst.shortLine}</p>
           </div>

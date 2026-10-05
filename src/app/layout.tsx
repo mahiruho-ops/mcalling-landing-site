@@ -62,8 +62,8 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#8B5CF6' },
-    { media: '(prefers-color-scheme: dark)', color: '#8B5CF6' }
+    { media: '(prefers-color-scheme: light)', color: '#6050c0' },
+    { media: '(prefers-color-scheme: dark)', color: '#b39af0' }
   ],
   colorScheme: "light dark",
 }
@@ -90,7 +90,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
         suppressHydrationWarning
       >
         <ThemeProvider

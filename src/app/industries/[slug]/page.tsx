@@ -15,6 +15,9 @@ import { fieldServiceMaintenanceContent } from "@/content/mkcalling/industries/f
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, ArrowLeft, Check, CheckCircle2, Phone, PhoneCall, FileText, Shield, TrendingUp } from "lucide-react";
+import { Atmosphere } from "@/components/site/Atmosphere";
+import { ChildPageHero, NoteStage } from "@/components/site/ChildPageHero";
+import { PhraseTiles } from "@/components/site/HeroStages";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -309,17 +312,16 @@ export default async function IndustryPage({ params }: Params) {
 
   if (!industry) {
     return (
-      <section className="py-24 pt-32">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl font-bold mb-4">Industry Not Found</h1>
-            <p className="text-muted-foreground mb-6">The requested industry page could not be found.</p>
-            <Link href="/industries">
-              <Button variant="outline">Back to Industries</Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <ChildPageHero
+        eyebrow="Industries"
+        title="Industry Not Found"
+        stage={<NoteStage>The requested industry page could not be found.</NoteStage>}
+        actions={
+          <Link href="/industries">
+            <Button variant="outline">Back to Industries</Button>
+          </Link>
+        }
+      />
     );
   }
 
@@ -343,53 +345,53 @@ export default async function IndustryPage({ params }: Params) {
     const trust = isHealthcare || isEducation ? (content as typeof healthcareContent | typeof educationContent).trust : undefined;
 
     return (
-      <section className="py-24 pt-32">
-        <div className="container mx-auto px-6">
-          <div className="max-w-6xl mx-auto">
-            {/* Breadcrumb */}
-            <nav className="mb-6 text-sm text-muted-foreground">
-              <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
+      <>
+      <ChildPageHero
+        eyebrow={industry.name}
+        title={hero.headline}
+        support={hero.subheadline}
+        stageLabel="industry"
+        stage={<PhraseTiles items={hero.bullets} />}
+        lead={
+          <div className="space-y-4">
+            <nav className="text-sm text-muted-foreground">
+              <Link href="/" className="transition-colors hover:text-foreground">Home</Link>
               <span className="mx-2">/</span>
-              <Link href="/industries" className="hover:text-foreground transition-colors">Industries</Link>
+              <Link href="/industries" className="transition-colors hover:text-foreground">Industries</Link>
               <span className="mx-2">/</span>
               <span className="text-foreground">{industry.name}</span>
             </nav>
-
-            {/* SECTION 1: Hero */}
-            <div className="mb-16">
-              <Link href="/industries" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6">
-                <ArrowLeft className="w-4 h-4" />
-                Back to Industries
-              </Link>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">{hero.headline}</h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mb-6">{hero.subheadline}</p>
-              <ul className="space-y-2 mb-6">
-                {hero.bullets.map((bullet, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span className="text-foreground">{bullet}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="flex flex-wrap items-center gap-4">
-                <Link href="/schedule-demo">
-                  <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
-                    {hero.primaryCTA}
-                    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-                <Link href="/pricing">
-                  <Button size="lg" variant="outline" className="border-primary/30 hover:border-primary/60">
-                    {hero.secondaryCTA}
-                  </Button>
-                </Link>
-              </div>
-            </div>
+            <Link href="/industries" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
+              <ArrowLeft className="h-4 w-4" />
+              Back to Industries
+            </Link>
+          </div>
+        }
+        actions={
+          <>
+            <Link href="/schedule-demo">
+              <Button size="lg" className="bg-gradient-primary transition-all hover:shadow-glow-primary group">
+                {hero.primaryCTA}
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+            <Link href="/pricing">
+              <Button size="lg" variant="outline" className="border-primary/30 hover:border-primary/60">
+                {hero.secondaryCTA}
+              </Button>
+            </Link>
+          </>
+        }
+      />
+      <section className="relative overflow-hidden border-b border-border py-16 md:py-20">
+        <Atmosphere variant="mist" />
+        <div className="relative container mx-auto px-6">
+          <div className="max-w-6xl mx-auto">
 
             {/* SECTION 2: Why [Industry] Needs AI Calling */}
             <div className="mb-16 p-8 rounded-xl bg-card border border-border/50">
               <div className="max-w-4xl mx-auto">
-                <h2 className="text-2xl md:text-3xl font-bold mb-2">{whyNeed.title}</h2>
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-2">{whyNeed.title}</h2>
                 <p className="text-muted-foreground mb-6">{whyNeed.subtitle}</p>
                 <div className="grid md:grid-cols-2 gap-6 mb-6">
                   <div>
@@ -423,8 +425,8 @@ export default async function IndustryPage({ params }: Params) {
 
             {/* SECTION 3: Key [Industry] Use Cases */}
             <div className="mb-16">
-              <div className="text-center space-y-4 mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold">{useCases.title}</h2>
+              <div className="mb-8 max-w-2xl space-y-4">
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{useCases.title}</h2>
                 <p className="text-muted-foreground">{useCases.subtitle}</p>
               </div>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
@@ -467,14 +469,14 @@ export default async function IndustryPage({ params }: Params) {
                 ))}
               </div>
               <div className="p-4 rounded-lg bg-primary/5 border border-primary/20 max-w-4xl mx-auto">
-                <p className="text-foreground font-medium text-center">{useCases.note}</p>
+                <p className="font-medium text-foreground">{useCases.note}</p>
               </div>
             </div>
 
             {/* SECTION 4: Example Workflow */}
             <div className="mb-16 p-8 rounded-xl bg-card border border-border/50">
               <div className="max-w-4xl mx-auto">
-                <h2 className="text-2xl md:text-3xl font-bold mb-2">{workflow.title}</h2>
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-2">{workflow.title}</h2>
                 <p className="text-muted-foreground mb-6">{workflow.subtitle}</p>
                 <div className="space-y-4 mb-6">
                   {workflow.steps.map((step, index) => (
@@ -495,7 +497,7 @@ export default async function IndustryPage({ params }: Params) {
             {/* SECTION 5: Platform Capabilities */}
             <div className="mb-16 p-8 rounded-xl bg-card border border-border/50">
               <div className="max-w-4xl mx-auto">
-                <h2 className="text-2xl md:text-3xl font-bold mb-2">{capabilities.title}</h2>
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-2">{capabilities.title}</h2>
                 <p className="text-muted-foreground mb-6">{capabilities.subtitle}</p>
                 <div className="grid md:grid-cols-2 gap-4">
                   {capabilities.items.map((item, index) => (
@@ -514,7 +516,7 @@ export default async function IndustryPage({ params }: Params) {
                 <div className="max-w-4xl mx-auto">
                   <div className="flex items-center gap-3 mb-6">
                     <Shield className="w-6 h-6 text-primary" />
-                    <h2 className="text-2xl md:text-3xl font-bold">{control.title}</h2>
+                    <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{control.title}</h2>
                   </div>
                   <p className="text-muted-foreground mb-6">{control.subtitle}</p>
                   <ul className="space-y-3 mb-6">
@@ -536,7 +538,7 @@ export default async function IndustryPage({ params }: Params) {
                 <div className="max-w-4xl mx-auto">
                   <div className="flex items-center gap-3 mb-6">
                     <Shield className="w-6 h-6 text-primary" />
-                    <h2 className="text-2xl md:text-3xl font-bold">{trust.title}</h2>
+                    <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{trust.title}</h2>
                   </div>
                   <p className="text-muted-foreground mb-6">{trust.subtitle}</p>
                   <ul className="space-y-3 mb-6">
@@ -556,8 +558,8 @@ export default async function IndustryPage({ params }: Params) {
 
             {/* SECTION 7: Why [Industry] Chooses mKcalling */}
             <div className="mb-16">
-              <div className="text-center space-y-4 mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold normal-case">{whyChoose.title}</h2>
+              <div className="mb-8 max-w-2xl space-y-4">
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl normal-case">{whyChoose.title}</h2>
                 <p className="text-muted-foreground">{whyChoose.subtitle}</p>
               </div>
               <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
@@ -571,10 +573,10 @@ export default async function IndustryPage({ params }: Params) {
             </div>
 
             {/* SECTION 8: CTA Band */}
-            <div className="text-center p-12 rounded-xl bg-card border border-primary/30">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">{cta.headline}</h2>
+            <div className="max-w-2xl rounded-2xl border border-primary/30 bg-card p-8 md:p-12">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-4">{cta.headline}</h2>
               <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">{cta.copy}</p>
-              <div className="flex flex-wrap items-center justify-center gap-4">
+              <div className="flex flex-wrap items-center gap-4">
                 <Link href="/schedule-demo">
                   <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
                     {cta.primaryCTA}
@@ -591,38 +593,49 @@ export default async function IndustryPage({ params }: Params) {
           </div>
         </div>
       </section>
+      </>
     );
   }
 
   // Default placeholder for other industries
   return (
-    <section className="py-24 pt-32">
-      <div className="container mx-auto px-6">
-        <div className="max-w-4xl mx-auto">
-          {/* Breadcrumb */}
-          <nav className="mb-6 text-sm text-muted-foreground">
-            <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
+    <>
+    <ChildPageHero
+      eyebrow={industry.name}
+      title={industry.name}
+      support={`Content coming soon. Learn how mKcalling automates calling for ${industry.name} businesses.`}
+      stageLabel="industry"
+      stage={<PhraseTiles items={industry.bullets} />}
+      lead={
+        <div className="space-y-4">
+          <nav className="text-sm text-muted-foreground">
+            <Link href="/" className="transition-colors hover:text-foreground">Home</Link>
             <span className="mx-2">/</span>
-            <Link href="/industries" className="hover:text-foreground transition-colors">Industries</Link>
+            <Link href="/industries" className="transition-colors hover:text-foreground">Industries</Link>
             <span className="mx-2">/</span>
             <span className="text-foreground">{industry.name}</span>
           </nav>
-
-          {/* Hero */}
-          <div className="mb-12">
-            <Link href="/industries" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Industries
-            </Link>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{industry.name}</h1>
-            <p className="text-xl text-muted-foreground">
-              Content coming soon. Learn how mKcalling automates calling for {industry.name} businesses.
-            </p>
-          </div>
-
-          {/* Placeholder Content */}
-          <div className="p-8 rounded-xl bg-card border border-border/50 mb-12">
-            <h2 className="text-2xl font-bold mb-4">Use Cases for {industry.name}</h2>
+          <Link href="/industries" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Industries
+          </Link>
+        </div>
+      }
+      actions={
+        <Link href="/schedule-demo">
+          <Button size="lg" className="bg-gradient-primary transition-all hover:shadow-glow-primary group">
+            Schedule a Demo
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Button>
+        </Link>
+      }
+    />
+    <section className="relative overflow-hidden border-b border-border py-16 md:py-20">
+      <Atmosphere variant="mist" />
+      <div className="relative container mx-auto px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-12 rounded-xl border border-border/50 bg-card p-8">
+            <h2 className="mb-4 text-2xl font-semibold tracking-tight">Use Cases for {industry.name}</h2>
             <ul className="space-y-3 mb-6">
               {industry.bullets.map((bullet, index) => (
                 <li key={index} className="flex items-start gap-3">
@@ -637,8 +650,8 @@ export default async function IndustryPage({ params }: Params) {
           </div>
 
           {/* CTA */}
-          <div className="text-center p-12 rounded-xl bg-card border border-primary/30">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 normal-case">See How mKcalling Works for {industry.name}</h2>
+          <div className="max-w-2xl rounded-2xl border border-primary/30 bg-card p-8 md:p-12">
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-4 normal-case">See How mKcalling Works for {industry.name}</h2>
             <p className="text-muted-foreground mb-6">
               Schedule a demo to learn how we can automate your calling operations.
             </p>
@@ -652,5 +665,6 @@ export default async function IndustryPage({ params }: Params) {
         </div>
       </div>
     </section>
+    </>
   );
 }

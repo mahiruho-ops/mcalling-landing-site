@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { pricingPageContent } from "@/content/mkcalling/pricingPage";
 import { cn } from "@/lib/utils";
+import { Atmosphere } from "@/components/site/Atmosphere";
 
 export function PricingAudienceSplit() {
   const { audience } = pricingPageContent;
@@ -14,11 +15,12 @@ export function PricingAudienceSplit() {
   };
 
   return (
-    <section id="pricing-paths" className="py-16 md:py-20 scroll-mt-28">
-      <div className="container mx-auto px-6">
+    <section id="pricing-paths" className="relative scroll-mt-28 overflow-hidden border-b border-border py-16 md:py-20">
+      <Atmosphere variant="soft" />
+      <div className="container relative mx-auto px-6">
         <div className="max-w-6xl mx-auto space-y-10">
-          <div className="text-center space-y-3 max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold">{audience.title}</h2>
+          <div className="max-w-2xl space-y-3">
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{audience.title}</h2>
             <p className="text-muted-foreground text-lg">{audience.subtitle}</p>
           </div>
           <div className="grid md:grid-cols-2 gap-6 md:items-stretch">

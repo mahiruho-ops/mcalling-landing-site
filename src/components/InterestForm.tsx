@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Checkbox } from "./ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { Send } from "lucide-react";
+import { Atmosphere } from "@/components/site/Atmosphere";
 import ReCAPTCHA from "react-google-recaptcha";
 import { industriesData } from "@/content/mkcalling/industries";
 import { countryCodes, defaultCountry, detectCountryFromBrowser, validatePhoneNumber, type CountryCode } from "@/lib/countryCodes";
@@ -634,14 +635,15 @@ export const InterestForm = () => {
   };
 
   return (
-    <section id="interest" className="py-24 relative bg-card/30">
-      <div className="container mx-auto px-6">
-        <div className="max-w-2xl mx-auto">
-          <div className="text-center space-y-4 mb-12 animate-fade-in-up">
-            <h2 className="text-4xl md:text-5xl font-bold normal-case">
+    <section id="interest" className="relative overflow-hidden border-b border-border py-16 md:py-20">
+      <Atmosphere variant="mist" />
+      <div className="relative mx-auto max-w-6xl px-6">
+        <div className="mx-auto max-w-2xl">
+          <div className="mb-10 max-w-2xl space-y-3">
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
               See mKcalling in Action
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-sm leading-relaxed text-muted-foreground md:text-base">
               Tell us your use case and calling volume — we'll show a live workflow and recommend the right setup.
             </p>
             <p className="text-sm text-muted-foreground mt-2">
@@ -649,7 +651,7 @@ export const InterestForm = () => {
             </p>
           </div>
 
-          <Card className="p-8 bg-card border-primary/30 shadow-card animate-fade-in-up">
+          <Card className="rounded-2xl border border-border bg-card p-8 shadow-card">
             <form key={formResetKey} onSubmit={handleSubmit} className="space-y-6">
               {pricingContextReady && !fromEstimator ? (
                 <div className="rounded-lg border border-primary/25 bg-primary/5 px-4 py-3 text-sm text-muted-foreground">

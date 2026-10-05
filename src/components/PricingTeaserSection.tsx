@@ -2,43 +2,29 @@ import { Check } from "lucide-react";
 import { homeContent } from "@/content/mkcalling/home";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { BandHeader, SiteBand } from "@/components/site/Atmosphere";
 
 export const PricingTeaserSection = () => {
   const { pricingTeaser } = homeContent;
 
   return (
-    <section id="pricing" className="py-24 relative">
-      <div className="absolute inset-0 bg-gradient-glow opacity-20" />
-      <div className="container mx-auto px-6 relative">
-        <div className="max-w-4xl mx-auto text-center space-y-4 mb-12 animate-fade-in-up">
-          <h2 className="text-4xl md:text-5xl font-bold">
-            {pricingTeaser.title}
-          </h2>
-          <p className="text-xl text-muted-foreground">
-            {pricingTeaser.subtitle}
-          </p>
-        </div>
-
-        <div className="max-w-3xl mx-auto">
-          <div className="p-8 rounded-2xl bg-card border border-primary/30 backdrop-blur-sm">
-            <div className="grid md:grid-cols-2 gap-4 mb-8">
-              {pricingTeaser.features.map((feature, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span className="text-sm text-foreground">{feature}</span>
-                </div>
-              ))}
+    <SiteBand id="pricing" variant="mist">
+      <BandHeader title={pricingTeaser.title} support={pricingTeaser.subtitle} />
+      <div className="max-w-3xl rounded-2xl border border-border bg-card p-8 shadow-card">
+        <div className="mb-8 grid gap-4 md:grid-cols-2">
+          {pricingTeaser.features.map((feature) => (
+            <div key={feature} className="flex items-center gap-3">
+              <Check className="h-5 w-5 flex-shrink-0 text-primary" />
+              <span className="text-sm text-foreground">{feature}</span>
             </div>
-            <div className="text-center">
-              <Link href="/pricing">
-                <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all">
-                  View Detailed Pricing
-                </Button>
-              </Link>
-            </div>
-          </div>
+          ))}
         </div>
+        <Link href="/pricing">
+          <Button size="lg" className="bg-gradient-primary transition-all hover:shadow-glow-primary">
+            View Detailed Pricing
+          </Button>
+        </Link>
       </div>
-    </section>
+    </SiteBand>
   );
 };

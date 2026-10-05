@@ -12,9 +12,10 @@ const config: Config = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "0px",
       screens: {
-        "2xl": "1400px",
+        xl: "72rem",
+        "2xl": "72rem",
       },
     },
     extend: {
@@ -68,7 +69,7 @@ const config: Config = {
         'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",

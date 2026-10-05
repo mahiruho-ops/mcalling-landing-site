@@ -3,45 +3,40 @@ import { EnterpriseManagement } from "@/components/EnterpriseManagement";
 import { MultiAgentOrchestration } from "@/components/MultiAgentOrchestration";
 import { BusinessAutomation } from "@/components/BusinessAutomation";
 import Link from "next/link";
+import { Atmosphere } from "@/components/site/Atmosphere";
+import { ChildPageHero } from "@/components/site/ChildPageHero";
+import { StepFlow } from "@/components/site/HeroStages";
 
 export const metadata = {
   title: "Enterprise",
   description: "Management, orchestration, and automation for enterprises.",
 };
 
+const rollout = [
+  "Week 1–2: Use‑case design and integration plan",
+  "Week 3–4: Build and pilot",
+  "Week 5+: Scale and governance",
+];
+
 export default function EnterprisePage() {
   return (
-    <section className="py-24">
-      <div className="container mx-auto px-6">
-        {/* <nav className="mb-6 text-sm text-muted-foreground">
-          <Link href="/" className="hover:underline">Home</Link>
-          <span className="mx-2">/</span>
-          <span className="text-foreground">Enterprise</span>
-        </nav> */}
-
-        <div className="text-center space-y-4 mb-12  flex flex-col items-center justify-center">
-          <h1 className="text-4xl md:text-5xl font-bold">From pilot to global rollout.</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Orchestrate specialized agents, automate processes and integrate securely-at enterprise scale.
-          </p>
-          <div className="text-sm text-muted-foreground">Who it’s for: CX leaders, Ops, IT and Platform teams.</div>
-          <div className="pt-4">
-            <Link href="/#interest" className="inline-flex items-center px-5 py-3 rounded-lg bg-gradient-primary text-primary-foreground hover:shadow-glow-primary transition-all">Request enterprise demo</Link>
-          </div>
-        </div>
-
-        
-        <div className="grid md:grid-cols-3 gap-4 max-w-5xl mx-auto mb-12">
-            {[
-              'Week 1–2: Use‑case design and integration plan',
-              'Week 3–4: Build and pilot',
-              'Week 5+: Scale and governance',
-            ].map((item, i) => (
-              <div key={i} className="p-3 rounded-lg bg-card/50 border border-border/50 text-sm text-muted-foreground">
-                {item}
-              </div>
-            ))}
-          </div>
+    <>
+      <ChildPageHero
+        eyebrow="Enterprise"
+        title="From pilot to global rollout."
+        support="Orchestrate specialized agents, automate processes and integrate securely-at enterprise scale."
+        stageLabel="rollout"
+        stage={<StepFlow steps={rollout} />}
+        actions={
+          <Link href="/#interest" className="inline-flex items-center rounded-lg bg-gradient-primary px-5 py-3 text-primary-foreground transition-all hover:shadow-glow-primary">
+            Request enterprise demo
+          </Link>
+        }
+      />
+      <section className="relative overflow-hidden border-b border-border py-16 md:py-20">
+        <Atmosphere variant="mist" />
+        <div className="relative container mx-auto px-6">
+        <p className="mb-10 max-w-2xl text-sm text-muted-foreground">Who it’s for: CX leaders, Ops, IT and Platform teams.</p>
           <div className="text-center mb-10">
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
             <a href="#management" className="hover:text-foreground transition-colors">Management</a>
@@ -73,6 +68,7 @@ export default function EnterprisePage() {
         </div>
       </div>
     </section>
+    </>
   );
 }
 

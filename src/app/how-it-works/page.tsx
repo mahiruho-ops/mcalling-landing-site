@@ -3,6 +3,9 @@ import { howItWorksContent } from "@/content/mkcalling/howItWorks";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Check, CheckCircle2, Phone, PhoneCall, Settings, TrendingUp, Users } from "lucide-react";
+import { Atmosphere } from "@/components/site/Atmosphere";
+import { ChildPageHero } from "@/components/site/ChildPageHero";
+import { StepFlow } from "@/components/site/HeroStages";
 
 export const metadata: Metadata = {
   title: "How It Works | mKcalling AI Calling Platform",
@@ -13,32 +16,35 @@ export default function HowItWorksPage() {
   const { hero, overview, step1, step2, step3, step4, step5, responsibilities, indiaFirst, cta } = howItWorksContent;
 
   return (
-    <section className="py-24 pt-32">
-      <div className="container mx-auto px-6">
+    <>
+    <ChildPageHero
+      eyebrow="How it works"
+      title={hero.headline}
+      support={hero.subheadline}
+      stageLabel="flow"
+      stage={<StepFlow steps={overview.steps} footer={hero.supportingLine} />}
+      actions={
+        <Link href="/schedule-demo">
+          <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
+            {hero.primaryCTA}
+            <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </Link>
+      }
+    />
+    <section className="relative overflow-hidden border-b border-border py-16 md:py-20">
+      <Atmosphere variant="mist" />
+      <div className="relative container mx-auto px-6">
         <div className="max-w-6xl mx-auto">
-          {/* SECTION 1: Hero */}
-          <div className="text-center space-y-6 mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold">{hero.headline}</h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">{hero.subheadline}</p>
-            <p className="text-muted-foreground">{hero.supportingLine}</p>
-            <div className="pt-4">
-              <Link href="/schedule-demo">
-                <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
-                  {hero.primaryCTA}
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-            </div>
-          </div>
 
           {/* SECTION 2: High-Level Flow Overview */}
           <div className="mb-16">
-            <div className="text-center space-y-4 mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold">{overview.title}</h2>
+            <div className="mb-12 max-w-2xl space-y-4">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{overview.title}</h2>
               <p className="text-muted-foreground">{overview.subtitle}</p>
             </div>
             <div className="max-w-5xl mx-auto">
-              <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+              <div className="flex flex-wrap gap-4 md:gap-6">
                 {overview.steps.map((step, index) => (
                   <div key={index} className="flex items-center gap-2 md:gap-4">
                     <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-lg border-2 border-primary/20">
@@ -64,7 +70,7 @@ export default function HowItWorksPage() {
                   1
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-2">{step1.title}</h2>
+                  <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-2">{step1.title}</h2>
                   <p className="text-muted-foreground mb-6">{step1.subtitle}</p>
                 </div>
               </div>
@@ -105,7 +111,7 @@ export default function HowItWorksPage() {
                   2
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-2">{step2.title}</h2>
+                  <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-2">{step2.title}</h2>
                   <p className="text-muted-foreground mb-6">{step2.subtitle}</p>
                 </div>
               </div>
@@ -144,7 +150,7 @@ export default function HowItWorksPage() {
                   3
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-2">{step3.title}</h2>
+                  <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-2">{step3.title}</h2>
                   <p className="text-muted-foreground mb-6">{step3.subtitle}</p>
                 </div>
               </div>
@@ -192,7 +198,7 @@ export default function HowItWorksPage() {
                   4
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-2">{step4.title}</h2>
+                  <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-2">{step4.title}</h2>
                   <p className="text-muted-foreground mb-6">{step4.subtitle}</p>
                 </div>
               </div>
@@ -220,7 +226,7 @@ export default function HowItWorksPage() {
                   5
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-2xl md:text-3xl font-bold mb-2">{step5.title}</h2>
+                  <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-2">{step5.title}</h2>
                   <p className="text-muted-foreground mb-6">{step5.subtitle}</p>
                 </div>
               </div>
@@ -242,15 +248,15 @@ export default function HowItWorksPage() {
 
           {/* SECTION 8: What You Manage vs What We Manage */}
           <div className="mb-16">
-            <div className="text-center space-y-4 mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold">{responsibilities.title}</h2>
+            <div className="mb-8 max-w-2xl space-y-4">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{responsibilities.title}</h2>
               <p className="text-muted-foreground">{responsibilities.subtitle}</p>
             </div>
             <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
               <div className="p-8 rounded-xl bg-card border border-border/50">
                 <div className="flex items-center gap-3 mb-6">
                   <Users className="w-6 h-6 text-primary" />
-                  <h3 className="text-2xl font-bold">{responsibilities.youManage.title}</h3>
+                  <h3 className="text-2xl font-semibold tracking-tight">{responsibilities.youManage.title}</h3>
                 </div>
                 <ul className="space-y-3">
                   {responsibilities.youManage.items.map((item, index) => (
@@ -264,7 +270,7 @@ export default function HowItWorksPage() {
               <div className="p-8 rounded-xl bg-card border border-primary/30">
                 <div className="flex items-center gap-3 mb-6">
                   <Settings className="w-6 h-6 text-primary" />
-                  <h3 className="text-2xl font-bold">{responsibilities.weManage.title}</h3>
+                  <h3 className="text-2xl font-semibold tracking-tight">{responsibilities.weManage.title}</h3>
                 </div>
                 <ul className="space-y-3">
                   {responsibilities.weManage.items.map((item, index) => (
@@ -280,8 +286,8 @@ export default function HowItWorksPage() {
 
           {/* SECTION 9: Designed for Indian Businesses */}
           <div className="mb-16 p-8 rounded-xl bg-card border border-primary/30">
-            <div className="text-center space-y-4 mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold">{indiaFirst.title}</h2>
+            <div className="mb-8 max-w-2xl space-y-4">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{indiaFirst.title}</h2>
               <p className="text-muted-foreground">{indiaFirst.subtitle}</p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
@@ -295,8 +301,8 @@ export default function HowItWorksPage() {
           </div>
 
           {/* SECTION 10: CTA */}
-          <div className="text-center p-12 rounded-xl bg-card border border-primary/30">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">{cta.title}</h2>
+          <div className="max-w-2xl rounded-2xl border border-primary/30 bg-card p-8 md:p-12">
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-4">{cta.title}</h2>
             <div className="pt-4">
               <Link href="/schedule-demo">
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
@@ -309,5 +315,6 @@ export default function HowItWorksPage() {
         </div>
       </div>
     </section>
+    </>
   );
 }

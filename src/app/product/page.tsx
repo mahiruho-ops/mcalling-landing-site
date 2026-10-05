@@ -3,6 +3,9 @@ import { productContent } from "@/content/mkcalling/product";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, X, MessageSquare, Phone, PhoneCall, Calendar, Hash, BarChart, Settings, Shield, Plug, Check } from "lucide-react";
+import { Atmosphere } from "@/components/site/Atmosphere";
+import { ChildPageHero } from "@/components/site/ChildPageHero";
+import { ShelfRows, StageFooter } from "@/components/site/HeroStages";
 
 export const metadata: Metadata = {
   title: "Product | mKcalling",
@@ -21,34 +24,71 @@ export default function ProductPage() {
   const { hero, whatItIs, capabilities, managedService, humanInLoop, integrations, whyChoose, cta } = productContent;
 
   return (
-    <section className="py-24 pt-32">
-      <div className="container mx-auto px-6">
-        <div className="max-w-6xl mx-auto">
-          {/* SECTION 1: Product Hero */}
-          <div className="text-center space-y-6 mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold">{hero.headline}</h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">{hero.subheadline}</p>
-            <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
-              {hero.bullets.map((bullet, index) => (
-                <div key={index} className="px-4 py-2 rounded-lg bg-card/50 border border-border/50 text-sm">
-                  {bullet}
-                </div>
-              ))}
+    <>
+    <ChildPageHero
+      eyebrow="Product"
+      title={hero.headline}
+      support={hero.subheadline}
+      stageLabel="product"
+      stage={
+        <>
+          <div className="grid divide-y border-b border-border sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+            <div className="px-4 py-4">
+              <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-primary">{whatItIs.is.title}</p>
+              <ul className="mt-2 space-y-1">
+                {whatItIs.is.items.slice(0, 2).map((item) => (
+                  <li key={item} className="text-xs leading-relaxed text-muted-foreground">{item}</li>
+                ))}
+              </ul>
             </div>
-            <div className="pt-4">
-              <Link href="/schedule-demo">
-                <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
-                  {hero.primaryCTA}
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
+            <div className="px-4 py-4">
+              <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">{whatItIs.isNot.title}</p>
+              <ul className="mt-2 space-y-1">
+                {whatItIs.isNot.items.slice(0, 2).map((item) => (
+                  <li key={item} className="text-xs leading-relaxed text-muted-foreground">{item}</li>
+                ))}
+              </ul>
             </div>
           </div>
+          <ShelfRows
+            rows={capabilities.items.map((item) => {
+              const Icon = iconMap[item.icon];
+              return {
+                title: item.title,
+                detail: item.description,
+                icon: Icon ? <Icon className="h-4 w-4" aria-hidden /> : undefined,
+              };
+            })}
+          />
+          <StageFooter>
+            <ul className="flex flex-wrap gap-1.5">
+              {hero.bullets.map((bullet) => (
+                <li key={bullet} className="rounded-md border border-border bg-background/70 px-2.5 py-1 text-xs text-foreground">
+                  {bullet}
+                </li>
+              ))}
+            </ul>
+          </StageFooter>
+        </>
+      }
+      actions={
+        <Link href="/schedule-demo">
+          <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
+            {hero.primaryCTA}
+            <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </Link>
+      }
+    />
+    <section className="relative overflow-hidden border-b border-border py-16 md:py-20">
+      <Atmosphere variant="mist" />
+      <div className="relative container mx-auto px-6">
+        <div className="max-w-6xl mx-auto">
 
           {/* SECTION 2: What mKcalling Is (and Is Not) */}
           <div className="mb-16">
-            <div className="text-center space-y-4 mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold normal-case">{whatItIs.title}</h2>
+            <div className="mb-12 max-w-2xl space-y-4">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl normal-case">{whatItIs.title}</h2>
               <p className="text-muted-foreground">{whatItIs.subtitle}</p>
             </div>
             <div className="grid md:grid-cols-2 gap-8">
@@ -87,8 +127,8 @@ export default function ProductPage() {
 
           {/* SECTION 3: Core Platform Capabilities */}
           <div className="mb-16">
-            <div className="text-center space-y-4 mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold">{capabilities.title}</h2>
+            <div className="mb-12 max-w-2xl space-y-4">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{capabilities.title}</h2>
               <p className="text-muted-foreground">{capabilities.subtitle}</p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -111,11 +151,11 @@ export default function ProductPage() {
 
           {/* SECTION 4: Managed Service */}
           <div className="mb-16 p-8 rounded-xl bg-card border border-primary/30">
-            <div className="text-center space-y-4 mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold">{managedService.title}</h2>
+            <div className="mb-8 max-w-2xl space-y-4">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{managedService.title}</h2>
               <p className="text-muted-foreground">{managedService.subtitle}</p>
             </div>
-            <p className="text-center text-lg text-foreground mb-8 max-w-3xl mx-auto">
+            <p className="mb-8 max-w-3xl text-lg text-foreground">
               {managedService.description}
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
@@ -131,17 +171,17 @@ export default function ProductPage() {
           {/* SECTION 5: Human-in-the-Loop Safety */}
           <div className="mb-16">
             <div className="p-8 rounded-xl bg-card border border-border/50">
-              <div className="text-center space-y-4 mb-6">
+              <div className="mb-6 max-w-2xl space-y-4">
                 <div className="p-3 rounded-lg bg-primary/10 text-primary w-fit mx-auto">
                   <Shield className="w-6 h-6" />
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold">{humanInLoop.title}</h2>
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{humanInLoop.title}</h2>
                 <p className="text-muted-foreground">{humanInLoop.subtitle}</p>
               </div>
-              <p className="text-center text-foreground mb-4 max-w-3xl mx-auto">
+              <p className="mb-4 max-w-3xl text-foreground">
                 {humanInLoop.description}
               </p>
-              <p className="text-center text-sm text-muted-foreground italic">
+              <p className="text-sm italic text-muted-foreground">
                 {humanInLoop.note}
               </p>
             </div>
@@ -149,8 +189,8 @@ export default function ProductPage() {
 
           {/* SECTION 6: Integrations & Extensibility */}
           <div className="mb-16">
-            <div className="text-center space-y-4 mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold">{integrations.title}</h2>
+            <div className="mb-12 max-w-2xl space-y-4">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{integrations.title}</h2>
               <p className="text-muted-foreground">{integrations.subtitle}</p>
             </div>
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -187,8 +227,8 @@ export default function ProductPage() {
 
           {/* SECTION 7: Why Businesses Choose mKcalling */}
           <div className="mb-16">
-            <div className="text-center space-y-4 mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold">{whyChoose.title}</h2>
+            <div className="mb-12 max-w-2xl space-y-4">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{whyChoose.title}</h2>
               <p className="text-muted-foreground">{whyChoose.subtitle}</p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -202,8 +242,8 @@ export default function ProductPage() {
           </div>
 
           {/* SECTION 8: CTA */}
-          <div className="text-center p-12 rounded-xl bg-card border border-primary/30">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 normal-case">{cta.title}</h2>
+          <div className="max-w-2xl rounded-2xl border border-primary/30 bg-card p-8 md:p-12">
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-4 normal-case">{cta.title}</h2>
             <div className="pt-4">
               <Link href="/schedule-demo">
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
@@ -216,5 +256,6 @@ export default function ProductPage() {
         </div>
       </div>
     </section>
+    </>
   );
 }

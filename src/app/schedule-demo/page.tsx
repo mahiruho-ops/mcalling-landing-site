@@ -4,6 +4,9 @@ import { ScheduleDemoEstimatorTip } from "@/components/ScheduleDemoEstimatorTip"
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Check, CheckCircle2, Users, X, Shield, Phone, Calendar, TrendingUp } from "lucide-react";
+import { Atmosphere } from "@/components/site/Atmosphere";
+import { ChildPageHero } from "@/components/site/ChildPageHero";
+import { StepFlow } from "@/components/site/HeroStages";
 
 export const metadata: Metadata = {
   title: "Schedule a Demo | mKcalling",
@@ -14,22 +17,33 @@ export default function ScheduleDemoPage() {
   const { hero, whatToExpect, whoIsThisFor, reassurance, cta } = scheduleDemoContent;
 
   return (
-    <section className="py-24 pt-32">
-      <div className="container mx-auto px-6">
-        <div className="max-w-6xl mx-auto">
-          {/* SECTION 1: Hero */}
-          <div className="text-center space-y-6 mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold">{hero.headline}</h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">{hero.subheadline}</p>
-            <p className="text-muted-foreground">{hero.supportingLine}</p>
+    <>
+    <ChildPageHero
+      eyebrow="Schedule a demo"
+      title={hero.headline}
+      support={hero.subheadline}
+      stageLabel="demo"
+      stage={
+        <>
+          <div className="border-b border-border px-5 py-4">
+            <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-primary">{whatToExpect.title}</p>
+            <p className="mt-2 text-sm leading-relaxed text-foreground">{hero.supportingLine}</p>
           </div>
+          <StepFlow steps={whatToExpect.items} footer={whatToExpect.keyMessage} />
+        </>
+      }
+    />
+    <section className="relative overflow-hidden border-b border-border py-16 md:py-20">
+      <Atmosphere variant="mist" />
+      <div className="relative container mx-auto px-6">
+        <div className="max-w-6xl mx-auto">
 
           <ScheduleDemoEstimatorTip />
 
           {/* SECTION 2: What to Expect in the Demo */}
           <div className="mb-16 p-8 rounded-xl bg-card border border-primary/30">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl md:text-3xl font-bold mb-2">{whatToExpect.title}</h2>
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-2">{whatToExpect.title}</h2>
               <p className="text-muted-foreground mb-6">{whatToExpect.subtitle}</p>
               <div className="mb-6">
                 <p className="text-sm font-semibold mb-4 text-muted-foreground">Demo Includes:</p>
@@ -50,15 +64,15 @@ export default function ScheduleDemoPage() {
 
           {/* SECTION 3: Who This Demo Is For */}
           <div className="mb-16">
-            <div className="text-center space-y-4 mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold">{whoIsThisFor.title}</h2>
+            <div className="mb-8 max-w-2xl space-y-4">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{whoIsThisFor.title}</h2>
               <p className="text-muted-foreground">{whoIsThisFor.subtitle}</p>
             </div>
             <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
               <div className="p-8 rounded-xl bg-card border border-primary/30">
                 <div className="flex items-center gap-3 mb-6">
                   <Check className="w-6 h-6 text-primary" />
-                  <h3 className="text-xl font-bold">{whoIsThisFor.goodFit.title}</h3>
+                  <h3 className="text-xl font-semibold tracking-tight">{whoIsThisFor.goodFit.title}</h3>
                 </div>
                 <ul className="space-y-3">
                   {whoIsThisFor.goodFit.items.map((item, index) => (
@@ -72,7 +86,7 @@ export default function ScheduleDemoPage() {
               <div className="p-8 rounded-xl bg-card border border-border/50">
                 <div className="flex items-center gap-3 mb-6">
                   <X className="w-6 h-6 text-muted-foreground" />
-                  <h3 className="text-xl font-bold">{whoIsThisFor.notRequired.title}</h3>
+                  <h3 className="text-xl font-semibold tracking-tight">{whoIsThisFor.notRequired.title}</h3>
                 </div>
                 <ul className="space-y-3">
                   {whoIsThisFor.notRequired.items.map((item, index) => (
@@ -88,8 +102,8 @@ export default function ScheduleDemoPage() {
 
           {/* SECTION 4: Reassurance Section */}
           <div className="mb-16">
-            <div className="text-center space-y-4 mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold normal-case">{reassurance.title}</h2>
+            <div className="mb-8 max-w-2xl space-y-4">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl normal-case">{reassurance.title}</h2>
               <p className="text-muted-foreground">{reassurance.subtitle}</p>
             </div>
             <div className="max-w-4xl mx-auto">
@@ -105,8 +119,8 @@ export default function ScheduleDemoPage() {
           </div>
 
           {/* SECTION 5: CTA (Reinforced) */}
-          <div className="text-center p-12 rounded-xl bg-card border border-primary/30">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 normal-case">{cta.title}</h2>
+          <div className="max-w-2xl rounded-2xl border border-primary/30 bg-card p-8 md:p-12">
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-4 normal-case">{cta.title}</h2>
             <div className="pt-4">
               <Link href="#interest">
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
@@ -119,5 +133,6 @@ export default function ScheduleDemoPage() {
         </div>
       </div>
     </section>
+    </>
   );
 }

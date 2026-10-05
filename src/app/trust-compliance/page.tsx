@@ -3,6 +3,9 @@ import { trustContent } from "@/content/mkcalling/trust";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Check, CheckCircle2, Shield, Lock, Users, Phone, FileText, AlertCircle } from "lucide-react";
+import { Atmosphere } from "@/components/site/Atmosphere";
+import { ChildPageHero } from "@/components/site/ChildPageHero";
+import { PointGrid } from "@/components/site/HeroStages";
 
 export const metadata: Metadata = {
   title: "Trust & Compliance | mKcalling",
@@ -13,30 +16,46 @@ export default function TrustCompliancePage() {
   const { hero, indiaFirst, callHandling, consent, aiTransparency, dataSecurity, roleBasedAccess, fairUse, businessValue, cta } = trustContent;
 
   return (
-    <section className="py-24 pt-32">
-      <div className="container mx-auto px-6">
-        <div className="max-w-6xl mx-auto">
-          {/* SECTION 1: Hero */}
-          <div className="text-center space-y-6 mb-16">
-            <h1 className="text-4xl md:text-5xl font-bold">{hero.headline}</h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">{hero.subheadline}</p>
-            <p className="text-muted-foreground">{hero.supportingLine}</p>
-            <div className="pt-4">
-              <Link href="/schedule-demo">
-                <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
-                  {hero.primaryCTA}
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-            </div>
+    <>
+    <ChildPageHero
+      eyebrow="Trust & compliance"
+      title={hero.headline}
+      support={
+        <>
+          <p>{hero.subheadline}</p>
+          <p>{hero.supportingLine}</p>
+        </>
+      }
+      stageLabel="india-first"
+      stage={
+        <>
+          <div className="border-b border-border px-5 py-4">
+            <p className="text-[11px] font-medium uppercase tracking-[0.16em] text-primary">{indiaFirst.title}</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{indiaFirst.description}</p>
           </div>
+          <PointGrid points={indiaFirst.points} footer={indiaFirst.closing} />
+        </>
+      }
+      actions={
+        <Link href="/schedule-demo">
+          <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
+            {hero.primaryCTA}
+            <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </Link>
+      }
+    />
+    <section className="relative overflow-hidden border-b border-border py-16 md:py-20">
+      <Atmosphere variant="mist" />
+      <div className="relative container mx-auto px-6">
+        <div className="max-w-6xl mx-auto">
 
           {/* SECTION 2: India-First by Design */}
           <div className="mb-16 p-8 rounded-xl bg-card border border-primary/30">
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
                 <Shield className="w-6 h-6 text-primary" />
-                <h2 className="text-2xl md:text-3xl font-bold">{indiaFirst.title}</h2>
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{indiaFirst.title}</h2>
               </div>
               <p className="text-muted-foreground mb-6">{indiaFirst.subtitle}</p>
               <p className="text-foreground mb-6">{indiaFirst.description}</p>
@@ -59,7 +78,7 @@ export default function TrustCompliancePage() {
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
                 <FileText className="w-6 h-6 text-primary" />
-                <h2 className="text-2xl md:text-3xl font-bold">{callHandling.title}</h2>
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{callHandling.title}</h2>
               </div>
               <p className="text-muted-foreground mb-6">{callHandling.subtitle}</p>
               <ul className="space-y-3 mb-6">
@@ -81,7 +100,7 @@ export default function TrustCompliancePage() {
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
                 <Phone className="w-6 h-6 text-primary" />
-                <h2 className="text-2xl md:text-3xl font-bold">{consent.title}</h2>
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{consent.title}</h2>
               </div>
               <p className="text-muted-foreground mb-6">{consent.subtitle}</p>
               <ul className="space-y-3 mb-6">
@@ -103,7 +122,7 @@ export default function TrustCompliancePage() {
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
                 <Users className="w-6 h-6 text-primary" />
-                <h2 className="text-2xl md:text-3xl font-bold">{aiTransparency.title}</h2>
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{aiTransparency.title}</h2>
               </div>
               <p className="text-muted-foreground mb-6">{aiTransparency.subtitle}</p>
               <ul className="space-y-3 mb-6">
@@ -125,7 +144,7 @@ export default function TrustCompliancePage() {
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
                 <Lock className="w-6 h-6 text-primary" />
-                <h2 className="text-2xl md:text-3xl font-bold">{dataSecurity.title}</h2>
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{dataSecurity.title}</h2>
               </div>
               <p className="text-muted-foreground mb-6">{dataSecurity.subtitle}</p>
               <ul className="space-y-3 mb-6">
@@ -147,7 +166,7 @@ export default function TrustCompliancePage() {
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
                 <Lock className="w-6 h-6 text-primary" />
-                <h2 className="text-2xl md:text-3xl font-bold">{roleBasedAccess.title}</h2>
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{roleBasedAccess.title}</h2>
               </div>
               <p className="text-muted-foreground mb-6">{roleBasedAccess.subtitle}</p>
               <p className="text-foreground mb-6">{roleBasedAccess.description}</p>
@@ -170,7 +189,7 @@ export default function TrustCompliancePage() {
             <div className="max-w-4xl mx-auto">
               <div className="flex items-center gap-3 mb-6">
                 <AlertCircle className="w-6 h-6 text-primary" />
-                <h2 className="text-2xl md:text-3xl font-bold">{fairUse.title}</h2>
+                <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{fairUse.title}</h2>
               </div>
               <p className="text-muted-foreground mb-6">{fairUse.subtitle}</p>
               <ul className="space-y-3 mb-6">
@@ -187,8 +206,8 @@ export default function TrustCompliancePage() {
 
           {/* SECTION 9: What This Means for Your Business */}
           <div className="mb-16">
-            <div className="text-center space-y-4 mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold">{businessValue.title}</h2>
+            <div className="mb-8 max-w-2xl space-y-4">
+              <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">{businessValue.title}</h2>
               <p className="text-muted-foreground">{businessValue.subtitle}</p>
             </div>
             <div className="max-w-4xl mx-auto">
@@ -204,8 +223,8 @@ export default function TrustCompliancePage() {
           </div>
 
           {/* SECTION 10: CTA */}
-          <div className="text-center p-12 rounded-xl bg-card border border-primary/30">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">{cta.title}</h2>
+          <div className="max-w-2xl rounded-2xl border border-primary/30 bg-card p-8 md:p-12">
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl mb-4">{cta.title}</h2>
             <div className="pt-4">
               <Link href="/schedule-demo">
                 <Button size="lg" className="bg-gradient-primary hover:shadow-glow-primary transition-all group">
@@ -218,5 +237,6 @@ export default function TrustCompliancePage() {
         </div>
       </div>
     </section>
+    </>
   );
 }

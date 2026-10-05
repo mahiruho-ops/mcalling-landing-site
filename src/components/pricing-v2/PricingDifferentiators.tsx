@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { pricingPageContent } from "@/content/mkcalling/pricingPage";
+import { Atmosphere } from "@/components/site/Atmosphere";
 
 const MAHIRUHO_EXTERNAL = {
   target: "_blank" as const,
@@ -13,11 +14,12 @@ export function PricingDifferentiators() {
   const mahiruhoHref = mahiruhoCard.websiteUrl;
 
   return (
-    <section className="py-16 md:py-20 border-t border-border/40">
-      <div className="container mx-auto px-6">
+    <section className="relative overflow-hidden border-b border-border py-16 md:py-20">
+      <Atmosphere variant="soft" />
+      <div className="container relative mx-auto px-6">
         <div className="max-w-6xl mx-auto space-y-10">
-          <div className="text-center space-y-3 max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold normal-case">{differentiators.title}</h2>
+          <div className="max-w-2xl space-y-3">
+            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl normal-case">{differentiators.title}</h2>
             <p className="text-muted-foreground text-lg leading-relaxed">{differentiators.subtitle}</p>
           </div>
 
@@ -40,7 +42,7 @@ export function PricingDifferentiators() {
             <div className="min-w-0 space-y-4">
               <div>
                 <p className="text-xs font-semibold tracking-wide text-primary">{mahiruhoCard.eyebrow}</p>
-                <h3 className="text-2xl md:text-3xl font-bold mt-1">
+                <h3 className="mt-1 text-2xl font-semibold tracking-tight md:text-3xl">
                   <Link
                     href={mahiruhoHref}
                     target={MAHIRUHO_EXTERNAL.target}

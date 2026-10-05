@@ -2,6 +2,9 @@ import Link from "next/link";
 import { Channels } from "@/components/Channels";
 import { MultiAgent } from "@/components/MultiAgent";
 import { CustomTools } from "@/components/CustomTools";
+import { Atmosphere } from "@/components/site/Atmosphere";
+import { ChildPageHero } from "@/components/site/ChildPageHero";
+import { ShelfRows } from "@/components/site/HeroStages";
 
 export const metadata = {
   title: "AI & Tools",
@@ -10,26 +13,38 @@ export const metadata = {
 
 export default function AiToolsPage() {
   return (
-    <section className="py-24">
-      <div className="container mx-auto px-6">
-        <nav className="mb-6 text-sm text-muted-foreground">
-          <Link href="/" className="hover:underline">Home</Link>
-          <span className="mx-2">/</span>
-          <span className="text-foreground">AI & Tools</span>
-        </nav>
-
-        <div className="text-center space-y-4 mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold">AI & Tools</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Core AI capabilities and developer tools.
-          </p>
-        </div>
-
+    <>
+      <ChildPageHero
+        eyebrow="AI & tools"
+        title="AI & Tools"
+        support="Core AI capabilities and developer tools."
+        stageLabel="tools"
+        stage={
+          <ShelfRows
+            rows={[
+              { title: "Deploy Once, Reach Every Channel" },
+              { title: "AI-Powered Multi-Agentic System" },
+              { title: "Integrate with Your Business. No Brittle Glue." },
+            ]}
+          />
+        }
+        lead={
+          <nav className="text-sm text-muted-foreground">
+            <Link href="/" className="hover:underline">Home</Link>
+            <span className="mx-2">/</span>
+            <span className="text-foreground">AI & Tools</span>
+          </nav>
+        }
+      />
+      <section className="relative overflow-hidden border-b border-border py-16 md:py-20">
+        <Atmosphere variant="mist" />
+        <div className="relative container mx-auto px-6">
         <Channels />
         <MultiAgent />
         <CustomTools />
       </div>
     </section>
+    </>
   );
 }
 
